@@ -14,19 +14,19 @@
             --text-main: #f3f4f6;
             --text-muted: #9ca3af;
 
-            /* Neon Accent Colors from Reference Image */
-            --glow-snpx: #10b981; /* Green */
-            --glow-mlow: #06b6d4; /* Cyan / Blue */
-            --glow-glum: #a855f7; /* Purple */
-            --glow-bite: #f97316; /* Amber / Orange */
-            --glow-pdgy: #00b4d8; /* Light Blue */
-            --glow-scrh: #ec4899; /* Hot Pink */
-            --glow-gwat: #10b981; /* Electric Green */
-            --glow-zro:  #3b82f6; /* Electric Blue */
-            --glow-crkt: #f59e0b; /* Gold / Bronze */
-            --glow-slk:  #d946ef; /* Magenta */
-            --glow-ghst: #e2e8f0; /* White / Silver */
-            --glow-lock: #ef4444; /* Alert Red */
+            /* Neon Accent Palette */
+            --glow-snpx: #10b981;
+            --glow-chll: #10b981;
+            --glow-glum: #a855f7;
+            --glow-bite: #f97316;
+            --glow-pdgy: #38bdf8;
+            --glow-scrh: #ec4899;
+            --glow-gwat: #10b981;
+            --glow-zro:  #3b82f6;
+            --glow-crkt: #eab308;
+            --glow-slk:  #d946ef;
+            --glow-ghst: #e2e8f0;
+            --glow-lock: #ef4444;
         }
 
         * {
@@ -39,7 +39,7 @@
         body {
             background-color: var(--bg-dark);
             background-image: 
-                radial-gradient(circle at 50% 30%, rgba(16, 185, 129, 0.08), transparent 70%),
+                radial-gradient(circle at 50% 40%, rgba(16, 185, 129, 0.08), transparent 70%),
                 linear-gradient(to bottom, rgba(3, 7, 18, 0.85), rgba(3, 7, 18, 0.98));
             color: var(--text-main);
             padding: 20px;
@@ -48,7 +48,7 @@
             overflow-x: hidden;
         }
 
-        /* Subtle Ambient Sweep (Smooth & Crisp) */
+        /* Ambient Screen Sweep */
         body::before {
             content: " ";
             display: block;
@@ -65,9 +65,9 @@
             100% { top: 110%; }
         }
 
-        /* Top Telemetry Header Bar (Direct Match to Image) */
+        /* Top Vault Telemetry Bar */
         .vault-header {
-            background: rgba(11, 18, 27, 0.85);
+            background: rgba(11, 18, 27, 0.9);
             border: 1px solid #1f2937;
             border-radius: 8px;
             padding: 12px 24px;
@@ -131,7 +131,7 @@
             letter-spacing: 1px;
         }
 
-        /* Card Matrix Grid */
+        /* Main Grid */
         .card-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
@@ -140,7 +140,7 @@
             margin: 0 auto;
         }
 
-        /* Trading Card Styling */
+        /* Individual Cards */
         .card-item {
             background-color: #0b0f19;
             border-radius: 12px;
@@ -156,21 +156,20 @@
             transform: translateY(-6px);
         }
 
-        /* Neon Color Assignments per Character */
+        /* Neon Frames */
         .card-snpx { border: 2px solid var(--glow-snpx); box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
-        .card-mlow { border: 2px solid var(--glow-mlow); box-shadow: 0 0 15px rgba(6, 182, 212, 0.4); }
+        .card-chll { border: 2px solid var(--glow-chll); box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
         .card-glum { border: 2px solid var(--glow-glum); box-shadow: 0 0 15px rgba(168, 85, 247, 0.4); }
         .card-bite { border: 2px solid var(--glow-bite); box-shadow: 0 0 15px rgba(249, 115, 22, 0.4); }
-        .card-pdgy { border: 2px solid var(--glow-pdgy); box-shadow: 0 0 15px rgba(0, 180, 216, 0.4); }
+        .card-pdgy { border: 2px solid var(--glow-pdgy); box-shadow: 0 0 15px rgba(56, 189, 248, 0.4); }
         .card-scrh { border: 2px solid var(--glow-scrh); box-shadow: 0 0 15px rgba(236, 72, 153, 0.4); }
         .card-gwat { border: 2px solid var(--glow-gwat); box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
         .card-zro  { border: 2px solid var(--glow-zro);  box-shadow: 0 0 15px rgba(59, 130, 246, 0.4); }
-        .card-crkt { border: 2px solid var(--glow-crkt); box-shadow: 0 0 15px rgba(245, 158, 11, 0.4); }
+        .card-crkt { border: 2px solid var(--glow-crkt); box-shadow: 0 0 15px rgba(234, 179, 8, 0.4); }
         .card-slk  { border: 2px solid var(--glow-slk);  box-shadow: 0 0 15px rgba(217, 70, 239, 0.4); }
         .card-ghst { border: 2px solid var(--glow-ghst); box-shadow: 0 0 15px rgba(226, 232, 240, 0.4); }
         .card-lock { border: 2px solid var(--glow-lock); box-shadow: 0 0 15px rgba(239, 68, 68, 0.4); background: #180909; }
 
-        /* Card Inner Ornate Border */
         .card-inner {
             border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 8px;
@@ -181,13 +180,12 @@
             background: rgba(0, 0, 0, 0.4);
         }
 
-        /* Number Badge Corner Icon */
         .card-number-badge {
             position: absolute;
             top: 12px; left: 12px;
             width: 22px; height: 22px;
             border-radius: 50%;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.85);
             border: 1px solid rgba(255, 255, 255, 0.3);
             display: flex;
             align-items: center;
@@ -201,7 +199,7 @@
         /* Image Display Frame */
         .image-frame {
             width: 100%;
-            height: 180px;
+            height: 195px;
             background-color: #030712;
             border-radius: 6px;
             overflow: hidden;
@@ -219,27 +217,53 @@
             object-fit: cover;
         }
 
-        /* Character Card Text Block */
         .card-title {
             font-size: 0.85rem;
             font-weight: bold;
             color: #ffffff;
             text-align: center;
             letter-spacing: 1px;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
         }
 
-        .card-desc-box {
+        /* Dynamic Clearance Status Badge */
+        .status-badge-front {
+            font-size: 0.65rem;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: bold;
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 6px;
+            letter-spacing: 1px;
+        }
+
+        .badge-locked-front {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--alert-red);
+            border: 1px solid var(--alert-red);
+        }
+
+        .badge-cleared-front {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--terminal-green);
+            border: 1px solid var(--terminal-green);
+        }
+
+        /* Card Progress Bar */
+        .card-progress-bar-bg {
+            width: 100%;
+            height: 6px;
             background: #000000;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-            padding: 6px;
-            font-size: 0.65rem;
-            color: var(--text-muted);
-            text-align: center;
-            line-height: 1.25;
-            min-height: 48px;
-            margin-bottom: 8px;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 6px;
+        }
+
+        .card-progress-bar-fill {
+            height: 100%;
+            transition: width 0.3s ease;
         }
 
         /* Coin Address Box */
@@ -257,7 +281,7 @@
             text-align: center;
         }
 
-        /* Bottom Ticker Pill */
+        /* Ticker Pill */
         .ticker-pill {
             align-self: center;
             background: #000000;
@@ -270,14 +294,13 @@
             margin-top: auto;
         }
 
-        /* Sparkline Chart Container */
         .mini-chart-box {
-            height: 35px;
+            height: 32px;
             width: 100%;
-            margin-top: 4px;
+            margin-bottom: 4px;
         }
 
-        /* Full Interactive Modal Popup */
+        /* Modal Overlay */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -329,7 +352,7 @@
             color: #000;
         }
 
-        /* Node 12 Emergency Override Alarm */
+        /* Node 12 Emergency Alarm */
         @keyframes alarmFlash {
             0% { background-color: rgba(239, 68, 68, 0.3); }
             50% { background-color: rgba(0, 0, 0, 0.95); }
@@ -364,7 +387,7 @@
     <!-- 12-Card Grid -->
     <div class="card-grid" id="card-grid"></div>
 
-    <!-- Stats & Solve Modal -->
+    <!-- Stats Modal Popup -->
     <div class="modal-overlay" id="card-modal">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal()">✕</button>
@@ -374,18 +397,18 @@
 
     <script>
         const cardsData = [
-            { id: 1, name: "MR. SNAPS", ticker: "$SNPX", class: "card-snpx", color: "#10b981", desc: "Glitched Retro-Animatronic Squirrel. Rusty, cracked eyes, FNAF style.", addr: "3kF9xA1...9b2Z", progress: 45, chart: [12, 18, 25, 22, 45], solved: false, img: "snpx.jpg" },
-            { id: 2, name: "MELLOW-TRON", ticker: "$MLOW", class: "card-mlow", color: "#06b6d4", desc: "A laid-back mechanical friend who never lets the system status phase him.", addr: "7mP2qC8...4v1L", progress: 60, chart: [30, 35, 40, 52, 60], solved: false, img: "mlow.jpg" },
-            { id: 3, name: "GLOOMIE", ticker: "$GLUM", class: "card-glum", color: "#a855f7", desc: "Pitch-black fuzzy creature with glowing neon eyes inside a glass vacuum tube.", addr: "9xT4vN1...1m8K", progress: 30, chart: [10, 15, 12, 28, 30], solved: false, img: "glum.jpg" },
-            { id: 4, name: "OVER-BITE", ticker: "$BITE", class: "card-bite", color: "#f97316", desc: "Possessed Retro Arcade Cabinet with razor teeth and glowing CRT face.", addr: "2bL8rY9...6p3W", progress: 80, chart: [40, 50, 65, 70, 80], solved: false, img: "bite.jpg" },
-            { id: 5, name: "PUDGY BYTES", ticker: "$PDGY", class: "card-pdgy", color: "#00b4d8", desc: "Pixelated Robotic Penguin with sunglasses, sitting on server hard drives.", addr: "5vZ1mQ4...8t7X", progress: 20, chart: [5, 12, 10, 15, 20], solved: false, img: "pdgy.jpg" },
-            { id: 6, name: "SCREECH", ticker: "$SCRH", class: "card-scrh", color: "#ec4899", desc: "Mechanized Bobcat with cracked porcelain, wire mesh face, and glowing core.", addr: "8kN3pL2...5x9Y", progress: 90, chart: [50, 60, 75, 82, 90], solved: false, img: "scrh.jpg" },
-            { id: 7, name: "GIGA-WATT", ticker: "$GWAT", class: "card-gwat", color: "#10b981", desc: "Muscular Mechanical Gorilla in golden armor with glowing blue vacuum tubes.", addr: "1qW4eR7...3y2U", progress: 50, chart: [20, 30, 25, 40, 50], solved: false, img: "gwat.jpg" },
-            { id: 8, name: "ZERO", ticker: "$ZRO", class: "card-zro", color: "#3b82f6", desc: "Pitch-black Marionette Puppet hanging from glowing fiber-optic cables.", addr: "4uI9oP1...7a6S", progress: 15, chart: [5, 8, 10, 12, 15], solved: false, img: "zro.jpg" },
-            { id: 9, name: "PROFESSOR CIRCUIT", ticker: "$CRKT", class: "card-crkt", color: "#f59e0b", desc: "Mechanical Gear Owl with brass construction, round spectacles, soldering iron.", addr: "6dF3gH8...2j1K", progress: 70, chart: [30, 45, 50, 62, 70], solved: false, img: "crkt.jpg" },
-            { id: 10, name: "SLICK", ticker: "$SLK", class: "card-slk", color: "#d946ef", desc: "Robotic Fox in leather jacket with glowing neon visor against cyberpunk street.", addr: "9zC5vB0...4m3N", progress: 40, chart: [15, 20, 32, 38, 40], solved: false, img: "slk.jpg" },
-            { id: 11, name: "THE DEVELOPER'S GHOST", ticker: "$GHST", class: "card-ghst", color: "#e2e8f0", desc: "Massive Amalgam Suit fused from animatronics with 'ENTER PASSPHRASE' screen.", addr: "3xS7dF2...8g9H", progress: 10, chart: [2, 4, 6, 8, 10], solved: false, img: "ghst.jpg" },
-            { id: 12, name: "ANDY'S VAULT", ticker: "NODE-12", class: "card-lock", color: "#ef4444", desc: "Level-5 Encrypted Enclave. Untouchable Vault Node.", addr: "ENCRYPTED", progress: 0, chart: [], solved: false, isVault: true }
+            { id: 1, name: "MR. SNAPS", ticker: "$SNPX", class: "card-snpx", color: "#10b981", addr: "3kF9xA1...9b2Z", progress: 45, chart: [12, 18, 25, 22, 45], solved: false, img: "snpx.jpg" },
+            { id: 2, name: "CHILL-BOT 9000", ticker: "$CHLL", class: "card-chll", color: "#10b981", addr: "7mP2qC8...4v1L", progress: 60, chart: [30, 35, 40, 52, 60], solved: false, img: "mlow.jpg" },
+            { id: 3, name: "GLOOMIE", ticker: "$GLUM", class: "card-glum", color: "#a855f7", addr: "9xT4vN1...1m8K", progress: 30, chart: [10, 15, 12, 28, 30], solved: false, img: "glum.jpg" },
+            { id: 4, name: "OVER-BITE", ticker: "$BITE", class: "card-bite", color: "#f97316", addr: "2bL8rY9...6p3W", progress: 80, chart: [40, 50, 65, 70, 80], solved: false, img: "bite.jpg" },
+            { id: 5, name: "PUDGY BYTES", ticker: "$PDGY", class: "card-pdgy", color: "#38bdf8", addr: "5vZ1mQ4...8t7X", progress: 20, chart: [5, 12, 10, 15, 20], solved: false, img: "pdgy.jpg" },
+            { id: 6, name: "SCREECH", ticker: "$SCRH", class: "card-scrh", color: "#ec4899", addr: "8kN3pL2...5x9Y", progress: 90, chart: [50, 60, 75, 82, 90], solved: false, img: "scrh.jpg" },
+            { id: 7, name: "GIGA-WATT", ticker: "$GWAT", class: "card-gwat", color: "#10b981", addr: "1qW4eR7...3y2U", progress: 50, chart: [20, 30, 25, 40, 50], solved: false, img: "gwat.jpg" },
+            { id: 8, name: "ZERO", ticker: "$ZRO", class: "card-zro", color: "#3b82f6", addr: "4uI9oP1...7a6S", progress: 15, chart: [5, 8, 10, 12, 15], solved: false, img: "zro.jpg" },
+            { id: 9, name: "PROFESSOR CIRCUIT", ticker: "$CRKT", class: "card-crkt", color: "#eab308", addr: "6dF3gH8...2j1K", progress: 70, chart: [30, 45, 50, 62, 70], solved: false, img: "crkt.jpg" },
+            { id: 10, name: "SLICK", ticker: "$SLK", class: "card-slk", color: "#d946ef", addr: "9zC5vB0...4m3N", progress: 40, chart: [15, 20, 32, 38, 40], solved: false, img: "slk.jpg" },
+            { id: 11, name: "THE DEVELOPER'S GHOST", ticker: "$GHST", class: "card-ghst", color: "#e2e8f0", addr: "3xS7dF2...8g9H", progress: 10, chart: [2, 4, 6, 8, 10], solved: false, img: "ghst.jpg" },
+            { id: 12, name: "ANDY'S VAULT", ticker: "NODE-12", class: "card-lock", color: "#ef4444", addr: "ENCRYPTED", progress: 0, chart: [], solved: false, isVault: true }
         ];
 
         const gridContainer = document.getElementById("card-grid");
@@ -411,7 +434,9 @@
                                 </div>
                             </div>
                             <div class="card-title" style="color: var(--alert-red);">${card.name}</div>
-                            <div class="card-desc-box" style="border-color: rgba(239,68,68,0.3); color: #fca5a5;">${card.desc}</div>
+                            <div class="status-badge-front badge-locked-front">
+                                ${readyToActivate ? 'READY TO UNLOCK' : '🔒 ENCRYPTED'}
+                            </div>
                             <div class="addr-box" style="border-color: var(--alert-red); color: var(--alert-red);">ACCESS RESTRICTED</div>
                             <div class="ticker-pill" style="color: var(--alert-red); border-color: var(--alert-red);">[LOCKED]</div>
                         </div>
@@ -419,6 +444,10 @@
                     cardEl.onclick = () => triggerNode12Sequence(readyToActivate);
                 } else {
                     cardEl.className = `card-item ${card.class}`;
+                    let statusBadgeHTML = card.solved
+                        ? `<div class="status-badge-front badge-cleared-front">✓ UNLOCKED (100%)</div>`
+                        : `<div class="status-badge-front badge-locked-front">🔒 LOCKED (${card.progress}%)</div>`;
+
                     cardEl.innerHTML = `
                         <div class="card-number-badge">${card.id}</div>
                         <div class="card-inner">
@@ -430,11 +459,19 @@
                                 </div>
                             </div>
                             <div class="card-title">${card.name}</div>
-                            <div class="card-desc-box">${card.desc}</div>
+                            
+                            ${statusBadgeHTML}
+                            
+                            <div class="card-progress-bar-bg">
+                                <div class="card-progress-bar-fill" style="width: ${card.solved ? 100 : card.progress}%; background: ${card.color}; box-shadow: 0 0 6px ${card.color};"></div>
+                            </div>
+
                             <div class="addr-box">CA: ${card.addr}</div>
+                            
                             <div class="mini-chart-box">
                                 <canvas id="mini-chart-${card.id}"></canvas>
                             </div>
+                            
                             <div class="ticker-pill" style="color: ${card.color}; border-color: ${card.color};">${card.ticker}</div>
                         </div>
                     `;
@@ -484,8 +521,7 @@
                 <div style="color: ${card.color}; font-size: 0.75rem; margin-bottom: 4px;">
                     // ACCESS STATUS: ${card.solved ? 'UNLOCKED / CLEARED' : '🔒 ENCRYPTED / LOCKED'}
                 </div>
-                <h2 style="color: #fff; margin-bottom: 4px;">${card.name} (${card.ticker})</h2>
-                <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 12px;">${card.desc}</p>
+                <h2 style="color: #fff; margin-bottom: 8px;">${card.name} (${card.ticker})</h2>
                 
                 <div style="background: #030712; border: 1px solid ${card.color}; padding: 10px; border-radius: 4px; margin-bottom: 12px;">
                     <div style="font-size: 0.7rem; color: var(--text-muted);">CONTRACT ADDRESS</div>
@@ -493,7 +529,7 @@
                 </div>
 
                 <div style="margin-bottom: 12px;">
-                    <div style="font-size: 0.75rem; margin-bottom: 4px; color: #fff;">CLEARANCE LEVEL: ${card.solved ? '100% (CLEARED)' : 'LOCKED'}</div>
+                    <div style="font-size: 0.75rem; margin-bottom: 4px; color: #fff;">CLEARANCE PROGRESS: ${card.solved ? '100% (CLEARED)' : card.progress + '%'}</div>
                     <div class="progress-bar-bg" style="width: 100%; height: 10px;">
                         <div class="progress-fill" style="width: ${card.solved ? 100 : card.progress}%; background: ${card.color}; box-shadow: 0 0 8px ${card.color};"></div>
                     </div>
