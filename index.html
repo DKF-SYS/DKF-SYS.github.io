@@ -31,10 +31,9 @@
             min-height: 100vh;
             position: relative;
             overflow-x: hidden;
-            animation: monitorGlitch 4s infinite linear;
         }
 
-        /* Moving CRT Scanlines & Static Grid Overlay */
+        /* Moving CRT Scanlines Overlay */
         body::before {
             content: " ";
             display: block;
@@ -44,17 +43,17 @@
                 to bottom,
                 rgba(255, 255, 255, 0),
                 rgba(255, 255, 255, 0) 50%,
-                rgba(0, 0, 0, 0.45) 50%,
-                rgba(0, 0, 0, 0.45)
-            ), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+                rgba(0, 0, 0, 0.4) 50%,
+                rgba(0, 0, 0, 0.4)
+            ), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
             z-index: 1000;
             background-size: 100% 6px, 6px 100%;
             pointer-events: none;
-            opacity: 0.85;
-            animation: moveScanlines 8s linear infinite;
+            opacity: 0.8;
+            animation: moveScanlines 10s linear infinite;
         }
 
-        /* Heavy CRT Rolling Bar Sweep */
+        /* Heavy CRT Rolling Bar Sweep & Slow Hum Flicker */
         body::after {
             content: " ";
             display: block;
@@ -66,12 +65,12 @@
             background: linear-gradient(
                 to bottom,
                 rgba(16, 185, 129, 0) 0%,
-                rgba(16, 185, 129, 0.15) 50%,
+                rgba(16, 185, 129, 0.12) 50%,
                 rgba(16, 185, 129, 0) 100%
             );
             z-index: 1001;
             pointer-events: none;
-            animation: rollingSweep 6s linear infinite;
+            animation: rollingSweep 7s linear infinite, slowFlicker 3s infinite ease-in-out;
         }
 
         /* Keyframe to continuously scroll scanlines down the screen */
@@ -86,15 +85,11 @@
             100% { top: 110%; }
         }
 
-        /* Monitor Glitch Shift Keyframes */
-        @keyframes monitorGlitch {
-            0% { transform: translate(0); filter: hue-rotate(0deg); }
-            2% { transform: translate(-3px, 2px); filter: hue-rotate(90deg) contrast(1.5); }
-            4% { transform: translate(3px, -1px); filter: hue-rotate(0deg); }
-            6% { transform: translate(0); }
-            98% { transform: translate(0); }
-            99% { transform: translate(2px, -3px); filter: opacity(0.8); }
-            100% { transform: translate(0); }
+        /* Subtraction of aggressive glitching in favor of a soft ambient monitor hum */
+        @keyframes slowFlicker {
+            0% { opacity: 0.8; }
+            50% { opacity: 1.0; }
+            100% { opacity: 0.8; }
         }
 
         /* Header Vault Status */
@@ -298,46 +293,6 @@
             color: #000;
         }
 
-        /* Glitch Text Effect Inside Modals */
-        .glitch-text {
-            position: relative;
-            display: inline-block;
-        }
-
-        .glitch-text::before, .glitch-text::after {
-            content: attr(data-text);
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            opacity: 0.8;
-        }
-
-        .glitch-text::before {
-            left: 2px;
-            text-shadow: -2px 0 #ef4444;
-            clip: rect(24px, 550px, 90px, 0);
-            animation: glitch-anim-1 2s infinite linear alternate-reverse;
-        }
-
-        .glitch-text::after {
-            left: -2px;
-            text-shadow: -2px 0 #10b981;
-            clip: rect(85px, 550px, 140px, 0);
-            animation: glitch-anim-2 2.5s infinite linear alternate-reverse;
-        }
-
-        @keyframes glitch-anim-1 {
-            0% { clip: rect(10px, 9999px, 30px, 0); }
-            50% { clip: rect(50px, 9999px, 80px, 0); }
-            100% { clip: rect(20px, 9999px, 60px, 0); }
-        }
-
-        @keyframes glitch-anim-2 {
-            0% { clip: rect(40px, 9999px, 70px, 0); }
-            50% { clip: rect(10px, 9999px, 40px, 0); }
-            100% { clip: rect(80px, 9999px, 100px, 0); }
-        }
-
         /* Alarm Flash Animation for Node 12 */
         @keyframes alarmFlash {
             0% { background-color: rgba(239, 68, 68, 0.3); }
@@ -488,7 +443,7 @@
                 <div style="color: ${card.solved ? 'var(--terminal-green)' : 'var(--alert-red)'}; font-size: 0.75rem; margin-bottom: 4px;">
                     // ACCESS STATUS: ${card.solved ? 'UNLOCKED / CLEARED' : '🔒 ENCRYPTED / LOCKED'}
                 </div>
-                <h2 class="glitch-text" data-text="${card.name}" style="color: #fff; margin-bottom: 4px;">${card.name} (${card.ticker})</h2>
+                <h2 style="color: #fff; margin-bottom: 4px;">${card.name} (${card.ticker})</h2>
                 <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 12px;">${card.desc}</p>
                 
                 <div style="background: #030712; border: 1px solid ${card.solved ? 'var(--terminal-green)' : 'var(--alert-red)'}; padding: 10px; border-radius: 4px; margin-bottom: 12px;">
