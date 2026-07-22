@@ -3,19 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DKF INDUSTRIES // WALLET MATRIX</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>DKF INDUSTRIES // LIVE VAULT MATRIX</title>
     <style>
         :root {
-            --bg-color: #0b0f19;
-            --card-bg: #111827;
-            --border-color: #1f2937;
-            --accent-green: #10b981;
-            --accent-dim: #059669;
-            --accent-red: #ef4444;
+            --bg-color: #030712;
+            --card-bg: #0b0f19;
+            --border-dim: #1f2937;
             --text-main: #f3f4f6;
             --text-muted: #9ca3af;
-            --lock-amber: #f59e0b;
+            
+            /* Neon Character Accent Colors */
+            --glow-snpx: #10b981; /* Green */
+            --glow-mlow: #06b6d4; /* Cyan */
+            --glow-glum: #a855f7; /* Purple */
+            --glow-bite: #f97316; /* Amber/Orange */
+            --glow-pdgy: #38bdf8; /* Blue */
+            --glow-scrh: #ec4899; /* Hot Pink */
+            --glow-gwat: #22c55e; /* Electric Green */
+            --glow-zro:  #64748b; /* Slate Gray */
+            --glow-crkt: #eab308; /* Yellow/Gold */
+            --glow-slk:  #d946ef; /* Magenta */
+            --glow-ghst: #e2e8f0; /* Ghost White */
+            --glow-lock: #ef4444; /* Locked Red */
         }
 
         * {
@@ -27,166 +36,193 @@
 
         body {
             background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.05), transparent 70%),
+                linear-gradient(to bottom, rgba(3, 7, 18, 0.85), rgba(3, 7, 18, 0.95));
             color: var(--text-main);
-            padding: 24px;
+            padding: 20px;
             min-height: 100vh;
         }
 
-        header {
-            border-bottom: 2px solid var(--accent-green);
-            padding-bottom: 16px;
+        /* Top Vault Telemetry Bar */
+        .vault-bar {
+            background: rgba(17, 24, 39, 0.8);
+            border: 1px solid #1f2937;
+            border-radius: 8px;
+            padding: 12px 20px;
             margin-bottom: 24px;
             display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-        }
-
-        h1 {
-            font-size: 1.4rem;
-            color: var(--accent-green);
-            letter-spacing: 2px;
-        }
-
-        .sys-status {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            text-align: right;
-        }
-
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 18px;
-        }
-
-        .wallet-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 16px;
-            position: relative;
-            transition: transform 0.2s, border-color 0.2s;
-        }
-
-        .wallet-card:hover {
-            border-color: var(--accent-green);
-            transform: translateY(-2px);
-        }
-
-        .wallet-card.locked {
-            border-color: var(--lock-amber);
-            background-color: #1a160c;
-        }
-
-        .wallet-header {
-            display: flex;
+            flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 8px;
-            margin-bottom: 12px;
+            gap: 12px;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
         }
 
-        .node-id {
+        .vault-title {
+            color: #10b981;
             font-weight: bold;
             font-size: 0.95rem;
-            color: var(--accent-green);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .node-id.locked-text {
-            color: var(--lock-amber);
-        }
-
-        .badge {
+        .status-pill {
+            background: #7f1d1d;
+            color: #fca5a5;
             font-size: 0.7rem;
-            padding: 2px 6px;
+            padding: 2px 8px;
             border-radius: 4px;
-            background: #064e3b;
-            color: var(--accent-green);
-            text-transform: uppercase;
+            border: 1px solid #ef4444;
         }
 
-        .badge.locked-badge {
-            background: #78350f;
-            color: var(--lock-amber);
+        .progress-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
         }
 
-        .metrics {
+        .progress-bar-bg {
+            width: 140px;
+            height: 10px;
+            background: #111827;
+            border: 1px solid #374151;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 35%;
+            background: linear-gradient(90deg, #059669, #10b981);
+            box-shadow: 0 0 8px #10b981;
+        }
+
+        .treasury-stat {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #38bdf8;
+        }
+
+        /* Card Matrix Grid */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Card Container */
+        .card-item {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 10px;
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            margin-bottom: 12px;
-        }
-
-        .metric-row {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.85rem;
-        }
-
-        .metric-label {
-            color: var(--text-muted);
-        }
-
-        .metric-val {
-            font-weight: bold;
-        }
-
-        .chart-box {
-            height: 80px;
-            margin-bottom: 12px;
-        }
-
-        .address-box {
-            background-color: #030712;
-            padding: 6px 8px;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            display: flex;
-            justify-content: space-between;
             align-items: center;
-            border: 1px solid #111827;
+            position: relative;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            background-clip: padding-box;
         }
 
-        .addr-text {
-            color: var(--text-muted);
+        .card-item:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Custom Neon Borders per Character */
+        .card-snpx { border: 2px solid var(--glow-snpx); box-shadow: 0 0 12px rgba(16, 185, 129, 0.4); }
+        .card-mlow { border: 2px solid var(--glow-mlow); box-shadow: 0 0 12px rgba(6, 182, 212, 0.4); }
+        .card-glum { border: 2px solid var(--glow-glum); box-shadow: 0 0 12px rgba(168, 85, 247, 0.4); }
+        .card-bite { border: 2px solid var(--glow-bite); box-shadow: 0 0 12px rgba(249, 115, 22, 0.4); }
+        .card-pdgy { border: 2px solid var(--glow-pdgy); box-shadow: 0 0 12px rgba(56, 189, 248, 0.4); }
+        .card-scrh { border: 2px solid var(--glow-scrh); box-shadow: 0 0 12px rgba(236, 72, 153, 0.4); }
+        .card-gwat { border: 2px solid var(--glow-gwat); box-shadow: 0 0 12px rgba(34, 197, 94, 0.4); }
+        .card-zro  { border: 2px solid var(--glow-zro);  box-shadow: 0 0 12px rgba(100, 116, 139, 0.4); }
+        .card-crkt { border: 2px solid var(--glow-crkt); box-shadow: 0 0 12px rgba(234, 179, 8, 0.4); }
+        .card-slk  { border: 2px solid var(--glow-slk);  box-shadow: 0 0 12px rgba(217, 70, 239, 0.4); }
+        .card-ghst { border: 2px solid var(--glow-ghst); box-shadow: 0 0 12px rgba(226, 232, 240, 0.4); }
+        .card-lock { border: 2px solid var(--glow-lock); box-shadow: 0 0 12px rgba(239, 68, 68, 0.4); background: #180909; }
+
+        /* Card Image Slot */
+        .image-frame {
+            width: 100%;
+            height: 240px;
+            background-color: #030712;
+            border-radius: 8px;
             overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            max-width: 220px;
+            border: 1px solid #1f2937;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
         }
 
-        .copy-btn {
-            background: transparent;
-            border: none;
-            color: var(--accent-green);
-            cursor: pointer;
-            font-size: 0.75rem;
+        .image-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
-        .copy-btn:hover {
-            text-decoration: underline;
-        }
-
-        .locked-overlay {
+        /* Image Placeholder Box (Shown if image URL is missing) */
+        .placeholder-box {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 140px;
-            color: var(--lock-amber);
+            color: var(--text-muted);
+            font-size: 0.75rem;
             text-align: center;
-            gap: 8px;
+            padding: 10px;
         }
 
-        .lock-icon {
-            font-size: 2rem;
+        .placeholder-icon {
+            font-size: 1.8rem;
+            margin-bottom: 6px;
+        }
+
+        /* Card Description & Details */
+        .card-body {
+            width: 100%;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .char-title {
+            font-size: 0.95rem;
+            font-weight: bold;
+            color: #ffffff;
+            letter-spacing: 1px;
+        }
+
+        .char-desc {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin: 6px 0;
+            line-height: 1.2;
+            min-height: 32px;
+        }
+
+        .ticker-pill {
+            display: inline-block;
+            background: #000000;
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            margin-top: 4px;
         }
 
         footer {
-            margin-top: 32px;
+            margin-top: 40px;
             padding-top: 16px;
-            border-top: 1px solid var(--border-color);
+            border-top: 1px solid var(--border-dim);
             font-size: 0.75rem;
             color: var(--text-muted);
             text-align: center;
@@ -195,121 +231,89 @@
 </head>
 <body>
 
-    <header>
-        <div>
-            <h1>DKF INDUSTRIES</h1>
-            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">OPERATIONAL WALLET MATRIX // R&D SECTOR</div>
+    <!-- Vault Telemetry Header Bar -->
+    <div class="vault-bar">
+        <div class="vault-title">
+            <span>LIVE VAULT: SUB-WALLET MATRIX</span>
+            <span class="status-pill">LOCKED</span>
         </div>
-        <div class="sys-status">
-            [SYS STATUS]: ONLINE<br>
-            [ACTIVE NODES]: 11/12 ACCESSIBLE
+        <div class="progress-container">
+            <span>Hint Progress: 35%</span>
+            <div class="progress-bar-bg">
+                <div class="progress-fill"></div>
+            </div>
+            <span>Burn Goal: 75%</span>
         </div>
-    </header>
+        <div class="treasury-stat">
+            TREASURY: 14.2 SOL
+        </div>
+    </div>
 
-    <div class="grid-container" id="wallet-grid"></div>
+    <!-- 12-Card Grid -->
+    <div class="card-grid" id="card-matrix"></div>
 
     <footer>
         DKF INDUSTRIES (DKF-SYS) // UNCLEARED ACCESS PROHIBITED
     </footer>
 
     <script>
-        const walletNodes = [
-    { id: "NODE-01", name: "$SNPX // Mr. Snaps", balance: "142.85 SOL", value: "$21,427.50", address: "3kF9xA1...9b2Z", isLocked: false, history: [120, 125, 130, 128, 142.85] },
-    { id: "NODE-02", name: "$MLOW // Mellow-Tron", balance: "89.10 SOL", value: "$13,365.00", address: "7mP2qC8...4v1L", isLocked: false, history: [95, 92, 88, 90, 89.10] },
-    { id: "NODE-03", name: "$GLUM // Gloomie", balance: "310.40 SOL", value: "$46,560.00", address: "9xT4vN1...1m8K", isLocked: false, history: [280, 290, 300, 305, 310.40] },
-    { id: "NODE-04", name: "$BITE // Over-Bite", balance: "54.20 SOL", value: "$8,130.00", address: "2bL8rY9...6p3W", isLocked: false, history: [50, 52, 51, 53, 54.20] },
-    { id: "NODE-05", name: "$PDGY // Pudgy Bytes", balance: "198.75 SOL", value: "$29,812.50", address: "5vZ1mQ4...8t7X", isLocked: false, history: [180, 185, 190, 195, 198.75] },
-    { id: "NODE-06", name: "$SCRH // Screech", balance: "412.00 SOL", value: "$61,800.00", address: "8kN3pL2...5x9Y", isLocked: false, history: [390, 400, 405, 410, 412.00] },
-    { id: "NODE-07", name: "$GWAT // Giga-Watt", balance: "76.50 SOL", value: "$11,475.00", address: "1qW4eR7...3y2U", isLocked: false, history: [80, 78, 77, 75, 76.50] },
-    { id: "NODE-08", name: "$ZRO // Zero", balance: "520.10 SOL", value: "$78,015.00", address: "4uI9oP1...7a6S", isLocked: false, history: [480, 495, 500, 510, 520.10] },
-    { id: "NODE-09", name: "$CRKT // Professor Circuit", balance: "230.90 SOL", value: "$34,635.00", address: "6dF3gH8...2j1K", isLocked: false, history: [210, 220, 225, 228, 230.90] },
-    { id: "NODE-10", name: "$SLK // Slick", balance: "115.30 SOL", value: "$17,295.00", address: "9zC5vB0...4m3N", isLocked: false, history: [100, 105, 110, 112, 115.30] },
-    { id: "NODE-11", name: "$GHST // The Developer's Ghost", balance: "67.00 SOL", value: "$10,050.00", address: "3xS7dF2...8g9H", isLocked: false, history: [65, 66, 66, 67, 67.00] },
-    { id: "NODE-12", name: "Andy's Vault // Untouchable Node", balance: "LOCKED", value: "ENCRYPTED", address: "UNASSIGNED / PRIVATE", isLocked: true, history: [] }
-];
-        const gridEl = document.getElementById("wallet-grid");
+        // Character cards configuration
+        const cards = [
+            { id: "01", ticker: "$SNPX", name: "MR. SNAPS", class: "card-snpx", color: "#10b981", desc: "Glitched Retro-Animatronic Squirrel. Rusty, cracked eyes, FNAF style.", img: "snpx.jpg" },
+            { id: "02", ticker: "$MLOW", name: "MELLOW-TRON", class: "card-mlow", color: "#06b6d4", desc: "A laid-back mechanical friend who never lets the system status phase him.", img: "mlow.jpg" },
+            { id: "03", ticker: "$GLUM", name: "GLOOMIE", class: "card-glum", color: "#a855f7", desc: "Pitch-black fuzzy creature with glowing neon eyes floating in a glass vacuum tube.", img: "glum.jpg" },
+            { id: "04", ticker: "$BITE", name: "OVER-BITE", class: "card-bite", color: "#f97316", desc: "Possessed Retro Arcade Cabinet with razor teeth and glowing CRT face.", img: "bite.jpg" },
+            { id: "05", ticker: "$PDGY", name: "PUDGY BYTES", class: "card-pdgy", color: "#38bdf8", desc: "Pixelated Robotic Penguin with sunglasses, sitting on server hard drives.", img: "pdgy.jpg" },
+            { id: "06", ticker: "$SCRH", name: "SCREECH", class: "card-scrh", color: "#ec4899", desc: "Mechanized Bobcat with cracked porcelain, wire mesh face, and glowing processor core.", img: "scrh.jpg" },
+            { id: "07", ticker: "$GWAT", name: "GIGA-WATT", class: "card-gwat", color: "#22c55e", desc: "Muscular Mechanical Gorilla in golden armor with glowing neon-blue vacuum tubes.", img: "gwat.jpg" },
+            { id: "08", ticker: "$ZRO",  name: "ZERO", class: "card-zro", color: "#64748b", desc: "Pitch-black Marionette Puppet hanging from glowing fiber-optic cables.", img: "zro.jpg" },
+            { id: "09", ticker: "$CRKT", name: "PROFESSOR CIRCUIT", class: "card-crkt", color: "#eab308", desc: "Mechanical Gear Owl with brass construction, round spectacles, holding soldering iron.", img: "crkt.jpg" },
+            { id: "10", ticker: "$SLK",  name: "SLICK", class: "card-slk", color: "#d946ef", desc: "Robotic Fox in leather jacket with glowing neon visor against cyberpunk backdrop.", img: "slk.jpg" },
+            { id: "11", ticker: "$GHST", name: "THE DEVELOPER'S GHOST", class: "card-ghst", color: "#e2e8f0", desc: "Massive Amalgam Suit fused from all previous animatronics with 'ENTER PASSPHRASE' screen.", img: "ghst.jpg" },
+            { id: "12", ticker: "NODE-12", name: "ANDY'S VAULT", class: "card-lock", color: "#ef4444", desc: "Level-5 Encrypted Enclave. Untouchable Node.", isLocked: true }
+        ];
 
-        walletNodes.forEach((node, index) => {
-            const card = document.createElement("div");
-            card.className = `wallet-card ${node.isLocked ? 'locked' : ''}`;
+        const matrixContainer = document.getElementById("card-matrix");
 
-            if (node.isLocked) {
-                card.innerHTML = `
-                    <div class="wallet-header">
-                        <span class="node-id locked-text">${node.id}</span>
-                        <span class="badge locked-badge">Restricted</span>
+        cards.forEach(card => {
+            const cardEl = document.createElement("div");
+            cardEl.className = `card-item ${card.class}`;
+
+            if (card.isLocked) {
+                cardEl.innerHTML = `
+                    <div class="image-frame" style="border-color: var(--glow-lock);">
+                        <div class="placeholder-box" style="color: var(--glow-lock);">
+                            <div class="placeholder-icon">🔒</div>
+                            <div>ENCRYPTED VAULT</div>
+                            <div style="font-size: 0.65rem; margin-top: 4px;">LEVEL-5 UNTOUCHABLE</div>
+                        </div>
                     </div>
-                    <div class="locked-overlay">
-                        <div class="lock-icon">🔒</div>
-                        <div style="font-size: 0.85rem; font-weight: bold;">ANDY'S VAULT NODE</div>
-                        <div style="font-size: 0.7rem; color: var(--text-muted);">Access Class: Level-5 Untouchable</div>
-                    </div>
-                    <div class="address-box">
-                        <span class="addr-text">SECURE ENCLAVE // READ-ONLY</span>
-                        <span style="color: var(--lock-amber); font-size: 0.7rem;">[LOCKED]</span>
+                    <div class="card-body">
+                        <div class="char-title" style="color: var(--glow-lock);">${card.name}</div>
+                        <div class="char-desc">${card.desc}</div>
+                        <div class="ticker-pill" style="color: var(--glow-lock); border-color: var(--glow-lock);">[RESTRICTED]</div>
                     </div>
                 `;
             } else {
-                card.innerHTML = `
-                    <div class="wallet-header">
-                        <span class="node-id">${node.id}</span>
-                        <span class="badge">Active</span>
-                    </div>
-                    <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">${node.name}</div>
-                    <div class="metrics">
-                        <div class="metric-row">
-                            <span class="metric-label">Holdings:</span>
-                            <span class="metric-val" style="color: var(--accent-green);">${node.balance}</span>
-                        </div>
-                        <div class="metric-row">
-                            <span class="metric-label">Estimated Value:</span>
-                            <span class="metric-val">${node.value}</span>
+                cardEl.innerHTML = `
+                    <div class="image-frame">
+                        <img src="${card.img}" alt="${card.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="placeholder-box" style="display:none;">
+                            <div class="placeholder-icon">🖼️</div>
+                            <div>ADD IMAGE</div>
+                            <div style="font-size: 0.65rem; color: ${card.color};">${card.img}</div>
                         </div>
                     </div>
-                    <div class="chart-box">
-                        <canvas id="chart-${index}"></canvas>
-                    </div>
-                    <div class="address-box">
-                        <span class="addr-text">${node.address}</span>
-                        <button class="copy-btn" onclick="copyAddr('${node.address}')">Copy</button>
+                    <div class="card-body">
+                        <div class="char-title">${card.name}</div>
+                        <div class="char-desc">${card.desc}</div>
+                        <div class="ticker-pill" style="color: ${card.color};">${card.ticker}</div>
                     </div>
                 `;
             }
 
-            gridEl.appendChild(card);
-
-            if (!node.isLocked) {
-                const ctx = document.getElementById(`chart-${index}`).getContext('2d');
-                new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: ['T-4', 'T-3', 'T-2', 'T-1', 'Now'],
-                        datasets: [{
-                            data: node.history,
-                            borderColor: '#10b981',
-                            borderWidth: 1.5,
-                            pointRadius: 0,
-                            fill: false,
-                            tension: 0.3
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: { legend: { display: false } },
-                        scales: {
-                            x: { display: false },
-                            y: { display: false }
-                        }
-                    }
-                });
-            }
+            matrixContainer.appendChild(cardEl);
         });
-
-        function copyAddr(addr) {
-            navigator.clipboard.writeText(addr);
-            alert("Contract/Wallet Address copied: " + addr);
-        }
     </script>
 </body>
 </html>
