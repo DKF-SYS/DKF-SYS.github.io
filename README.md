@@ -1,89 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DEVELOPMENTAL KINETICS FACILITY // TERMINAL</title>
-    <style>
-        body {
-            background-color: #0b0d10;
-            color: #00ff66;
-            font-family: 'Courier New', Courier, monospace;
-            padding: 20px;
-            margin: 0;
-        }
-        #terminal {
-            max-width: 800px;
-            margin: 20px auto;
-            border: 1px solid #00ff66;
-            padding: 20px;
-            box-shadow: 0 0 15px rgba(0,255,102,0.2);
-            border-radius: 5px;
-        }
-        .output {
-            white-space: pre-wrap;
-            margin-bottom: 15px;
-            line-height: 1.4;
-        }
-        .input-line {
-            display: flex;
-        }
-        .prompt {
-            margin-right: 10px;
-            font-weight: bold;
-        }
-        input {
-            background: transparent;
-            border: none;
-            color: #00ff66;
-            font-family: inherit;
-            font-size: 1em;
-            flex-grow: 1;
-            outline: none;
-        }
-    </style>
-</head>
-<body>
+# DEVELOPMENTAL KINETICS FACILITY // DKF-SYS
 
-<div id="terminal">
-    <div class="output" id="log">
-DEVELOPMENTAL KINETICS FACILITY // SYSTEM TERMINAL v1.0.4
----------------------------------------------------
-[SYSTEM]: Core Vault Ledger Online.
-[SYSTEM]: Type 'help' to view available commands.
-    </div>
-    <div class="input-line">
-        <span class="prompt">DKF-SYS&gt;</span>
-        <input type="text" id="userInput" autofocus autocomplete="off">
-    </div>
-</div>
+> **SYSTEM STATUS:** Core Vault Locked | SHA-256 Commitments Active
 
-<script>
-    const input = document.getElementById('userInput');
-    const log = document.getElementById('log');
+Welcome to the **Developmental Kinetics Facility (DKF-SYS)** public interface node.
 
-    input.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') {
-            const cmd = input.value.trim().toLowerCase();
-            log.innerHTML += `\nDKF-SYS> ${input.value}`;
-            
-            if (cmd === 'help') {
-                log.innerHTML += `\n[AVAILABLE COMMANDS]:\n - help      : Display command menu\n - status    : Check vault and node status\n - scan      : Scan sub-wallets for data fragments\n - parts     : View Andy's component order progress`;
-            } else if (cmd === 'status') {
-                log.innerHTML += `\n[STATUS]: Master Vault Locked. Dynamic Seed Commitment Verified (SHA-256).`;
-            } else if (cmd === 'scan') {
-                log.innerHTML += `\n[SCANNING]: Searching sub-wallets... 11 node fragments detected.`;
-            } else if (cmd === 'parts') {
-                log.innerHTML += `\n[HARDWARE CATALOG]:\n - Micro-Processor Unit: [|||||-----] 50% Funded\n - Sub-Assembly Frame  : [||||||||--] 80% Funded\n - Power Cell Unit     : [||--------] 15% Funded`;
-            } else if (cmd !== '') {
-                log.innerHTML += `\n[ERROR]: Command '${cmd}' not recognized. Type 'help' for options.`;
-            }
-            
-            input.value = '';
-            window.scrollTo(0, document.body.scrollHeight);
-        }
-    });
-</script>
+---
 
-</body>
-</html>
+### 🌐 Live System Terminal
+Access the interactive command terminal to scan sub-wallets and track component hardware progress:
+
+👉 **[Launch Interactive Terminal](https://dkf-sys.github.io)**
+
+---
+
+### 🔧 System Overview & Hardware Catalog
+* **Master Vault:** Locked (Passphrase Sequence Required)
+* **Sub-Wallets:** 11 Node Fragments Active
+* **Primary Operator:** Andy (Hardware Repair Protocol Active)
+
+| Component ID | Part Description | Procurement Status | Funding Threshold |
+| :--- | :--- | :--- | :--- |
+| **MPU-01** | Micro-Processor Control Unit | In Progress | 50% |
+| **SUB-FRM** | Structural Sub-Assembly Frame | In Progress | 80% |
+| **PWR-CELL** | High-Density Power Cell | Awaiting Liquidity | 15% |
+
+---
+
+### 🔒 Cryptographic Verification
+All multi-vault seed phrase commitments are verified using SHA-256 hashes published in `commitments.txt` to ensure complete algorithmic integrity.
