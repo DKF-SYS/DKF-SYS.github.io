@@ -1,8 +1,8 @@
-# DEVELOPMENTAL KINETICS FACILITY // DKF-SYS
+# DYNAMIC KINETIC FACILITY // DKF-SYS
 
 > **SYSTEM STATUS:** Core Vault Locked | SHA-256 Commitments Active
 
-Welcome to the **Developmental Kinetics Facility (DKF-SYS)** public interface node.
+Welcome to the **Dynamic Kinetic Facility (DKF-SYS)** public interface node.
 
 ---
 
