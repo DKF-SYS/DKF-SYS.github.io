@@ -3,18 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DKF INDUSTRIES // BUNKER MONITOR</title>
+    <title>DKF INDUSTRIES // LIVE VAULT MATRIX</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --bg-color: #020509;
+            --bg-dark: #030712;
             --terminal-green: #10b981;
-            --terminal-dim: #064e3b;
             --alert-red: #ef4444;
             --amber-warn: #f59e0b;
-            --card-bg: #090d16;
-            --text-main: #d1d5db;
-            --text-muted: #6b7280;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+
+            /* Neon Accent Colors from Reference Image */
+            --glow-snpx: #10b981; /* Green */
+            --glow-mlow: #06b6d4; /* Cyan / Blue */
+            --glow-glum: #a855f7; /* Purple */
+            --glow-bite: #f97316; /* Amber / Orange */
+            --glow-pdgy: #00b4d8; /* Light Blue */
+            --glow-scrh: #ec4899; /* Hot Pink */
+            --glow-gwat: #10b981; /* Electric Green */
+            --glow-zro:  #3b82f6; /* Electric Blue */
+            --glow-crkt: #f59e0b; /* Gold / Bronze */
+            --glow-slk:  #d946ef; /* Magenta */
+            --glow-ghst: #e2e8f0; /* White / Silver */
+            --glow-lock: #ef4444; /* Alert Red */
         }
 
         * {
@@ -25,7 +37,10 @@
         }
 
         body {
-            background-color: var(--bg-color);
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 50% 30%, rgba(16, 185, 129, 0.08), transparent 70%),
+                linear-gradient(to bottom, rgba(3, 7, 18, 0.85), rgba(3, 7, 18, 0.98));
             color: var(--text-main);
             padding: 20px;
             min-height: 100vh;
@@ -33,153 +48,166 @@
             overflow-x: hidden;
         }
 
-        /* Moving CRT Scanlines Overlay */
+        /* Subtle Ambient Sweep (Smooth & Crisp) */
         body::before {
             content: " ";
             display: block;
             position: fixed;
-            top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(
-                to bottom,
-                rgba(255, 255, 255, 0),
-                rgba(255, 255, 255, 0) 50%,
-                rgba(0, 0, 0, 0.4) 50%,
-                rgba(0, 0, 0, 0.4)
-            ), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
+            top: -20%; left: 0; width: 100%; height: 20%;
+            background: linear-gradient(to bottom, rgba(16, 185, 129, 0) 0%, rgba(16, 185, 129, 0.06) 50%, rgba(16, 185, 129, 0) 100%);
             z-index: 1000;
-            background-size: 100% 6px, 6px 100%;
             pointer-events: none;
-            opacity: 0.8;
-            animation: moveScanlines 10s linear infinite;
+            animation: rollingSweep 10s linear infinite;
         }
 
-        /* Heavy CRT Rolling Bar Sweep & Slow Hum Flicker */
-        body::after {
-            content: " ";
-            display: block;
-            position: fixed;
-            top: -15%; 
-            left: 0; 
-            width: 100%; 
-            height: 15%;
-            background: linear-gradient(
-                to bottom,
-                rgba(16, 185, 129, 0) 0%,
-                rgba(16, 185, 129, 0.12) 50%,
-                rgba(16, 185, 129, 0) 100%
-            );
-            z-index: 1001;
-            pointer-events: none;
-            animation: rollingSweep 7s linear infinite, slowFlicker 3s infinite ease-in-out;
-        }
-
-        /* Keyframe to continuously scroll scanlines down the screen */
-        @keyframes moveScanlines {
-            0% { background-position: 0 0, 0 0; }
-            100% { background-position: 0 100%, 0 0; }
-        }
-
-        /* Keyframe for rolling sweep line down the screen */
         @keyframes rollingSweep {
-            0% { top: -15%; }
+            0% { top: -20%; }
             100% { top: 110%; }
         }
 
-        /* Subtraction of aggressive glitching in favor of a soft ambient monitor hum */
-        @keyframes slowFlicker {
-            0% { opacity: 0.8; }
-            50% { opacity: 1.0; }
-            100% { opacity: 0.8; }
-        }
-
-        /* Header Vault Status */
+        /* Top Telemetry Header Bar (Direct Match to Image) */
         .vault-header {
-            background: rgba(11, 18, 27, 0.9);
-            border: 2px solid var(--terminal-green);
-            box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
-            border-radius: 6px;
-            padding: 16px;
+            background: rgba(11, 18, 27, 0.85);
+            border: 1px solid #1f2937;
+            border-radius: 8px;
+            padding: 12px 24px;
             margin-bottom: 24px;
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
+            gap: 16px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
             gap: 12px;
-        }
-
-        .header-title h1 {
-            font-size: 1.3rem;
             color: var(--terminal-green);
-            letter-spacing: 2px;
-            text-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+            font-weight: bold;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
         }
 
-        .clearance-tracker {
-            font-size: 0.85rem;
-            color: var(--amber-warn);
-            border: 1px solid var(--amber-warn);
-            padding: 6px 12px;
+        .status-pill {
+            background: #7f1d1d;
+            color: #fca5a5;
+            font-size: 0.7rem;
+            padding: 2px 8px;
             border-radius: 4px;
-            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid var(--alert-red);
         }
 
-        /* Card Grid */
+        .progress-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .progress-bar-bg {
+            width: 160px;
+            height: 10px;
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 35%;
+            background: linear-gradient(90deg, #059669, #10b981);
+            box-shadow: 0 0 8px #10b981;
+        }
+
+        .treasury-stat {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #38bdf8;
+            letter-spacing: 1px;
+        }
+
+        /* Card Matrix Grid */
         .card-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
             gap: 20px;
             max-width: 1400px;
             margin: 0 auto;
         }
 
-        /* Card Container */
+        /* Trading Card Styling */
         .card-item {
-            background-color: var(--card-bg);
-            border: 2px solid #1f2937;
-            border-radius: 8px;
-            padding: 12px;
+            background-color: #0b0f19;
+            border-radius: 12px;
+            padding: 8px;
             display: flex;
             flex-direction: column;
             position: relative;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
         }
 
         .card-item:hover {
-            border-color: var(--terminal-green);
-            box-shadow: 0 0 12px rgba(16, 185, 129, 0.3);
-            transform: translateY(-3px);
+            transform: translateY(-6px);
         }
 
-        /* Node 12 Special Card Style */
-        .card-item.vault-node-12 {
-            border-color: var(--alert-red);
-            background: rgba(239, 68, 68, 0.05);
-            box-shadow: 0 0 10px rgba(239, 68, 68, 0.2);
+        /* Neon Color Assignments per Character */
+        .card-snpx { border: 2px solid var(--glow-snpx); box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
+        .card-mlow { border: 2px solid var(--glow-mlow); box-shadow: 0 0 15px rgba(6, 182, 212, 0.4); }
+        .card-glum { border: 2px solid var(--glow-glum); box-shadow: 0 0 15px rgba(168, 85, 247, 0.4); }
+        .card-bite { border: 2px solid var(--glow-bite); box-shadow: 0 0 15px rgba(249, 115, 22, 0.4); }
+        .card-pdgy { border: 2px solid var(--glow-pdgy); box-shadow: 0 0 15px rgba(0, 180, 216, 0.4); }
+        .card-scrh { border: 2px solid var(--glow-scrh); box-shadow: 0 0 15px rgba(236, 72, 153, 0.4); }
+        .card-gwat { border: 2px solid var(--glow-gwat); box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
+        .card-zro  { border: 2px solid var(--glow-zro);  box-shadow: 0 0 15px rgba(59, 130, 246, 0.4); }
+        .card-crkt { border: 2px solid var(--glow-crkt); box-shadow: 0 0 15px rgba(245, 158, 11, 0.4); }
+        .card-slk  { border: 2px solid var(--glow-slk);  box-shadow: 0 0 15px rgba(217, 70, 239, 0.4); }
+        .card-ghst { border: 2px solid var(--glow-ghst); box-shadow: 0 0 15px rgba(226, 232, 240, 0.4); }
+        .card-lock { border: 2px solid var(--glow-lock); box-shadow: 0 0 15px rgba(239, 68, 68, 0.4); background: #180909; }
+
+        /* Card Inner Ornate Border */
+        .card-inner {
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
         }
 
-        .card-status-badge {
-            font-size: 0.65rem;
-            padding: 2px 6px;
-            border-radius: 3px;
+        /* Number Badge Corner Icon */
+        .card-number-badge {
+            position: absolute;
+            top: 12px; left: 12px;
+            width: 22px; height: 22px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
             font-weight: bold;
-            text-transform: uppercase;
-            align-self: flex-start;
-            margin-bottom: 8px;
+            color: #fff;
+            z-index: 5;
         }
 
-        .badge-solved { background: #065f46; color: #34d399; border: 1px solid #10b981; }
-        .badge-alert { background: #7f1d1d; color: var(--alert-red); border: 1px solid var(--alert-red); }
-
+        /* Image Display Frame */
         .image-frame {
             width: 100%;
             height: 180px;
-            background-color: #000;
-            border-radius: 4px;
+            background-color: #030712;
+            border-radius: 6px;
             overflow: hidden;
-            border: 1px solid #1f2937;
+            border: 1px solid rgba(255, 255, 255, 0.1);
             position: relative;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -191,57 +219,65 @@
             object-fit: cover;
         }
 
+        /* Character Card Text Block */
         .card-title {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: bold;
             color: #ffffff;
+            text-align: center;
+            letter-spacing: 1px;
             margin-bottom: 4px;
         }
 
-        .card-ticker {
-            font-size: 0.75rem;
-            color: var(--terminal-green);
+        .card-desc-box {
+            background: #000000;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            padding: 6px;
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            text-align: center;
+            line-height: 1.25;
+            min-height: 48px;
             margin-bottom: 8px;
         }
 
         /* Coin Address Box */
         .addr-box {
-            background: #02050a;
-            border: 1px solid #1f2937;
-            padding: 4px 6px;
+            background: rgba(3, 7, 18, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 3px 6px;
             border-radius: 4px;
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             color: var(--text-muted);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            text-align: center;
         }
 
-        /* Progress Bar */
-        .card-progress-bg {
-            width: 100%;
-            height: 6px;
-            background: #111827;
-            border-radius: 3px;
-            overflow: hidden;
-            margin-bottom: 8px;
-            border: 1px solid #1f2937;
+        /* Bottom Ticker Pill */
+        .ticker-pill {
+            align-self: center;
+            background: #000000;
+            padding: 3px 12px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            margin-top: auto;
         }
 
-        .card-progress-fill {
-            height: 100%;
-            background: var(--terminal-green);
-            width: 0%;
-        }
-
-        /* Small Chart Box */
+        /* Sparkline Chart Container */
         .mini-chart-box {
-            height: 45px;
+            height: 35px;
             width: 100%;
+            margin-top: 4px;
         }
 
-        /* Full View Modal Overlay */
+        /* Full Interactive Modal Popup */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -276,7 +312,7 @@
         }
 
         .modal-btn {
-            background: var(--terminal-dim);
+            background: rgba(16, 185, 129, 0.15);
             color: var(--terminal-green);
             border: 1px solid var(--terminal-green);
             padding: 10px 16px;
@@ -293,10 +329,10 @@
             color: #000;
         }
 
-        /* Alarm Flash Animation for Node 12 */
+        /* Node 12 Emergency Override Alarm */
         @keyframes alarmFlash {
             0% { background-color: rgba(239, 68, 68, 0.3); }
-            50% { background-color: rgba(0, 0, 0, 0.9); }
+            50% { background-color: rgba(0, 0, 0, 0.95); }
             100% { background-color: rgba(239, 68, 68, 0.3); }
         }
 
@@ -307,18 +343,25 @@
 </head>
 <body>
 
-    <!-- Header Banner -->
+    <!-- Vault Telemetry Bar -->
     <div class="vault-header">
         <div class="header-title">
-            <h1>DKF INDUSTRIES // BUNKER MONITOR</h1>
-            <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">SECURE CLEARANCE SUB-LEVEL 04</div>
+            <span>LIVE VAULT: SUB-WALLET #01</span>
+            <span class="status-pill">LOCKED</span>
         </div>
-        <div class="clearance-tracker" id="clearance-status">
-            CLEARANCE PROGRESS: 0 / 11 CARDS SOLVED
+        <div class="progress-container">
+            <span>Hint Progress: 35%</span>
+            <div class="progress-bar-bg">
+                <div class="progress-fill"></div>
+            </div>
+            <span>Burn Goal: 75%</span>
+        </div>
+        <div class="treasury-stat">
+            TREASURY: 14.2 SOL
         </div>
     </div>
 
-    <!-- 12 Node Grid -->
+    <!-- 12-Card Grid -->
     <div class="card-grid" id="card-grid"></div>
 
     <!-- Stats & Solve Modal -->
@@ -331,18 +374,18 @@
 
     <script>
         const cardsData = [
-            { id: 1, name: "MR. SNAPS", ticker: "$SNPX", desc: "Mechanical Capture & Hardware Interlocking Unit.", addr: "3kF9xA1...9b2Z", progress: 45, chart: [12, 18, 25, 22, 45], solved: false, img: "snpx.jpg" },
-            { id: 2, name: "MELLOW-TRON", ticker: "$MLOW", desc: "Signal Stabilization & Frequency Dampening.", addr: "7mP2qC8...4v1L", progress: 60, chart: [30, 35, 40, 52, 60], solved: false, img: "mlow.jpg" },
-            { id: 3, name: "GLOOMIE", ticker: "$GLUM", desc: "Sub-Layer Telemetry & Low-Voltage Monitoring.", addr: "9xT4vN1...1m8K", progress: 30, chart: [10, 15, 12, 28, 30], solved: false, img: "glum.jpg" },
-            { id: 4, name: "OVER-BITE", ticker: "$BITE", desc: "Data Ingestion & Mechanical Compression.", addr: "2bL8rY9...6p3W", progress: 80, chart: [40, 50, 65, 70, 80], solved: false, img: "bite.jpg" },
-            { id: 5, name: "PUDGY BYTES", ticker: "$PDGY", desc: "Buffer Storage & Heavy Data Processing.", addr: "5vZ1mQ4...8t7X", progress: 20, chart: [5, 12, 10, 15, 20], solved: false, img: "pdgy.jpg" },
-            { id: 6, name: "SCREECH", ticker: "$SCRH", desc: "High-Frequency Comms & Acoustic Waveform.", addr: "8kN3pL2...5x9Y", progress: 90, chart: [50, 60, 75, 82, 90], solved: false, img: "scrh.jpg" },
-            { id: 7, name: "GIGA-WATT", ticker: "$GWAT", desc: "Primary Power Grid & High-Voltage Discharge.", addr: "1qW4eR7...3y2U", progress: 50, chart: [20, 30, 25, 40, 50], solved: false, img: "gwat.jpg" },
-            { id: 8, name: "ZERO", ticker: "$ZRO", desc: "System Reset & Null-State Enclave.", addr: "4uI9oP1...7a6S", progress: 15, chart: [5, 8, 10, 12, 15], solved: false, img: "zro.jpg" },
-            { id: 9, name: "PROFESSOR CIRCUIT", ticker: "$CRKT", desc: "Main Architecture Logic & CPU Routing.", addr: "6dF3gH8...2j1K", progress: 70, chart: [30, 45, 50, 62, 70], solved: false, img: "crkt.jpg" },
-            { id: 10, name: "SLICK", ticker: "$SLK", desc: "Frictionless Protocol & Exchange Routing.", addr: "9zC5vB0...4m3N", progress: 40, chart: [15, 20, 32, 38, 40], solved: false, img: "slk.jpg" },
-            { id: 11, name: "THE DEVELOPER'S GHOST", ticker: "$GHST", desc: "Autonomous Legacy Kernel & Background Scripting.", addr: "3xS7dF2...8g9H", progress: 10, chart: [2, 4, 6, 8, 10], solved: false, img: "ghst.jpg" },
-            { id: 12, name: "ANDY'S VAULT", ticker: "NODE-12", desc: "Level-5 Untouchable Enclave.", addr: "ENCRYPTED", progress: 0, chart: [], solved: false, isVault: true }
+            { id: 1, name: "MR. SNAPS", ticker: "$SNPX", class: "card-snpx", color: "#10b981", desc: "Glitched Retro-Animatronic Squirrel. Rusty, cracked eyes, FNAF style.", addr: "3kF9xA1...9b2Z", progress: 45, chart: [12, 18, 25, 22, 45], solved: false, img: "snpx.jpg" },
+            { id: 2, name: "MELLOW-TRON", ticker: "$MLOW", class: "card-mlow", color: "#06b6d4", desc: "A laid-back mechanical friend who never lets the system status phase him.", addr: "7mP2qC8...4v1L", progress: 60, chart: [30, 35, 40, 52, 60], solved: false, img: "mlow.jpg" },
+            { id: 3, name: "GLOOMIE", ticker: "$GLUM", class: "card-glum", color: "#a855f7", desc: "Pitch-black fuzzy creature with glowing neon eyes inside a glass vacuum tube.", addr: "9xT4vN1...1m8K", progress: 30, chart: [10, 15, 12, 28, 30], solved: false, img: "glum.jpg" },
+            { id: 4, name: "OVER-BITE", ticker: "$BITE", class: "card-bite", color: "#f97316", desc: "Possessed Retro Arcade Cabinet with razor teeth and glowing CRT face.", addr: "2bL8rY9...6p3W", progress: 80, chart: [40, 50, 65, 70, 80], solved: false, img: "bite.jpg" },
+            { id: 5, name: "PUDGY BYTES", ticker: "$PDGY", class: "card-pdgy", color: "#00b4d8", desc: "Pixelated Robotic Penguin with sunglasses, sitting on server hard drives.", addr: "5vZ1mQ4...8t7X", progress: 20, chart: [5, 12, 10, 15, 20], solved: false, img: "pdgy.jpg" },
+            { id: 6, name: "SCREECH", ticker: "$SCRH", class: "card-scrh", color: "#ec4899", desc: "Mechanized Bobcat with cracked porcelain, wire mesh face, and glowing core.", addr: "8kN3pL2...5x9Y", progress: 90, chart: [50, 60, 75, 82, 90], solved: false, img: "scrh.jpg" },
+            { id: 7, name: "GIGA-WATT", ticker: "$GWAT", class: "card-gwat", color: "#10b981", desc: "Muscular Mechanical Gorilla in golden armor with glowing blue vacuum tubes.", addr: "1qW4eR7...3y2U", progress: 50, chart: [20, 30, 25, 40, 50], solved: false, img: "gwat.jpg" },
+            { id: 8, name: "ZERO", ticker: "$ZRO", class: "card-zro", color: "#3b82f6", desc: "Pitch-black Marionette Puppet hanging from glowing fiber-optic cables.", addr: "4uI9oP1...7a6S", progress: 15, chart: [5, 8, 10, 12, 15], solved: false, img: "zro.jpg" },
+            { id: 9, name: "PROFESSOR CIRCUIT", ticker: "$CRKT", class: "card-crkt", color: "#f59e0b", desc: "Mechanical Gear Owl with brass construction, round spectacles, soldering iron.", addr: "6dF3gH8...2j1K", progress: 70, chart: [30, 45, 50, 62, 70], solved: false, img: "crkt.jpg" },
+            { id: 10, name: "SLICK", ticker: "$SLK", class: "card-slk", color: "#d946ef", desc: "Robotic Fox in leather jacket with glowing neon visor against cyberpunk street.", addr: "9zC5vB0...4m3N", progress: 40, chart: [15, 20, 32, 38, 40], solved: false, img: "slk.jpg" },
+            { id: 11, name: "THE DEVELOPER'S GHOST", ticker: "$GHST", class: "card-ghst", color: "#e2e8f0", desc: "Massive Amalgam Suit fused from animatronics with 'ENTER PASSPHRASE' screen.", addr: "3xS7dF2...8g9H", progress: 10, chart: [2, 4, 6, 8, 10], solved: false, img: "ghst.jpg" },
+            { id: 12, name: "ANDY'S VAULT", ticker: "NODE-12", class: "card-lock", color: "#ef4444", desc: "Level-5 Encrypted Enclave. Untouchable Vault Node.", addr: "ENCRYPTED", progress: 0, chart: [], solved: false, isVault: true }
         ];
 
         const gridContainer = document.getElementById("card-grid");
@@ -351,50 +394,48 @@
         function renderGrid() {
             gridContainer.innerHTML = "";
             let solvedCount = cardsData.filter(c => c.solved).length;
-            document.getElementById("clearance-status").innerText = `CLEARANCE PROGRESS: ${solvedCount} / 11 CARDS SOLVED`;
 
             cardsData.forEach((card, index) => {
                 const cardEl = document.createElement("div");
 
                 if (card.isVault) {
-                    cardEl.className = "card-item vault-node-12";
+                    cardEl.className = `card-item ${card.class}`;
                     const readyToActivate = solvedCount === 11;
                     cardEl.innerHTML = `
-                        <span class="card-status-badge ${readyToActivate ? 'badge-alert' : 'badge-alert'}">
-                            ${readyToActivate ? 'READY TO UNLOCK' : '🔒 LOCKED'}
-                        </span>
-                        <div class="image-frame" style="border-color: var(--alert-red);">
-                            <div style="text-align: center; color: var(--alert-red);">
-                                <div style="font-size: 2rem;">🔒</div>
-                                <div style="font-size: 0.7rem; margin-top: 4px;">ANDY'S VAULT</div>
+                        <div class="card-number-badge" style="color: var(--alert-red); border-color: var(--alert-red);">12</div>
+                        <div class="card-inner">
+                            <div class="image-frame" style="border-color: var(--alert-red);">
+                                <div style="text-align: center; color: var(--alert-red);">
+                                    <div style="font-size: 2.2rem;">🔒</div>
+                                    <div style="font-size: 0.65rem; margin-top: 4px;">ANDY'S VAULT</div>
+                                </div>
                             </div>
+                            <div class="card-title" style="color: var(--alert-red);">${card.name}</div>
+                            <div class="card-desc-box" style="border-color: rgba(239,68,68,0.3); color: #fca5a5;">${card.desc}</div>
+                            <div class="addr-box" style="border-color: var(--alert-red); color: var(--alert-red);">ACCESS RESTRICTED</div>
+                            <div class="ticker-pill" style="color: var(--alert-red); border-color: var(--alert-red);">[LOCKED]</div>
                         </div>
-                        <div class="card-title" style="color: var(--alert-red);">${card.name}</div>
-                        <div style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 8px;">LOCKED // UNLOCK CARDS TO ACTIVATE</div>
-                        <div class="addr-box" style="border-color: var(--alert-red); color: var(--alert-red);">ACCESS RESTRICTED</div>
                     `;
                     cardEl.onclick = () => triggerNode12Sequence(readyToActivate);
                 } else {
-                    cardEl.className = "card-item";
-                    let statusBadge = card.solved 
-                        ? `<span class="card-status-badge badge-solved">✓ UNLOCKED</span>`
-                        : `<span class="card-status-badge badge-alert">🔒 LOCKED</span>`;
-
+                    cardEl.className = `card-item ${card.class}`;
                     cardEl.innerHTML = `
-                        ${statusBadge}
-                        <div class="image-frame">
-                            <img src="${card.img}" alt="${card.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                            <div style="display:none; color: var(--text-muted); font-size: 0.7rem;">🖼️ ${card.img}</div>
-                        </div>
-                        <div class="card-title">${card.name}</div>
-                        <div class="card-ticker">${card.ticker}</div>
-                        <div class="addr-box">CA: ${card.addr}</div>
-                        <div style="font-size: 0.65rem; color: var(--text-muted); margin-bottom: 2px;">STATUS: ${card.solved ? 'CLEARED' : 'LOCKED'}</div>
-                        <div class="card-progress-bg">
-                            <div class="card-progress-fill" style="width: ${card.solved ? 100 : card.progress}%; background: ${card.solved ? 'var(--terminal-green)' : 'var(--alert-red)'};"></div>
-                        </div>
-                        <div class="mini-chart-box">
-                            <canvas id="mini-chart-${card.id}"></canvas>
+                        <div class="card-number-badge">${card.id}</div>
+                        <div class="card-inner">
+                            <div class="image-frame">
+                                <img src="${card.img}" alt="${card.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <div style="display:none; flex-direction:column; align-items:center; color: var(--text-muted); font-size: 0.7rem;">
+                                    <div style="font-size: 1.5rem;">🖼️</div>
+                                    <div>${card.img}</div>
+                                </div>
+                            </div>
+                            <div class="card-title">${card.name}</div>
+                            <div class="card-desc-box">${card.desc}</div>
+                            <div class="addr-box">CA: ${card.addr}</div>
+                            <div class="mini-chart-box">
+                                <canvas id="mini-chart-${card.id}"></canvas>
+                            </div>
+                            <div class="ticker-pill" style="color: ${card.color}; border-color: ${card.color};">${card.ticker}</div>
                         </div>
                     `;
 
@@ -420,7 +461,7 @@
                     labels: ['1', '2', '3', '4', '5'],
                     datasets: [{
                         data: card.chart,
-                        borderColor: card.solved ? '#10b981' : '#ef4444',
+                        borderColor: card.color,
                         borderWidth: 1.5,
                         pointRadius: 0,
                         fill: false
@@ -440,25 +481,25 @@
             const modalBody = document.getElementById("modal-body");
             
             modalBody.innerHTML = `
-                <div style="color: ${card.solved ? 'var(--terminal-green)' : 'var(--alert-red)'}; font-size: 0.75rem; margin-bottom: 4px;">
+                <div style="color: ${card.color}; font-size: 0.75rem; margin-bottom: 4px;">
                     // ACCESS STATUS: ${card.solved ? 'UNLOCKED / CLEARED' : '🔒 ENCRYPTED / LOCKED'}
                 </div>
                 <h2 style="color: #fff; margin-bottom: 4px;">${card.name} (${card.ticker})</h2>
                 <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 12px;">${card.desc}</p>
                 
-                <div style="background: #030712; border: 1px solid ${card.solved ? 'var(--terminal-green)' : 'var(--alert-red)'}; padding: 10px; border-radius: 4px; margin-bottom: 12px;">
+                <div style="background: #030712; border: 1px solid ${card.color}; padding: 10px; border-radius: 4px; margin-bottom: 12px;">
                     <div style="font-size: 0.7rem; color: var(--text-muted);">CONTRACT ADDRESS</div>
-                    <div style="font-size: 0.8rem; color: var(--terminal-green); word-break: break-all;">${card.addr}</div>
+                    <div style="font-size: 0.8rem; color: ${card.color}; word-break: break-all;">${card.addr}</div>
                 </div>
 
                 <div style="margin-bottom: 12px;">
-                    <div style="font-size: 0.75rem; margin-bottom: 4px;">SYSTEM CLEARANCE: ${card.solved ? '100%' : 'LOCKED (PASSCODE REQUIRED)'}</div>
-                    <div class="card-progress-bg" style="height: 10px;">
-                        <div class="card-progress-fill" style="width: ${card.solved ? 100 : card.progress}%; background: ${card.solved ? 'var(--terminal-green)' : 'var(--alert-red)'};"></div>
+                    <div style="font-size: 0.75rem; margin-bottom: 4px; color: #fff;">CLEARANCE LEVEL: ${card.solved ? '100% (CLEARED)' : 'LOCKED'}</div>
+                    <div class="progress-bar-bg" style="width: 100%; height: 10px;">
+                        <div class="progress-fill" style="width: ${card.solved ? 100 : card.progress}%; background: ${card.color}; box-shadow: 0 0 8px ${card.color};"></div>
                     </div>
                 </div>
 
-                <button class="modal-btn" style="border-color: ${card.solved ? 'var(--terminal-green)' : 'var(--alert-red)'};" onclick="solveCard(${index})">
+                <button class="modal-btn" style="border-color: ${card.color}; color: ${card.color};" onclick="solveCard(${index})">
                     ${card.solved ? 'NODE CLEARED' : 'ENTER OVERRIDE CODE TO UNLOCK'}
                 </button>
             `;
