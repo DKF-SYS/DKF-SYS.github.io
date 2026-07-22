@@ -1,6 +1,6 @@
 # DKF INDUSTRIES // OPERATIONAL MATRIX
 
-Welcome to the central command repository for **DKF Industries** (Dynamic Kinetics Framework). This system manages operational node telemetry, wallet metrics, and high-level sector infrastructure.
+Welcome to the central command repository for **DKF Industries**. This system manages operational node telemetry, wallet metrics, and high-level sector infrastructure.
 
 ---
 
