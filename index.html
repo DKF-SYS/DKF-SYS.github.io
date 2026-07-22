@@ -3,69 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DKF INDUSTRIES // ABANDONED BUNKER TERMINAL</title>
+    <title>DKF INDUSTRIES // BUNKER MONITOR</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* Replace your existing body style with this */
-body {
-    background-color: var(--bg-color);
-    color: var(--text-main);
-    padding: 20px;
-    min-height: 100vh;
-    position: relative;
-    overflow-x: hidden;
-    animation: monitorGlitch 4s infinite linear; /* Triggers CRT glitch */
-}
-
-/* Paste the new keyframes right above </style> */
-@keyframes monitorGlitch {
-    0% { transform: translate(0); filter: hue-rotate(0deg); }
-    2% { transform: translate(-3px, 2px); filter: hue-rotate(90deg) contrast(1.5); }
-    4% { transform: translate(3px, -1px); filter: hue-rotate(0deg); }
-    6% { transform: translate(0); }
-    98% { transform: translate(0); }
-    99% { transform: translate(2px, -3px); filter: opacity(0.8); }
-    100% { transform: translate(0); }
-}
-
-.glitch-text {
-    position: relative;
-    display: inline-block;
-}
-
-.glitch-text::before, .glitch-text::after {
-    content: attr(data-text);
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    opacity: 0.8;
-}
-
-.glitch-text::before {
-    left: 2px;
-    text-shadow: -2px 0 #ef4444;
-    clip: rect(24px, 550px, 90px, 0);
-    animation: glitch-anim-1 2s infinite linear alternate-reverse;
-}
-
-.glitch-text::after {
-    left: -2px;
-    text-shadow: -2px 0 #10b981;
-    clip: rect(85px, 550px, 140px, 0);
-    animation: glitch-anim-2 2.5s infinite linear alternate-reverse;
-}
-
-@keyframes glitch-anim-1 {
-    0% { clip: rect(10px, 9999px, 30px, 0); }
-    50% { clip: rect(50px, 9999px, 80px, 0); }
-    100% { clip: rect(20px, 9999px, 60px, 0); }
-}
-
-@keyframes glitch-anim-2 {
-    0% { clip: rect(40px, 9999px, 70px, 0); }
-    50% { clip: rect(10px, 9999px, 40px, 0); }
-    100% { clip: rect(80px, 9999px, 100px, 0); }
-}
         :root {
             --bg-color: #020509;
             --terminal-green: #10b981;
@@ -91,9 +31,10 @@ body {
             min-height: 100vh;
             position: relative;
             overflow-x: hidden;
+            animation: monitorGlitch 4s infinite linear;
         }
 
-        /* Abandoned Bunker CRT Scanline & Grid Effect Overlay */
+        /* Abandoned Bunker CRT Scanline Overlay */
         body::before {
             content: " ";
             display: block;
@@ -107,7 +48,7 @@ body {
             opacity: 0.7;
         }
 
-        /* CRT Screen Flicker */
+        /* CRT Flicker Effect */
         body::after {
             content: " ";
             display: block;
@@ -124,6 +65,17 @@ body {
             0% { opacity: 0.01; }
             50% { opacity: 0.04; }
             100% { opacity: 0.01; }
+        }
+
+        /* Monitor Glitch Shift Keyframes */
+        @keyframes monitorGlitch {
+            0% { transform: translate(0); filter: hue-rotate(0deg); }
+            2% { transform: translate(-3px, 2px); filter: hue-rotate(90deg) contrast(1.5); }
+            4% { transform: translate(3px, -1px); filter: hue-rotate(0deg); }
+            6% { transform: translate(0); }
+            98% { transform: translate(0); }
+            99% { transform: translate(2px, -3px); filter: opacity(0.8); }
+            100% { transform: translate(0); }
         }
 
         /* Header Vault Status */
@@ -179,20 +131,13 @@ body {
             transition: all 0.2s ease;
         }
 
-        .card-item.unlocked:hover {
+        .card-item:hover {
             border-color: var(--terminal-green);
             box-shadow: 0 0 12px rgba(16, 185, 129, 0.3);
             transform: translateY(-3px);
         }
 
-        .card-item.locked-node {
-            opacity: 0.5;
-            cursor: not-allowed;
-            border-color: #374151;
-            background-color: #05070c;
-        }
-
-        /* Node 12 Special Locked Card Style */
+        /* Node 12 Special Card Style */
         .card-item.vault-node-12 {
             border-color: var(--alert-red);
             background: rgba(239, 68, 68, 0.05);
@@ -209,9 +154,7 @@ body {
             margin-bottom: 8px;
         }
 
-        .badge-unlocked { background: var(--terminal-dim); color: var(--terminal-green); border: 1px solid var(--terminal-green); }
         .badge-solved { background: #065f46; color: #34d399; border: 1px solid #10b981; }
-        .badge-locked { background: #374151; color: var(--text-muted); border: 1px solid #4b5563; }
         .badge-alert { background: #7f1d1d; color: var(--alert-red); border: 1px solid var(--alert-red); }
 
         .image-frame {
@@ -336,7 +279,47 @@ body {
             color: #000;
         }
 
-        /* Alarm Flash Animation for Node 12 Sequence */
+        /* Glitch Text Effect Inside Modals */
+        .glitch-text {
+            position: relative;
+            display: inline-block;
+        }
+
+        .glitch-text::before, .glitch-text::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            opacity: 0.8;
+        }
+
+        .glitch-text::before {
+            left: 2px;
+            text-shadow: -2px 0 #ef4444;
+            clip: rect(24px, 550px, 90px, 0);
+            animation: glitch-anim-1 2s infinite linear alternate-reverse;
+        }
+
+        .glitch-text::after {
+            left: -2px;
+            text-shadow: -2px 0 #10b981;
+            clip: rect(85px, 550px, 140px, 0);
+            animation: glitch-anim-2 2.5s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitch-anim-1 {
+            0% { clip: rect(10px, 9999px, 30px, 0); }
+            50% { clip: rect(50px, 9999px, 80px, 0); }
+            100% { clip: rect(20px, 9999px, 60px, 0); }
+        }
+
+        @keyframes glitch-anim-2 {
+            0% { clip: rect(40px, 9999px, 70px, 0); }
+            50% { clip: rect(10px, 9999px, 40px, 0); }
+            100% { clip: rect(80px, 9999px, 100px, 0); }
+        }
+
+        /* Alarm Flash Animation for Node 12 */
         @keyframes alarmFlash {
             0% { background-color: rgba(239, 68, 68, 0.3); }
             50% { background-color: rgba(0, 0, 0, 0.9); }
@@ -388,7 +371,6 @@ body {
             { id: 12, name: "ANDY'S VAULT", ticker: "NODE-12", desc: "Level-5 Untouchable Enclave.", addr: "ENCRYPTED", progress: 0, chart: [], solved: false, isVault: true }
         ];
 
-        let activeUnlockedIndex = 0; // Card 1 unlocked by default
         const gridContainer = document.getElementById("card-grid");
         const chartInstances = {};
 
@@ -399,15 +381,13 @@ body {
 
             cardsData.forEach((card, index) => {
                 const cardEl = document.createElement("div");
-                const isUnlocked = index <= activeUnlockedIndex;
-                
+
                 if (card.isVault) {
-                    // Node 12 special state
                     cardEl.className = "card-item vault-node-12";
                     const readyToActivate = solvedCount === 11;
                     cardEl.innerHTML = `
-                        <span class="card-status-badge ${readyToActivate ? 'badge-alert' : 'badge-locked'}">
-                            ${readyToActivate ? 'READY TO UNLOCK' : 'LOCKED'}
+                        <span class="card-status-badge ${readyToActivate ? 'badge-alert' : 'badge-alert'}">
+                            ${readyToActivate ? 'READY TO UNLOCK' : '🔒 LOCKED'}
                         </span>
                         <div class="image-frame" style="border-color: var(--alert-red);">
                             <div style="text-align: center; color: var(--alert-red);">
@@ -421,13 +401,10 @@ body {
                     `;
                     cardEl.onclick = () => triggerNode12Sequence(readyToActivate);
                 } else {
-                    cardEl.className = `card-item ${isUnlocked ? 'unlocked' : 'locked-node'}`;
-                    let statusBadge = `<span class="card-status-badge badge-locked">LOCKED</span>`;
-                    if (card.solved) {
-                        statusBadge = `<span class="card-status-badge badge-solved">✓ SOLVED</span>`;
-                    } else if (isUnlocked) {
-                        statusBadge = `<span class="card-status-badge badge-unlocked">ACTIVE NODE</span>`;
-                    }
+                    cardEl.className = "card-item";
+                    let statusBadge = card.solved 
+                        ? `<span class="card-status-badge badge-solved">✓ UNLOCKED</span>`
+                        : `<span class="card-status-badge badge-alert">🔒 LOCKED</span>`;
 
                     cardEl.innerHTML = `
                         ${statusBadge}
@@ -438,24 +415,21 @@ body {
                         <div class="card-title">${card.name}</div>
                         <div class="card-ticker">${card.ticker}</div>
                         <div class="addr-box">CA: ${card.addr}</div>
-                        <div style="font-size: 0.65rem; color: var(--text-muted); margin-bottom: 2px;">CLEARANCE: ${card.progress}%</div>
+                        <div style="font-size: 0.65rem; color: var(--text-muted); margin-bottom: 2px;">STATUS: ${card.solved ? 'CLEARED' : 'LOCKED'}</div>
                         <div class="card-progress-bg">
-                            <div class="card-progress-fill" style="width: ${card.progress}%;"></div>
+                            <div class="card-progress-fill" style="width: ${card.solved ? 100 : card.progress}%; background: ${card.solved ? 'var(--terminal-green)' : 'var(--alert-red)'};"></div>
                         </div>
                         <div class="mini-chart-box">
                             <canvas id="mini-chart-${card.id}"></canvas>
                         </div>
                     `;
 
-                    if (isUnlocked) {
-                        cardEl.onclick = () => openModal(card, index);
-                    }
+                    cardEl.onclick = () => openModal(card, index);
                 }
 
                 gridContainer.appendChild(cardEl);
 
-                // Render mini sparklines for active cards
-                if (isUnlocked && !card.isVault) {
+                if (!card.isVault) {
                     setTimeout(() => renderMiniChart(card), 50);
                 }
             });
@@ -472,7 +446,7 @@ body {
                     labels: ['1', '2', '3', '4', '5'],
                     datasets: [{
                         data: card.chart,
-                        borderColor: '#10b981',
+                        borderColor: card.solved ? '#10b981' : '#ef4444',
                         borderWidth: 1.5,
                         pointRadius: 0,
                         fill: false
@@ -492,24 +466,26 @@ body {
             const modalBody = document.getElementById("modal-body");
             
             modalBody.innerHTML = `
-                <div style="color: var(--terminal-green); font-size: 0.75rem; margin-bottom: 4px;">// TACTICAL NODE SPECS</div>
-                <h2 style="color: #fff; margin-bottom: 4px;">${card.name} (${card.ticker})</h2>
+                <div style="color: ${card.solved ? 'var(--terminal-green)' : 'var(--alert-red)'}; font-size: 0.75rem; margin-bottom: 4px;">
+                    // ACCESS STATUS: ${card.solved ? 'UNLOCKED / CLEARED' : '🔒 ENCRYPTED / LOCKED'}
+                </div>
+                <h2 class="glitch-text" data-text="${card.name}" style="color: #fff; margin-bottom: 4px;">${card.name} (${card.ticker})</h2>
                 <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 12px;">${card.desc}</p>
                 
-                <div style="background: #030712; border: 1px solid #1f2937; padding: 10px; border-radius: 4px; margin-bottom: 12px;">
+                <div style="background: #030712; border: 1px solid ${card.solved ? 'var(--terminal-green)' : 'var(--alert-red)'}; padding: 10px; border-radius: 4px; margin-bottom: 12px;">
                     <div style="font-size: 0.7rem; color: var(--text-muted);">CONTRACT ADDRESS</div>
                     <div style="font-size: 0.8rem; color: var(--terminal-green); word-break: break-all;">${card.addr}</div>
                 </div>
 
                 <div style="margin-bottom: 12px;">
-                    <div style="font-size: 0.75rem; margin-bottom: 4px;">CLEARANCE TELEMETRY: ${card.progress}%</div>
+                    <div style="font-size: 0.75rem; margin-bottom: 4px;">SYSTEM CLEARANCE: ${card.solved ? '100%' : 'LOCKED (PASSCODE REQUIRED)'}</div>
                     <div class="card-progress-bg" style="height: 10px;">
-                        <div class="card-progress-fill" style="width: ${card.progress}%;"></div>
+                        <div class="card-progress-fill" style="width: ${card.solved ? 100 : card.progress}%; background: ${card.solved ? 'var(--terminal-green)' : 'var(--alert-red)'};"></div>
                     </div>
                 </div>
 
-                <button class="modal-btn" onclick="solveCard(${index})">
-                    ${card.solved ? 'NODE ALREADY SOLVED' : 'COMPLETE NODE TASK & UNLOCK NEXT'}
+                <button class="modal-btn" style="border-color: ${card.solved ? 'var(--terminal-green)' : 'var(--alert-red)'};" onclick="solveCard(${index})">
+                    ${card.solved ? 'NODE CLEARED' : 'ENTER OVERRIDE CODE TO UNLOCK'}
                 </button>
             `;
             
@@ -523,9 +499,6 @@ body {
         function solveCard(index) {
             cardsData[index].solved = true;
             cardsData[index].progress = 100;
-            if (activeUnlockedIndex === index && activeUnlockedIndex < 11) {
-                activeUnlockedIndex++;
-            }
             closeModal();
             renderGrid();
         }
@@ -536,7 +509,6 @@ body {
                 return;
             }
 
-            // Launch Node 12 Emergency Override Action Sequence
             document.body.classList.add("alarm-active");
             alert("⚠️ WARNING: CRITICAL OVERRIDE INITIATED! UNLOCKING ANDY'S VAULT...");
             
@@ -546,7 +518,6 @@ body {
             }, 3000);
         }
 
-        // Initial launch
         renderGrid();
     </script>
 </body>
