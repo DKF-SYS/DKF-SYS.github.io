@@ -214,20 +214,19 @@
 
     <script>
         const walletNodes = [
-            { id: "NODE-01", name: "Alpha Research Reserve", balance: "142.85 SOL", value: "$21,427.50", address: "3kF9xA1...9b2Z", isLocked: false, history: [120, 125, 130, 128, 142.85] },
-            { id: "NODE-02", name: "Propulsion Engineering", balance: "89.10 SOL", value: "$13,365.00", address: "7mP2qC8...4v1L", isLocked: false, history: [95, 92, 88, 90, 89.10] },
-            { id: "NODE-03", name: "Hardware Prototyping", balance: "310.40 SOL", value: "$46,560.00", address: "9xT4vN1...1m8K", isLocked: false, history: [280, 290, 300, 305, 310.40] },
-            { id: "NODE-04", name: "Cybernetics Field Lab", balance: "54.20 SOL", value: "$8,130.00", address: "2bL8rY9...6p3W", isLocked: false, history: [50, 52, 51, 53, 54.20] },
-            { id: "NODE-05", name: "Materials Fabrication", balance: "198.75 SOL", value: "$29,812.50", address: "5vZ1mQ4...8t7X", isLocked: false, history: [180, 185, 190, 195, 198.75] },
-            { id: "NODE-06", name: "Autonomous Systems Pool", balance: "412.00 SOL", value: "$61,800.00", address: "8kN3pL2...5x9Y", isLocked: false, history: [390, 400, 405, 410, 412.00] },
-            { id: "NODE-07", name: "Ballistics Vault", balance: "76.50 SOL", value: "$11,475.00", address: "1qW4eR7...3y2U", isLocked: false, history: [80, 78, 77, 75, 76.50] },
-            { id: "NODE-08", name: "Sub-Layer Energy Network", balance: "520.10 SOL", value: "$78,015.00", address: "4uI9oP1...7a6S", isLocked: false, history: [480, 495, 500, 510, 520.10] },
-            { id: "NODE-09", name: "Liquidity & Exchange Operations", balance: "230.90 SOL", value: "$34,635.00", address: "6dF3gH8...2j1K", isLocked: false, history: [210, 220, 225, 228, 230.90] },
-            { id: "NODE-10", name: "Secure Protocol Reserve", balance: "115.30 SOL", value: "$17,295.00", address: "9zC5vB0...4m3N", isLocked: false, history: [100, 105, 110, 112, 115.30] },
-            { id: "NODE-11", name: "Emergency Hardware Contingency", balance: "67.00 SOL", value: "$10,050.00", address: "3xS7dF2...8g9H", isLocked: false, history: [65, 66, 66, 67, 67.00] },
-            { id: "NODE-12", name: "Andy's Vault // Untouchable Node", balance: "LOCKED", value: "ENCRYPTED", address: "UNASSIGNED / PRIVATE", isLocked: true, history: [] }
-        ];
-
+    { id: "NODE-01", name: "$SNPX // Mr. Snaps", balance: "142.85 SOL", value: "$21,427.50", address: "3kF9xA1...9b2Z", isLocked: false, history: [120, 125, 130, 128, 142.85] },
+    { id: "NODE-02", name: "$MLOW // Mellow-Tron", balance: "89.10 SOL", value: "$13,365.00", address: "7mP2qC8...4v1L", isLocked: false, history: [95, 92, 88, 90, 89.10] },
+    { id: "NODE-03", name: "$GLUM // Gloomie", balance: "310.40 SOL", value: "$46,560.00", address: "9xT4vN1...1m8K", isLocked: false, history: [280, 290, 300, 305, 310.40] },
+    { id: "NODE-04", name: "$BITE // Over-Bite", balance: "54.20 SOL", value: "$8,130.00", address: "2bL8rY9...6p3W", isLocked: false, history: [50, 52, 51, 53, 54.20] },
+    { id: "NODE-05", name: "$PDGY // Pudgy Bytes", balance: "198.75 SOL", value: "$29,812.50", address: "5vZ1mQ4...8t7X", isLocked: false, history: [180, 185, 190, 195, 198.75] },
+    { id: "NODE-06", name: "$SCRH // Screech", balance: "412.00 SOL", value: "$61,800.00", address: "8kN3pL2...5x9Y", isLocked: false, history: [390, 400, 405, 410, 412.00] },
+    { id: "NODE-07", name: "$GWAT // Giga-Watt", balance: "76.50 SOL", value: "$11,475.00", address: "1qW4eR7...3y2U", isLocked: false, history: [80, 78, 77, 75, 76.50] },
+    { id: "NODE-08", name: "$ZRO // Zero", balance: "520.10 SOL", value: "$78,015.00", address: "4uI9oP1...7a6S", isLocked: false, history: [480, 495, 500, 510, 520.10] },
+    { id: "NODE-09", name: "$CRKT // Professor Circuit", balance: "230.90 SOL", value: "$34,635.00", address: "6dF3gH8...2j1K", isLocked: false, history: [210, 220, 225, 228, 230.90] },
+    { id: "NODE-10", name: "$SLK // Slick", balance: "115.30 SOL", value: "$17,295.00", address: "9zC5vB0...4m3N", isLocked: false, history: [100, 105, 110, 112, 115.30] },
+    { id: "NODE-11", name: "$GHST // The Developer's Ghost", balance: "67.00 SOL", value: "$10,050.00", address: "3xS7dF2...8g9H", isLocked: false, history: [65, 66, 66, 67, 67.00] },
+    { id: "NODE-12", name: "Andy's Vault // Untouchable Node", balance: "LOCKED", value: "ENCRYPTED", address: "UNASSIGNED / PRIVATE", isLocked: true, history: [] }
+];
         const gridEl = document.getElementById("wallet-grid");
 
         walletNodes.forEach((node, index) => {
