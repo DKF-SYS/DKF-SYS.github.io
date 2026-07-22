@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DYNAMIC KINETIC FACILITY // WALLET MATRIX</title>
+    <title>DKF INDUSTRIES // WALLET MATRIX</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
@@ -197,7 +197,7 @@
 
     <header>
         <div>
-            <h1>DYNAMIC KINETICS FACILITY</h1>
+            <h1>DKF INDUSTRIES</h1>
             <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">OPERATIONAL WALLET MATRIX // R&D SECTOR</div>
         </div>
         <div class="sys-status">
@@ -209,11 +209,10 @@
     <div class="grid-container" id="wallet-grid"></div>
 
     <footer>
-        DYNAMIC KINETICS FACILITY (DKF-SYS) // UNCLEARED ACCESS PROHIBITED
+        DKF INDUSTRIES (DKF-SYS) // UNCLEARED ACCESS PROHIBITED
     </footer>
 
     <script>
-        // Node 12 is Andy's private/untouchable wallet
         const walletNodes = [
             { id: "NODE-01", name: "Alpha Research Reserve", balance: "142.85 SOL", value: "$21,427.50", address: "3kF9xA1...9b2Z", isLocked: false, history: [120, 125, 130, 128, 142.85] },
             { id: "NODE-02", name: "Propulsion Engineering", balance: "89.10 SOL", value: "$13,365.00", address: "7mP2qC8...4v1L", isLocked: false, history: [95, 92, 88, 90, 89.10] },
@@ -280,7 +279,6 @@
 
             gridEl.appendChild(card);
 
-            // Render mini sparkline charts for active nodes
             if (!node.isLocked) {
                 const ctx = document.getElementById(`chart-${index}`).getContext('2d');
                 new Chart(ctx, {
