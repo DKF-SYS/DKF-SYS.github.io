@@ -7,7 +7,7 @@ Welcome to the central command repository for **DKF Industries**. This system ma
 ## 🛰️ Live Terminal Dashboard
 
 Access the real-time node matrix and wallet telemetry at:
-👉 **[DKF Industries Live Terminal](https://dkf-sys.github.io)** *(Replace with your exact GitHub Pages URL)*
+👉 **[DKF Industries Live Terminal](https://dkf-sys.github.io)** 
 
 ---
 
