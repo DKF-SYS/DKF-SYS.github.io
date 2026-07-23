@@ -204,7 +204,7 @@
 
         .image-frame {
             width: 100%;
-            height: 195px;
+            height: 210px;
             background-color: #030712;
             border-radius: 6px;
             overflow: hidden;
@@ -219,7 +219,7 @@
         .image-frame img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
         }
 
         .card-title {
@@ -429,6 +429,112 @@
         }
         .nono-cell.selected { background: #38bdf8; color: #000; box-shadow: 0 0 8px #38bdf8; }
 
+        /* Footer & Donation Styles */
+        .footer-container {
+            max-width: 1400px;
+            margin: 40px auto 20px auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .footer-box {
+            background: rgba(11, 18, 27, 0.9);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
+        }
+
+        .footer-box h3 {
+            color: var(--terminal-green);
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            border-bottom: 1px dashed rgba(16, 185, 129, 0.3);
+            padding-bottom: 6px;
+        }
+
+        .instructions-box ul {
+            list-style: none;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .instructions-box li {
+            margin-bottom: 8px;
+        }
+
+        .instructions-box strong {
+            color: var(--text-main);
+        }
+
+        .donation-box p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .wallet-copy-container {
+            display: flex;
+            gap: 8px;
+        }
+
+        .wallet-copy-container input {
+            flex: 1;
+            background: #030712;
+            border: 1px solid #334155;
+            color: var(--terminal-green);
+            padding: 8px 10px;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 0.75rem;
+        }
+
+        .wallet-copy-container button {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--terminal-green);
+            border: 1px solid var(--terminal-green);
+            padding: 8px 14px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-family: inherit;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .wallet-copy-container button:hover {
+            background: var(--terminal-green);
+            color: #000;
+        }
+
+        .copy-success-text {
+            font-size: 0.7rem;
+            color: var(--terminal-green);
+            margin-top: 6px;
+            height: 14px;
+        }
+
+        /* Responsive Mobile Tweak */
+        @media (max-width: 768px) {
+            .footer-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .card-grid {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+                gap: 12px;
+            }
+            .image-frame {
+                height: 170px;
+            }
+        }
+
         @keyframes alarmFlash {
             0% { background-color: rgba(239, 68, 68, 0.3); }
             50% { background-color: rgba(0, 0, 0, 0.95); }
@@ -457,6 +563,29 @@
     </div>
 
     <div class="card-grid" id="card-grid"></div>
+
+    <!-- INSTRUCTIONS & DONATION FOOTER -->
+    <div class="footer-container">
+        <div class="footer-box instructions-box">
+            <h3>// MATRIX OPERATIONAL GUIDELINES</h3>
+            <ul>
+                <li><strong>01. SELECT NODE:</strong> Click any locked card (Nodes 1–11) to launch its interactive decryption interface.</li>
+                <li><strong>02. SOLVE PUZZLES:</strong> Complete mini-games, calibrate valves, match frequencies, or decode ciphers to clear each node.</li>
+                <li><strong>03. UNLOCK ANDY'S VAULT:</strong> Clear all 11 preceding character nodes to override and access <strong>NODE-12 (Andy's Vault)</strong>.</li>
+            </ul>
+        </div>
+
+        <div class="footer-box donation-box">
+            <h3>// SUPPORT THE ARCHITECT</h3>
+            <p>Want to support vault development or send a tip for a specific card? Send SOL / SPL Tokens directly to the treasury address below:</p>
+            
+            <div class="wallet-copy-container">
+                <input type="text" readonly value="YOUR_SOLANA_WALLET_ADDRESS_HERE" id="walletAddr">
+                <button onclick="copyWalletAddress()" id="copyBtn">COPY ADDRESS</button>
+            </div>
+            <div id="copyNotice" class="copy-success-text"></div>
+        </div>
+    </div>
 
     <div class="modal-overlay" id="card-modal">
         <div class="modal-content">
@@ -784,6 +913,24 @@
             setTimeout(() => {
                 document.body.classList.remove("alarm-active");
                 alert("🔓 SUCCESS: LEVEL-5 ENCLAVE UNLOCKED. WELCOME TO ANDY'S PRIVATE VAULT.");
+            }, 3000);
+        }
+
+        function copyWalletAddress() {
+            const copyText = document.getElementById("walletAddr");
+            copyText.select();
+            copyText.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(copyText.value);
+            
+            const btn = document.getElementById("copyBtn");
+            const notice = document.getElementById("copyNotice");
+            
+            btn.innerText = "COPIED!";
+            notice.innerText = "✓ Wallet address copied to clipboard.";
+            
+            setTimeout(() => {
+                btn.innerText = "COPY ADDRESS";
+                notice.innerText = "";
             }, 3000);
         }
 
