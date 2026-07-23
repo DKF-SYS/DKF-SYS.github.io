@@ -48,7 +48,7 @@
             overflow-x: hidden;
         }
 
-        /* CRT Overlay */
+        /* CRT Scanline Overlay */
         body::before {
             content: " ";
             display: block;
@@ -137,10 +137,7 @@
             font-weight: bold;
         }
 
-        .dev-bypass-btn:hover {
-            background: var(--amber-warn);
-            color: #000;
-        }
+        .dev-bypass-btn:hover { background: var(--amber-warn); color: #000; }
 
         .card-grid {
             display: grid;
@@ -326,7 +323,7 @@
             text-align: center;
         }
 
-        /* --- SAFE DIAL --- */
+        /* SAFE DIAL */
         .safe-container {
             position: relative; width: 200px; height: 200px; margin: 15px auto;
             display: flex; align-items: center; justify-content: center;
@@ -353,39 +350,36 @@
             letter-spacing: 4px; margin-top: 8px; text-shadow: 0 0 10px var(--terminal-green);
         }
 
-        /* --- DYNAMIC BOUNCING ANDY GRAPHIC --- */
+        /* BOUNCING ANDY PHYSICS */
         #andy-flying-icon {
-            position: fixed;
-            top: 0; left: 0;
-            width: 160px; height: 160px;
-            z-index: 5000;
-            pointer-events: none;
-            display: none;
-            filter: drop-shadow(0 0 20px rgba(16, 185, 129, 0.8));
+            position: fixed; top: 0; left: 0;
+            width: 160px; height: 160px; z-index: 5000; pointer-events: none;
+            display: none; filter: drop-shadow(0 0 20px rgba(16, 185, 129, 0.8));
         }
 
-        /* Glitch Trail Effects */
         .andy-trail {
-            position: fixed;
-            width: 160px; height: 160px;
-            pointer-events: none;
-            z-index: 4999;
-            opacity: 0.6;
-            filter: blur(4px) hue-rotate(90deg);
+            position: fixed; width: 160px; height: 160px; pointer-events: none;
+            z-index: 4999; opacity: 0.6; filter: blur(4px) hue-rotate(90deg);
             transition: opacity 0.4s ease-out;
         }
 
-        .switch-grid { display: flex; justify-content: center; gap: 15px; margin: 15px 0; }
-        .toggle-switch {
-            width: 50px; height: 80px; background: #1e293b; border: 2px solid #475569;
-            border-radius: 6px; display: flex; flex-direction: column; justify-content: space-between;
-            padding: 6px; cursor: pointer;
-        }
-        .toggle-knob { width: 100%; height: 32px; background: #64748b; border-radius: 4px; transition: all 0.2s; }
-        .toggle-switch.on .toggle-knob { background: var(--terminal-green); box-shadow: 0 0 10px var(--terminal-green); transform: translateY(32px); }
+        /* Interactive Custom UI Elements */
+        .grid-2x2 { display: grid; grid-template-columns: repeat(2, 60px); gap: 10px; justify-content: center; margin: 12px 0; }
+        .grid-3x3 { display: grid; grid-template-columns: repeat(3, 50px); gap: 8px; justify-content: center; margin: 12px 0; }
+        .grid-5x5 { display: grid; grid-template-columns: repeat(5, 32px); gap: 4px; justify-content: center; margin: 12px 0; }
 
         .mem-tile { width: 60px; height: 60px; background: #1e293b; border: 1px solid #475569; border-radius: 6px; color: #fff; font-weight: bold; cursor: pointer; }
         .mem-tile.flash { background: var(--terminal-green) !important; box-shadow: 0 0 15px var(--terminal-green); }
+
+        .node-tile { width: 50px; height: 50px; background: #1e293b; border: 2px solid #475569; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #fff; transition: all 0.2s; }
+        .node-tile.active { background: rgba(16, 185, 129, 0.3); border-color: var(--terminal-green); box-shadow: 0 0 10px var(--terminal-green); color: var(--terminal-green); }
+
+        .bit-tile { width: 32px; height: 32px; background: #1e293b; border: 1px solid #475569; border-radius: 4px; cursor: pointer; font-size: 0.75rem; color: #fff; display: flex; align-items: center; justify-content: center; }
+        .bit-tile.active { background: var(--terminal-green); color: #000; font-weight: bold; }
+
+        .patch-jack { width: 45px; height: 45px; border-radius: 50%; border: 3px solid #64748b; background: #0f172a; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; color: #fff; }
+        .patch-jack.selected { border-color: var(--amber-warn); box-shadow: 0 0 12px var(--amber-warn); }
+        .patch-jack.wired { border-color: var(--terminal-green); background: rgba(16, 185, 129, 0.3); box-shadow: 0 0 12px var(--terminal-green); }
 
         @keyframes alarmFlash {
             0% { background-color: rgba(239, 68, 68, 0.35); }
@@ -397,10 +391,8 @@
 </head>
 <body>
 
-    <!-- BOUNCING ANDY ANIMATION GRAPHIC -->
     <img src="lock.png" id="andy-flying-icon" alt="Andy Unleashed" onerror="this.onerror=null; this.src='lock.jpg';">
 
-    <!-- TOP DYNAMIC HEADER BANNER -->
     <div class="vault-header">
         <div class="header-title">
             <span>LIVE VAULT: SUB-WALLET #01</span>
@@ -418,7 +410,6 @@
 
     <div class="card-grid" id="card-grid"></div>
 
-    <!-- MODAL -->
     <div class="modal-overlay" id="card-modal">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal()">✕</button>
@@ -446,10 +437,7 @@
         const chartInstances = {};
 
         function handleImageError(imgElement, baseName) {
-            if (imgElement.dataset.triedPng) {
-                imgElement.style.display = 'none';
-                return;
-            }
+            if (imgElement.dataset.triedPng) { imgElement.style.display = 'none'; return; }
             imgElement.dataset.triedPng = "true";
             imgElement.src = baseName + ".png";
         }
@@ -463,18 +451,12 @@
         function updateGlobalBanner() {
             const solvedCount = cardsData.filter(c => !c.isVault && c.solved).length;
             const percentage = Math.round((solvedCount / 11) * 100);
-            
             document.getElementById("progress-text").innerText = `Clearance: ${solvedCount} / 11 (${percentage}%)`;
             document.getElementById("global-progress-fill").style.width = `${percentage}%`;
             
             const pill = document.getElementById("global-status-pill");
-            if (solvedCount === 11) {
-                pill.innerText = "SAFE READY";
-                pill.classList.add("unlocked");
-            } else {
-                pill.innerText = "LOCKED";
-                pill.classList.remove("unlocked");
-            }
+            if (solvedCount === 11) { pill.innerText = "SAFE READY"; pill.classList.add("unlocked"); }
+            else { pill.innerText = "LOCKED"; pill.classList.remove("unlocked"); }
         }
 
         function renderGrid() {
@@ -488,7 +470,6 @@
                 if (card.isVault) {
                     cardEl.className = `card-item ${card.class}`;
                     const readyToActivate = solvedCount === 11;
-                    
                     cardEl.innerHTML = `
                         <div class="card-number-badge" style="color: var(--alert-red); border-color: var(--alert-red);">12</div>
                         <div class="card-inner">
@@ -528,15 +509,11 @@
                             <div class="ticker-pill" style="color: ${card.color}; border-color: ${card.color};">${card.ticker}</div>
                         </div>
                     `;
-
                     cardEl.onclick = () => openModal(card, index);
                 }
 
                 gridContainer.appendChild(cardEl);
-
-                if (!card.isVault) {
-                    setTimeout(() => renderMiniChart(card), 50);
-                }
+                if (!card.isVault) setTimeout(() => renderMiniChart(card), 50);
             });
         }
 
@@ -549,17 +526,10 @@
                 type: 'line',
                 data: {
                     labels: ['1', '2', '3', '4', '5'],
-                    datasets: [{
-                        data: card.chart,
-                        borderColor: card.color,
-                        borderWidth: 1.5,
-                        pointRadius: 0,
-                        fill: false
-                    }]
+                    datasets: [{ data: card.chart, borderColor: card.color, borderWidth: 1.5, pointRadius: 0, fill: false }]
                 },
                 options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
+                    responsive: true, maintainAspectRatio: false,
                     plugins: { legend: { display: false } },
                     scales: { x: { display: false }, y: { display: false } }
                 }
@@ -581,36 +551,52 @@
 
                 if (card.type === "simon") {
                     interactiveHTML = `
-                        <div style="font-size:0.8rem; color:var(--text-muted);">SIMON MEMORY: Watch pattern, then repeat it.</div>
+                        <div style="font-size:0.8rem; color:var(--text-muted);">SIMON MEMORY: Memorize the 4-flashes sequence, then repeat it!</div>
                         <div class="game-board">
-                            <button class="modal-btn" onclick="startSimon(${index})" id="sStart">START PATTERN</button>
-                            <div id="sGrid" style="display:none; gap:10px; justify-content:center; margin-top:10px;">
-                                <button class="mem-tile" id="m1" onclick="pressSimon(1, ${index})">A</button>
-                                <button class="mem-tile" id="m2" onclick="pressSimon(2, ${index})">B</button>
-                                <button class="mem-tile" id="m3" onclick="pressSimon(3, ${index})">C</button>
+                            <button class="modal-btn" onclick="playSimonSeq(${index})" id="sStartBtn">START FLASH SEQUENCE</button>
+                            <div class="grid-2x2">
+                                <button class="mem-tile" id="sm-0" onclick="pressSimonTile(0, ${index})">1</button>
+                                <button class="mem-tile" id="sm-1" onclick="pressSimonTile(1, ${index})">2</button>
+                                <button class="mem-tile" id="sm-2" onclick="pressSimonTile(2, ${index})">3</button>
+                                <button class="mem-tile" id="sm-3" onclick="pressSimonTile(3, ${index})">4</button>
                             </div>
+                            <div id="simonStatus" style="color:var(--terminal-green); font-size:0.8rem; height:20px;"></div>
                         </div>
                     `;
                 } else if (card.type === "valves") {
                     interactiveHTML = `
-                        <div style="font-size:0.8rem; color:var(--text-muted);">PRESSURE VALVE: Balance pressure to 50 PSI.</div>
+                        <div style="font-size:0.8rem; color:var(--text-muted);">DUAL-GAUGE EQUALIZER: Balance BOTH Pressure (40-60 PSI) & Temp (30-50°C)!</div>
                         <div class="game-board">
-                            <div style="font-size:1.2rem; color:var(--terminal-green); margin:10px;" id="pVal">20 PSI</div>
-                            <button class="modal-btn" onclick="addPressure(15, ${index})">+15 PSI RELEASE</button>
+                            <div style="display:flex; justify-content:space-around; margin:10px 0;">
+                                <div style="color:var(--terminal-green); font-size:1rem;" id="pVal">PSI: 20</div>
+                                <div style="color:var(--amber-warn); font-size:1rem;" id="tVal">TEMP: 10°C</div>
+                            </div>
+                            <div style="display:flex; gap:8px;">
+                                <button class="modal-btn" onclick="adjValves(15, 10, ${index})">+PRESSURE (+15 PSI, +10°C)</button>
+                                <button class="modal-btn" onclick="adjValves(-10, -5, ${index})">-COOL VENT (-10 PSI, -5°C)</button>
+                            </div>
                         </div>
                     `;
                 } else if (card.type === "sine") {
                     interactiveHTML = `
-                        <div style="font-size:0.8rem; color:var(--text-muted);">FREQUENCY SYNCHRONIZER: Set slider to 88 Hz to sync.</div>
+                        <div style="font-size:0.8rem; color:var(--text-muted);">DUAL-AXIS SINE SYNCHRONIZER: Align Freq to 88 Hz AND Amplitude to 75%.</div>
                         <div class="game-board">
-                            <input type="range" min="0" max="100" value="20" id="freqSlider" oninput="document.getElementById('fVal').innerText=this.value+' Hz'">
-                            <div id="fVal" style="color:var(--terminal-green); margin:8px;">20 Hz</div>
-                            <button class="modal-btn" onclick="checkFreq(${index})">LOCK FREQUENCY</button>
+                            <div style="margin:8px 0;">
+                                <label style="font-size:0.75rem;">FREQUENCY: </label>
+                                <input type="range" min="0" max="100" value="20" id="freqSlider" oninput="updateSineReadout()">
+                                <span id="fVal" style="color:var(--terminal-green)">20 Hz</span>
+                            </div>
+                            <div style="margin:8px 0;">
+                                <label style="font-size:0.75rem;">AMPLITUDE: </label>
+                                <input type="range" min="0" max="100" value="10" id="ampSlider" oninput="updateSineReadout()">
+                                <span id="aVal" style="color:var(--amber-warn)">10%</span>
+                            </div>
+                            <button class="modal-btn" onclick="checkSineSync(${index})">LOCK WAVE HARMONICS</button>
                         </div>
                     `;
                 } else if (card.type === "maze") {
                     interactiveHTML = `
-                        <div style="font-size: 0.8rem; color: var(--text-muted);">ARCADE MAZE: Move 👾 to the green 🚩 exit!</div>
+                        <div style="font-size:0.8rem; color:var(--text-muted);">CHOMP & ESCAPE: Grab 🍖 pellet first, dodge 💣 trap, and head to 🚩 exit!</div>
                         <div class="game-board">
                             <div id="mazeContainer" style="display:grid; grid-template-columns:repeat(5,35px); gap:4px; justify-content:center; margin:10px auto;"></div>
                             <div style="display:flex; justify-content:center; gap:8px;">
@@ -623,72 +609,76 @@
                     `;
                 } else if (card.type === "nonogram") {
                     interactiveHTML = `
-                        <div style="font-size:0.8rem; color:var(--text-muted);">BIT-FLIP MATRIX: Turn all 4 corner bits ON (Set to 1)!</div>
+                        <div style="font-size:0.8rem; color:var(--text-muted);">5x5 BIT NONOGRAM: Turn ON the center cross pattern (+)!</div>
                         <div class="game-board">
-                            <div style="display:grid; grid-template-columns:repeat(3,40px); gap:6px; justify-content:center; margin:10px;" id="bitGrid">
-                                <button class="mem-tile" onclick="toggleBit(this)">0</button><button class="mem-tile" onclick="toggleBit(this)">0</button><button class="mem-tile" onclick="toggleBit(this)">0</button>
-                                <button class="mem-tile" onclick="toggleBit(this)">0</button><button class="mem-tile" style="background:#334155;">1</button><button class="mem-tile" onclick="toggleBit(this)">0</button>
-                                <button class="mem-tile" onclick="toggleBit(this)">0</button><button class="mem-tile" onclick="toggleBit(this)">0</button><button class="mem-tile" onclick="toggleBit(this)">0</button>
-                            </div>
-                            <button class="modal-btn" onclick="checkBits(${index})">VERIFY BITMAP</button>
+                            <div class="grid-5x5" id="nonoGrid"></div>
+                            <button class="modal-btn" onclick="verifyNonoGrid(${index})">VERIFY PATTERN MATRIX</button>
                         </div>
                     `;
                 } else if (card.type === "morse") {
                     interactiveHTML = `
-                        <div style="font-size:0.8rem; color:var(--text-muted);">RADIO MORSE DECODER: Tap pattern [DOT - DASH - DOT] (.-.).</div>
+                        <div style="font-size:0.8rem; color:var(--text-muted);">TELEGRAPH RHYTHM: Tap fast for DOT (.), Hold >0.2s for DASH (-). Match: [ . - . ]</div>
                         <div class="game-board">
-                            <div style="display:flex; gap:10px; justify-content:center;">
-                                <button class="modal-btn" onclick="tapMorse('.', ${index})">TAP DOT (.)</button>
-                                <button class="modal-btn" onclick="tapMorse('-', ${index})">TAP DASH (-)</button>
-                            </div>
-                            <div id="morseLog" style="color:var(--terminal-green); font-size:1.2rem; font-weight:bold; margin-top:12px; height:24px;"></div>
+                            <button class="modal-btn" id="morseKey" style="height:60px; font-size:1.1rem; background:#334155;">[ HOLD TELEGRAPH KEY ]</button>
+                            <div id="morseLog" style="color:var(--terminal-green); font-size:1.3rem; font-weight:bold; margin-top:12px; height:24px;"></div>
                         </div>
                     `;
                 } else if (card.type === "switches") {
                     interactiveHTML = `
-                        <div style="font-size:0.8rem; color:var(--text-muted);">HIGH VOLTAGE SWITCH GRID: Flip switches to [ON - OFF - ON].</div>
+                        <div style="font-size:0.8rem; color:var(--text-muted);">GRID POWER ROUTER: Flipping a breaker flips its neighbors too. Turn ALL GREEN!</div>
                         <div class="game-board">
-                            <div class="switch-grid">
-                                <div class="toggle-switch" id="sw0" onclick="toggleSwitch(0)"><div class="toggle-knob"></div></div>
-                                <div class="toggle-switch" id="sw1" onclick="toggleSwitch(1)"><div class="toggle-knob"></div></div>
-                                <div class="toggle-switch" id="sw2" onclick="toggleSwitch(2)"><div class="toggle-knob"></div></div>
-                            </div>
-                            <button class="modal-btn" onclick="verifySwitches(${index})">TEST VOLTAGE GRID</button>
+                            <div class="grid-3x3" id="lightGrid"></div>
                         </div>
                     `;
                 } else if (card.type === "caesar") {
                     interactiveHTML = `
-                        <div style="font-size:0.8rem; color:var(--text-muted);">CAESAR CIPHER WHEEL: Rotate offset ring to Shift 7.</div>
+                        <div style="font-size:0.8rem; color:var(--text-muted);">DYNAMIC CIPHER: Shift ring to Offset 7 AND set polarity (+) to match hex string!</div>
                         <div class="game-board">
-                            <button class="modal-btn" onclick="shiftCipher(${index})">ROTATE CIPHER WHEEL</button>
-                            <div id="cVal" style="color:var(--terminal-green); font-size:1.1rem; font-weight:bold; margin-top:12px;">Current Shift: 0</div>
+                            <div style="display:flex; gap:8px; justify-content:center;">
+                                <button class="modal-btn" style="width:50%;" onclick="shiftCipherRing(${index})">SHIFT RING (+1)</button>
+                                <button class="modal-btn" style="width:50%;" onclick="togglePolarity(${index})" id="polBtn">POLARITY: (-)</button>
+                            </div>
+                            <div id="cVal" style="color:var(--terminal-green); font-size:1rem; font-weight:bold; margin-top:12px;">Offset: 0 | Polarity: (-)</div>
                         </div>
                     `;
                 } else if (card.type === "gears") {
                     interactiveHTML = `
-                        <div style="font-size:0.8rem; color:var(--text-muted);">GEAR RATIO SYNTHESIZER: Spin drive mechanism to 100% engagement.</div>
+                        <div style="font-size:0.8rem; color:var(--text-muted);">GEAR PITCH SYNTHESIZER: Tune Drive, Idler, and Output gears to ratio [1 : 2 : 4].</div>
                         <div class="game-board">
-                            <button class="modal-btn" onclick="spinGears(${index})">ENGAGE DRIVE GEAR</button>
-                            <div id="gVal" style="color:var(--terminal-green); font-size:1.1rem; font-weight:bold; margin-top:12px;">Engagement: 25%</div>
+                            <div style="display:flex; justify-content:space-around; margin:10px 0;">
+                                <div>G1: <span id="g1">1</span></div>
+                                <div>G2: <span id="g2">1</span></div>
+                                <div>G3: <span id="g3">1</span></div>
+                            </div>
+                            <div style="display:flex; gap:6px; justify-content:center;">
+                                <button class="modal-btn" onclick="tuneGear(1, ${index})">+G1</button>
+                                <button class="modal-btn" onclick="tuneGear(2, ${index})">+G2</button>
+                                <button class="modal-btn" onclick="tuneGear(3, ${index})">+G3</button>
+                            </div>
                         </div>
                     `;
                 } else if (card.type === "rebus") {
                     interactiveHTML = `
-                        <div style="font-size:0.8rem; color:var(--text-muted);">NEON REBUS PUZZLE: Tap symbols in order [👁️ ➔ 🔑].</div>
+                        <div style="font-size:0.8rem; color:var(--text-muted);">NEON ICON SWAP: Click two tiles to swap. Arrange to [👁️, 🔑, ⚡, 🐝]!</div>
                         <div class="game-board">
-                            <div style="display:flex; gap:10px; justify-content:center;">
-                                <button class="mem-tile" onclick="pressRebus('👁️', ${index})">👁️</button>
-                                <button class="mem-tile" onclick="pressRebus('🔑', ${index})">🔑</button>
-                            </div>
-                            <div id="rLog" style="color:var(--terminal-green); font-size:1.2rem; margin-top:12px; height:24px;"></div>
+                            <div style="display:grid; grid-template-columns:repeat(2,60px); gap:8px; justify-content:center; margin:10px;" id="rebusBoard"></div>
                         </div>
                     `;
                 } else if (card.type === "patchbay") {
                     interactiveHTML = `
-                        <div style="font-size:0.8rem; color:var(--text-muted);">PATCHBAY SWITCHBOARD: Click to wire main system channels.</div>
+                        <div style="font-size:0.8rem; color:var(--text-muted);">SYNTH SWITCHBOARD: Select SOURCE jack (Left), then select TARGET socket (Right) to patch!</div>
                         <div class="game-board">
-                            <button class="modal-btn" onclick="connectPatch(${index})">PATCH AUDIO TERMINAL FEED</button>
-                            <div id="patchStatus" style="color:var(--amber-warn); margin-top:10px;">Status: Channels Disconnected</div>
+                            <div style="display:flex; justify-content:space-around;">
+                                <div>
+                                    <div style="font-size:0.65rem; color:var(--text-muted); margin-bottom:4px;">SOURCES</div>
+                                    <div class="patch-jack" id="jack-s1" onclick="selectJack('s1')">OSC1</div>
+                                </div>
+                                <div>
+                                    <div style="font-size:0.65rem; color:var(--text-muted); margin-bottom:4px;">TARGETS</div>
+                                    <div class="patch-jack" id="jack-t1" onclick="selectJack('t1', ${index})">VCF</div>
+                                </div>
+                            </div>
+                            <div id="patchLog" style="color:var(--amber-warn); font-size:0.8rem; margin-top:12px;">Status: Unpatched</div>
                         </div>
                     `;
                 }
@@ -701,41 +691,75 @@
             }
             
             modal.style.display = "flex";
+            if(card.type === "nonogram" && !card.solved) initNonoGrid(index);
             if(card.type === "maze" && !card.solved) initMaze(index);
+            if(card.type === "morse" && !card.solved) initMorseEvents(index);
+            if(card.type === "switches" && !card.solved) initLights(index);
+            if(card.type === "rebus" && !card.solved) initRebusBoard(index);
         }
 
         function closeModal() { document.getElementById("card-modal").style.display = "none"; }
 
-        /* --- GAME MECHANICS IMPLEMENTATION --- */
-        let simonSeq = [1, 3, 2]; let sIdx = 0;
-        function startSimon(idx) {
-            document.getElementById("sStart").style.display = "none";
-            document.getElementById("sGrid").style.display = "flex";
-            sIdx = 0;
+        /* --- GAME ENGINE MECHANICS --- */
+
+        /* CARD 1: MR. SNAPS SIMON ENGINE */
+        let simonSeq = [0, 3, 1, 2];
+        let userSimonStep = 0;
+        function playSimonSeq(idx) {
+            userSimonStep = 0;
+            document.getElementById("simonStatus").innerText = "Memorize flashing order...";
+            simonSeq.forEach((tileIdx, delay) => {
+                setTimeout(() => {
+                    const el = document.getElementById(`sm-${tileIdx}`);
+                    if(el) {
+                        el.classList.add("flash");
+                        setTimeout(() => el.classList.remove("flash"), 300);
+                    }
+                }, (delay + 1) * 500);
+            });
+            setTimeout(() => {
+                document.getElementById("simonStatus").innerText = "Your Turn! Tap tiles in sequence.";
+            }, 2500);
         }
-        function pressSimon(val, idx) {
-            if(val === simonSeq[sIdx]) {
-                sIdx++;
-                if(sIdx === simonSeq.length) markSolved(idx, "Simon Memory Complete!");
-            } else { alert("Wrong sequence!"); sIdx = 0; }
+        function pressSimonTile(tileIdx, idx) {
+            if(tileIdx === simonSeq[userSimonStep]) {
+                userSimonStep++;
+                if(userSimonStep === simonSeq.length) markSolved(idx, "Simon Memory Complete!");
+            } else {
+                document.getElementById("simonStatus").innerText = "❌ WRONG SEQUENCE! Restart.";
+                userSimonStep = 0;
+            }
         }
 
-        let currentPSI = 20;
-        function addPressure(val, idx) {
-            currentPSI += val;
-            document.getElementById("pVal").innerText = currentPSI + " PSI";
-            if(currentPSI >= 50 && currentPSI <= 60) markSolved(idx, "Pressure Normalized!");
-            else if(currentPSI > 60) currentPSI = 20;
+        /* CARD 2: CHILL-BOT 9000 DUAL DYNAMICS */
+        let curPSI = 20; let curTemp = 10;
+        function adjValves(pDelta, tDelta, idx) {
+            curPSI = Math.max(0, curPSI + pDelta);
+            curTemp = Math.max(0, curTemp + tDelta);
+            document.getElementById("pVal").innerText = `PSI: ${curPSI}`;
+            document.getElementById("tVal").innerText = `TEMP: ${curTemp}°C`;
+
+            if(curPSI >= 40 && curPSI <= 60 && curTemp >= 30 && curTemp <= 50) {
+                markSolved(idx, "Dual System Balanced!");
+            }
         }
 
-        function checkFreq(idx) {
-            let v = document.getElementById("freqSlider").value;
-            if(v >= 85 && v <= 90) markSolved(idx, "Frequency Locked!");
-            else alert("Frequency noise detected! Align closer to 88 Hz.");
+        /* CARD 3: GLOOMIE WAVE TUNER */
+        function updateSineReadout() {
+            document.getElementById("fVal").innerText = document.getElementById("freqSlider").value + " Hz";
+            document.getElementById("aVal").innerText = document.getElementById("ampSlider").value + "%";
+        }
+        function checkSineSync(idx) {
+            let f = document.getElementById("freqSlider").value;
+            let a = document.getElementById("ampSlider").value;
+            if(f >= 85 && f <= 90 && a >= 70 && a <= 80) markSolved(idx, "Wave Lock Achieved!");
+            else alert("Alignment Off! Set Freq close to 88 Hz & Amp to 75%.");
         }
 
+        /* CARD 4: OVER-BITE ARCADE MAZE */
         let playerPos = { r: 0, c: 0 };
-        function initMaze(idx) { playerPos = { r: 0, c: 0 }; renderMaze(idx); }
+        let hasPellet = false;
+        function initMaze(idx) { playerPos = { r: 0, c: 0 }; hasPellet = false; renderMaze(idx); }
         function renderMaze(idx) {
             const container = document.getElementById("mazeContainer");
             if(!container) return;
@@ -745,8 +769,11 @@
                     const cell = document.createElement("div");
                     cell.style.width = "35px"; cell.style.height = "35px"; cell.style.border = "1px solid #334155";
                     cell.style.display = "flex"; cell.style.alignItems = "center"; cell.style.justifyContent = "center";
+                    
                     if(r === playerPos.r && c === playerPos.c) { cell.innerText = "👾"; cell.style.background = "#f97316"; }
-                    else if(r === 4 && c === 4) { cell.innerText = "🚩"; cell.style.background = "#10b981"; }
+                    else if(r === 0 && c === 4 && !hasPellet) { cell.innerText = "🍖"; cell.style.background = "#eab308"; }
+                    else if(r === 2 && c === 2) { cell.innerText = "💣"; cell.style.background = "#7f1d1d"; }
+                    else if(r === 4 && c === 4) { cell.innerText = "🚩"; cell.style.background = hasPellet ? "#10b981" : "#334155"; }
                     else cell.style.background = "#0f172a";
                     container.appendChild(cell);
                 }
@@ -755,68 +782,145 @@
         function moveMaze(dc, dr, idx) {
             let nr = playerPos.r + dr; let nc = playerPos.c + dc;
             if(nr >= 0 && nr < 5 && nc >= 0 && nc < 5) {
-                playerPos = { r: nr, c: nc }; renderMaze(idx);
-                if(nr === 4 && nc === 4) markSolved(idx, "Maze Exit Reached!");
+                if(nr === 2 && nc === 2) { alert("BOOM! Hit trap bomb!"); initMaze(idx); return; }
+                playerPos = { r: nr, c: nc };
+                if(nr === 0 && nc === 4) hasPellet = true;
+                renderMaze(idx);
+                if(nr === 4 && nc === 4) {
+                    if(hasPellet) markSolved(idx, "Maze Escape Complete!");
+                    else alert("DOOR LOCKED: Grab the 🍖 key pellet at top right first!");
+                }
             }
         }
 
-        function toggleBit(btn) {
-            btn.innerText = btn.innerText === "0" ? "1" : "0";
-            btn.style.background = btn.innerText === "1" ? "#10b981" : "#1e293b";
+        /* CARD 5: PUDGY BYTES NONOGRAM */
+        let nonoState = Array(25).fill(false);
+        function initNonoGrid(idx) {
+            const container = document.getElementById("nonoGrid");
+            if(!container) return;
+            container.innerHTML = "";
+            nonoState.forEach((st, i) => {
+                const btn = document.createElement("div");
+                btn.className = `bit-tile ${st ? 'active' : ''}`;
+                btn.innerText = st ? "1" : "0";
+                btn.onclick = () => { nonoState[i] = !nonoState[i]; initNonoGrid(idx); };
+                container.appendChild(btn);
+            });
         }
-        function checkBits(idx) {
-            const btns = document.querySelectorAll("#bitGrid button");
-            if(btns[0].innerText==="1" && btns[2].innerText==="1" && btns[6].innerText==="1" && btns[8].innerText==="1") {
-                markSolved(idx, "Bitmatrix verified!");
-            } else alert("Turn ON all 4 corner bits (Set to 1)!");
-        }
-
-        let morseStr = "";
-        function tapMorse(char, idx) {
-            morseStr += char;
-            document.getElementById("morseLog").innerText = morseStr;
-            if(morseStr === ".-.") markSolved(idx, "Morse Signal Decoded!");
-            else if(morseStr.length >= 3) morseStr = "";
-        }
-
-        let switchStates = [false, false, false];
-        function toggleSwitch(i) {
-            switchStates[i] = !switchStates[i];
-            document.getElementById(`sw${i}`).classList.toggle("on", switchStates[i]);
-        }
-        function verifySwitches(idx) {
-            if(switchStates[0] && !switchStates[1] && switchStates[2]) markSolved(idx, "Voltage Grid Stabilized!");
-            else alert("Incorrect layout! Set switches to [ON - OFF - ON].");
+        function verifyNonoGrid(idx) {
+            // Target Pattern: Cross shape (+)
+            const target = [2, 7, 10, 11, 12, 13, 14, 17, 22];
+            let isValid = true;
+            for(let i=0; i<25; i++) {
+                let shouldBeOn = target.includes(i);
+                if(nonoState[i] !== shouldBeOn) { isValid = false; break; }
+            }
+            if(isValid) markSolved(idx, "Nonogram Matrix Solved!");
+            else alert("Pattern Incorrect! Turn ON the center cross shape (+)!");
         }
 
-        let cOffset = 0;
-        function shiftCipher(idx) {
-            cOffset = (cOffset + 1) % 10;
-            document.getElementById("cVal").innerText = "Current Shift: " + cOffset;
-            if(cOffset === 7) markSolved(idx, "Caesar Cipher Unlocked!");
+        /* CARD 6: SCREECH MORSE */
+        let pressStart = 0; let morseStr = "";
+        function initMorseEvents(idx) {
+            const btn = document.getElementById("morseKey");
+            if(!btn) return;
+            btn.onmousedown = () => { pressStart = Date.now(); btn.style.background = "var(--terminal-green)"; };
+            btn.onmouseup = () => {
+                let duration = Date.now() - pressStart;
+                btn.style.background = "#334155";
+                morseStr += (duration > 200) ? "-" : ".";
+                document.getElementById("morseLog").innerText = morseStr;
+                if(morseStr === ".-.") markSolved(idx, "Telegraph Signal Decoded!");
+                else if(morseStr.length >= 3) morseStr = "";
+            };
         }
 
-        let gEngage = 25;
-        function spinGears(idx) {
-            gEngage += 25;
-            document.getElementById("gVal").innerText = "Engagement: " + gEngage + "%";
-            if(gEngage >= 100) markSolved(idx, "Gears Fully Interlocked!");
+        /* CARD 7: GIGA-WATT LIGHTS OUT */
+        let gridState = [false, true, false, false, false, false, false, true, false];
+        function initLights(idx) {
+            const container = document.getElementById("lightGrid");
+            if(!container) return;
+            container.innerHTML = "";
+            gridState.forEach((st, i) => {
+                const btn = document.createElement("div");
+                btn.className = `node-tile ${st ? 'active' : ''}`;
+                btn.innerText = st ? "ON" : "OFF";
+                btn.onclick = () => toggleLightNode(i, idx);
+                container.appendChild(btn);
+            });
+        }
+        function toggleLightNode(i, idx) {
+            const toggle = (n) => { if(n>=0 && n<9) gridState[n] = !gridState[n]; };
+            toggle(i);
+            if(i%3 !== 0) toggle(i-1);
+            if(i%3 !== 2) toggle(i+1);
+            toggle(i-3); toggle(i+3);
+            initLights(idx);
+            if(gridState.every(x => x)) markSolved(idx, "Power Grid Fully Routed!");
         }
 
-        let rebusStr = "";
-        function pressRebus(char, idx) {
-            rebusStr += char;
-            document.getElementById("rLog").innerText = rebusStr;
-            if(rebusStr === "👁️🔑") markSolved(idx, "Rebus Code Verified!");
-            else if(rebusStr.length >= 2) rebusStr = "";
+        /* CARD 8: ZERO CIPHER */
+        let cRing = 0; let cPol = false;
+        function shiftCipherRing(idx) { cRing = (cRing + 1) % 10; updateCipherUI(idx); }
+        function togglePolarity(idx) { cPol = !cPol; document.getElementById("polBtn").innerText = `POLARITY: (${cPol ? '+' : '-'})`; updateCipherUI(idx); }
+        function updateCipherUI(idx) {
+            document.getElementById("cVal").innerText = `Offset: ${cRing} | Polarity: ${cPol ? '+' : '-'}`;
+            if(cRing === 7 && cPol) markSolved(idx, "Cipher Fully Decrypted!");
         }
 
-        function connectPatch(idx) {
-            document.getElementById("patchStatus").innerText = "Status: Patching Channels...";
-            setTimeout(() => markSolved(idx, "Synthesizer Switchboard Online!"), 600);
+        /* CARD 9: PROFESSOR CIRCUIT GEARS */
+        let gVals = [1, 1, 1];
+        function tuneGear(gNum, idx) {
+            gVals[gNum-1] = (gVals[gNum-1] % 4) + 1;
+            document.getElementById(`g${gNum}`).innerText = gVals[gNum-1];
+            if(gVals[0] === 1 && gVals[1] === 2 && gVals[2] === 4) markSolved(idx, "Gear Pitch Synthesized!");
         }
 
-        /* --- NODE 12 SAFE COMBINATION LOCK --- */
+        /* CARD 10: SLICK REBUS SWAP */
+        let rebusIcons = ["⚡", "👁️", "🔑", "🐝"];
+        let selectedTile = null;
+        function initRebusBoard(idx) {
+            const container = document.getElementById("rebusBoard");
+            if(!container) return;
+            container.innerHTML = "";
+            rebusIcons.forEach((icon, i) => {
+                const btn = document.createElement("button");
+                btn.className = "mem-tile"; btn.style.fontSize = "1.3rem";
+                btn.innerText = icon;
+                btn.onclick = () => swapRebusTile(i, idx);
+                container.appendChild(btn);
+            });
+        }
+        function swapRebusTile(i, idx) {
+            if(selectedTile === null) { selectedTile = i; }
+            else {
+                let temp = rebusIcons[selectedTile];
+                rebusIcons[selectedTile] = rebusIcons[i];
+                rebusIcons[i] = temp;
+                selectedTile = null;
+                initRebusBoard(idx);
+                if(rebusIcons[0]==="👁️" && rebusIcons[1]==="🔑" && rebusIcons[2]==="⚡" && rebusIcons[3]==="🐝") {
+                    markSolved(idx, "Neon Icon Circuit Aligned!");
+                }
+            }
+        }
+
+        /* CARD 11: DEVELOPER'S GHOST PATCHBAY */
+        let activeJack = null;
+        function selectJack(id, idx) {
+            if(id === 's1') {
+                activeJack = 's1';
+                document.getElementById('jack-s1').classList.add('selected');
+                document.getElementById('patchLog').innerText = "Source OSC1 selected. Select Target VCF!";
+            } else if(id === 't1' && activeJack === 's1') {
+                document.getElementById('jack-t1').classList.add('wired');
+                document.getElementById('jack-s1').classList.remove('selected');
+                document.getElementById('jack-s1').classList.add('wired');
+                markSolved(idx, "Switchboard Patch Active!");
+            }
+        }
+
+        /* NODE 12 COMBINATION LOCK */
         let dialNumber = 0; let currentDialRotation = 0;
         function openSafeDialModal(ready) {
             if (!ready) { alert("ACCESS DENIED: Solve all 11 preceding character nodes to unlock Andy's Vault."); return; }
@@ -847,18 +951,15 @@
             document.getElementById("dialVal").innerText = dialNumber < 10 ? `0${dialNumber}` : dialNumber;
         }
 
-        /* --- BOUNCING ANDY 2D PHYSICS ANIMATION ENGINE --- */
+        /* BOUNCING ANDY PHYSICS ENGINE */
         let animationFrameId = null;
 
         function startBouncingAndy(durationMs, onComplete) {
             const andy = document.getElementById("andy-flying-icon");
             andy.style.display = "block";
 
-            // Screen dimensions and starting position
             let x = window.innerWidth / 2 - 80;
             let y = window.innerHeight / 2 - 80;
-            
-            // Velocity speeds (Paced so it doesn't go too fast)
             let dx = 8 + Math.random() * 4;
             let dy = 6 + Math.random() * 4;
             let rotation = 0;
@@ -875,33 +976,17 @@
                     return;
                 }
 
-                x += dx;
-                y += dy;
-                rotation += 6;
+                x += dx; y += dy; rotation += 6;
 
-                // Bounce off Left / Right Screen Walls
-                if (x <= 0 || x + iconSize >= window.innerWidth) {
-                    dx *= -1;
-                    triggerWallEffect(x, y);
-                }
+                if (x <= 0 || x + iconSize >= window.innerWidth) { dx *= -1; triggerWallEffect(x, y); }
+                if (y <= 0 || y + iconSize >= window.innerHeight) { dy *= -1; triggerWallEffect(x, y); }
 
-                // Bounce off Top / Bottom Screen Walls
-                if (y <= 0 || y + iconSize >= window.innerHeight) {
-                    dy *= -1;
-                    triggerWallEffect(x, y);
-                }
-
-                // Keep bounded inside window
                 x = Math.max(0, Math.min(window.innerWidth - iconSize, x));
                 y = Math.max(0, Math.min(window.innerHeight - iconSize, y));
 
-                // Apply position and rotation
                 andy.style.transform = `translate(${x}px, ${y}px) rotate(${rotation}deg)`;
 
-                // Periodically leave trail ghost copies behind
-                if (Math.random() < 0.25) {
-                    createGlitchTrail(x, y, rotation);
-                }
+                if (Math.random() < 0.25) createGlitchTrail(x, y, rotation);
 
                 animationFrameId = requestAnimationFrame(frame);
             }
@@ -912,8 +997,7 @@
         function triggerWallEffect(x, y) {
             if (typeof confetti === 'function') {
                 confetti({
-                    particleCount: 25,
-                    spread: 60,
+                    particleCount: 25, spread: 60,
                     origin: { x: (x + 80) / window.innerWidth, y: (y + 80) / window.innerHeight }
                 });
             }
@@ -941,10 +1025,8 @@
             closeModal();
             document.body.classList.add("alarm-active");
 
-            // Confetti Burst at start
             if (typeof confetti === 'function') confetti({ particleCount: 150, spread: 90, origin: { y: 0.5 } });
 
-            // Run Bouncing Andy Physics Engine for 5.5 Seconds before opening the final victory modal
             startBouncingAndy(5500, () => {
                 document.body.classList.remove("alarm-active");
 
