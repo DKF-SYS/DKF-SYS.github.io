@@ -48,7 +48,7 @@
             overflow-x: hidden;
         }
 
-        /* CRT Scanlines */
+        /* CRT Overlay */
         body::before {
             content: " ";
             display: block;
@@ -124,6 +124,22 @@
             background: linear-gradient(90deg, #059669, #10b981);
             box-shadow: 0 0 8px #10b981;
             transition: width 0.4s ease;
+        }
+
+        .dev-bypass-btn {
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid var(--amber-warn);
+            color: var(--amber-warn);
+            font-size: 0.7rem;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .dev-bypass-btn:hover {
+            background: var(--amber-warn);
+            color: #000;
         }
 
         .card-grid {
@@ -346,7 +362,6 @@
 
         .fly-across { transform: translate(calc(100vw + 500px), calc(-100vh - 500px)) rotate(720deg); }
 
-        /* Custom Mini Game Components */
         .switch-grid { display: flex; justify-content: center; gap: 15px; margin: 15px 0; }
         .toggle-switch {
             width: 50px; height: 80px; background: #1e293b; border: 2px solid #475569;
@@ -383,7 +398,7 @@
             <div class="progress-bar-bg">
                 <div class="progress-fill" id="global-progress-fill"></div>
             </div>
-            <span>Vault Gate: 100%</span>
+            <button class="dev-bypass-btn" onclick="devUnlockAll()">[DEV: UNLOCK ALL]</button>
         </div>
         <div style="font-size: 0.9rem; font-weight: bold; color: #38bdf8;">TREASURY: 14.2 SOL</div>
     </div>
@@ -424,6 +439,12 @@
             }
             imgElement.dataset.triedPng = "true";
             imgElement.src = baseName + ".png";
+        }
+
+        function devUnlockAll() {
+            cardsData.forEach(c => { if(!c.isVault) c.solved = true; });
+            renderGrid();
+            alert("⚡ [DEV BYPASS ACTIVATED]: All 11 character nodes unlocked! You can now click Node 12 (Andy's Vault) to test the combination safe and fireworks event.");
         }
 
         function updateGlobalBanner() {
@@ -547,7 +568,7 @@
 
                 if (card.type === "simon") {
                     interactiveHTML = `
-                        <div style="font-size:0.8rem; color:var(--text-muted);">SIMON MEMORY: Watch lights, then match sequence.</div>
+                        <div style="font-size:0.8rem; color:var(--text-muted);">SIMON MEMORY: Watch pattern, then repeat it.</div>
                         <div class="game-board">
                             <button class="modal-btn" onclick="startSimon(${index})" id="sStart">START PATTERN</button>
                             <div id="sGrid" style="display:none; gap:10px; justify-content:center; margin-top:10px;">
@@ -559,7 +580,7 @@
                     `;
                 } else if (card.type === "valves") {
                     interactiveHTML = `
-                        <div style="font-size:0.8rem; color:var(--text-muted);">PRESSURE VALVE: Balance pressure levels between 40 - 60 PSI.</div>
+                        <div style="font-size:0.8rem; color:var(--text-muted);">PRESSURE VALVE: Balance pressure to 50 PSI.</div>
                         <div class="game-board">
                             <div style="font-size:1.2rem; color:var(--terminal-green); margin:10px;" id="pVal">20 PSI</div>
                             <button class="modal-btn" onclick="addPressure(15, ${index})">+15 PSI RELEASE</button>
@@ -567,7 +588,7 @@
                     `;
                 } else if (card.type === "sine") {
                     interactiveHTML = `
-                        <div style="font-size:0.8rem; color:var(--text-muted);">FREQUENCY SYNCHRONIZER: Adjust slider to 88 Hz to sync.</div>
+                        <div style="font-size:0.8rem; color:var(--text-muted);">FREQUENCY SYNCHRONIZER: Set slider to 88 Hz to sync.</div>
                         <div class="game-board">
                             <input type="range" min="0" max="100" value="20" id="freqSlider" oninput="document.getElementById('fVal').innerText=this.value+' Hz'">
                             <div id="fVal" style="color:var(--terminal-green); margin:8px;">20 Hz</div>
@@ -576,7 +597,7 @@
                     `;
                 } else if (card.type === "maze") {
                     interactiveHTML = `
-                        <div style="font-size: 0.8rem; color: var(--text-muted);">ARCADE ESCAPE: Move 👾 to green 🚩 exit!</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted);">ARCADE MAZE: Move 👾 to the green 🚩 exit!</div>
                         <div class="game-board">
                             <div id="mazeContainer" style="display:grid; grid-template-columns:repeat(5,35px); gap:4px; justify-content:center; margin:10px auto;"></div>
                             <div style="display:flex; justify-content:center; gap:8px;">
@@ -589,7 +610,7 @@
                     `;
                 } else if (card.type === "nonogram") {
                     interactiveHTML = `
-                        <div style="font-size:0.8rem; color:var(--text-muted);">BIT-FLIP MATRIX: Turn all 4 corner bits ON!</div>
+                        <div style="font-size:0.8rem; color:var(--text-muted);">BIT-FLIP MATRIX: Turn all 4 corner bits ON (Set to 1)!</div>
                         <div class="game-board">
                             <div style="display:grid; grid-template-columns:repeat(3,40px); gap:6px; justify-content:center; margin:10px;" id="bitGrid">
                                 <button class="mem-tile" onclick="toggleBit(this)">0</button><button class="mem-tile" onclick="toggleBit(this)">0</button><button class="mem-tile" onclick="toggleBit(this)">0</button>
@@ -601,56 +622,60 @@
                     `;
                 } else if (card.type === "morse") {
                     interactiveHTML = `
-                        <div style="font-size:0.8rem; color:var(--text-muted);">RADIO SIGNAL: Tap key pattern [DOT - DASH - DOT].</div>
+                        <div style="font-size:0.8rem; color:var(--text-muted);">RADIO MORSE DECODER: Tap pattern [DOT - DASH - DOT] (.-.).</div>
                         <div class="game-board">
-                            <button class="modal-btn" onclick="tapMorse('.', ${index})">TAP DOT (.)</button>
-                            <button class="modal-btn" onclick="tapMorse('-', ${index})">TAP DASH (-)</button>
-                            <div id="morseLog" style="color:var(--terminal-green); margin-top:8px; height:20px;"></div>
+                            <div style="display:flex; gap:10px; justify-content:center;">
+                                <button class="modal-btn" onclick="tapMorse('.', ${index})">TAP DOT (.)</button>
+                                <button class="modal-btn" onclick="tapMorse('-', ${index})">TAP DASH (-)</button>
+                            </div>
+                            <div id="morseLog" style="color:var(--terminal-green); font-size:1.2rem; font-weight:bold; margin-top:12px; height:24px;"></div>
                         </div>
                     `;
                 } else if (card.type === "switches") {
                     interactiveHTML = `
-                        <div style="font-size:0.8rem; color:var(--text-muted);">SWITCH GRID: Target configuration [ON - OFF - ON].</div>
+                        <div style="font-size:0.8rem; color:var(--text-muted);">HIGH VOLTAGE SWITCH GRID: Flip switches to [ON - OFF - ON].</div>
                         <div class="game-board">
                             <div class="switch-grid">
                                 <div class="toggle-switch" id="sw0" onclick="toggleSwitch(0)"><div class="toggle-knob"></div></div>
                                 <div class="toggle-switch" id="sw1" onclick="toggleSwitch(1)"><div class="toggle-knob"></div></div>
                                 <div class="toggle-switch" id="sw2" onclick="toggleSwitch(2)"><div class="toggle-knob"></div></div>
                             </div>
-                            <button class="modal-btn" onclick="verifySwitches(${index})">TEST VOLTAGE</button>
+                            <button class="modal-btn" onclick="verifySwitches(${index})">TEST VOLTAGE GRID</button>
                         </div>
                     `;
                 } else if (card.type === "caesar") {
                     interactiveHTML = `
-                        <div style="font-size:0.8rem; color:var(--text-muted);">CIPHER ROTATION: Rotate wheel offset to match code '7'.</div>
+                        <div style="font-size:0.8rem; color:var(--text-muted);">CAESAR CIPHER WHEEL: Rotate offset ring to Shift 7.</div>
                         <div class="game-board">
-                            <button class="modal-btn" onclick="shiftCipher(${index})">SPIN CIPHER WHEEL</button>
-                            <div id="cVal" style="color:var(--terminal-green); margin-top:8px;">Current Offset: 0</div>
+                            <button class="modal-btn" onclick="shiftCipher(${index})">ROTATE CIPHER WHEEL</button>
+                            <div id="cVal" style="color:var(--terminal-green); font-size:1.1rem; font-weight:bold; margin-top:12px;">Current Shift: 0</div>
                         </div>
                     `;
                 } else if (card.type === "gears") {
                     interactiveHTML = `
-                        <div style="font-size:0.8rem; color:var(--text-muted);">GEAR SYNTHESIZER: Engage teeth ratio to 100%.</div>
+                        <div style="font-size:0.8rem; color:var(--text-muted);">GEAR RATIO SYNTHESIZER: Spin drive mechanism to 100% engagement.</div>
                         <div class="game-board">
-                            <button class="modal-btn" onclick="spinGears(${index})">ROTATE DRIVE GEAR</button>
-                            <div id="gVal" style="color:var(--terminal-green); margin-top:8px;">Engagement: 25%</div>
+                            <button class="modal-btn" onclick="spinGears(${index})">ENGAGE DRIVE GEAR</button>
+                            <div id="gVal" style="color:var(--terminal-green); font-size:1.1rem; font-weight:bold; margin-top:12px;">Engagement: 25%</div>
                         </div>
                     `;
                 } else if (card.type === "rebus") {
                     interactiveHTML = `
-                        <div style="font-size:0.8rem; color:var(--text-muted);">REBUS EQUATION: Click items in sequence [👁️ ➔ 🔑].</div>
+                        <div style="font-size:0.8rem; color:var(--text-muted);">NEON REBUS PUZZLE: Tap symbols in order [👁️ ➔ 🔑].</div>
                         <div class="game-board">
-                            <button class="mem-tile" onclick="pressRebus('👁️', ${index})">👁️</button>
-                            <button class="mem-tile" onclick="pressRebus('🔑', ${index})">🔑</button>
-                            <div id="rLog" style="color:var(--terminal-green); margin-top:8px; height:20px;"></div>
+                            <div style="display:flex; gap:10px; justify-content:center;">
+                                <button class="mem-tile" onclick="pressRebus('👁️', ${index})">👁️</button>
+                                <button class="mem-tile" onclick="pressRebus('🔑', ${index})">🔑</button>
+                            </div>
+                            <div id="rLog" style="color:var(--terminal-green); font-size:1.2rem; margin-top:12px; height:24px;"></div>
                         </div>
                     `;
                 } else if (card.type === "patchbay") {
                     interactiveHTML = `
-                        <div style="font-size:0.8rem; color:var(--text-muted);">PATCHBAY SWITCHBOARD: Connect Mainframe Terminal.</div>
+                        <div style="font-size:0.8rem; color:var(--text-muted);">PATCHBAY SWITCHBOARD: Click to wire main system channels.</div>
                         <div class="game-board">
-                            <button class="modal-btn" onclick="connectPatch(${index})">PATCH AUDIO FEED 01</button>
-                            <div id="patchStatus" style="color:var(--amber-warn); margin-top:8px;">Channel Offline</div>
+                            <button class="modal-btn" onclick="connectPatch(${index})">PATCH AUDIO TERMINAL FEED</button>
+                            <div id="patchStatus" style="color:var(--amber-warn); margin-top:10px;">Status: Channels Disconnected</div>
                         </div>
                     `;
                 }
@@ -668,7 +693,7 @@
 
         function closeModal() { document.getElementById("card-modal").style.display = "none"; }
 
-        /* --- GAME MECHANICS --- */
+        /* --- GAME MECHANICS IMPLEMENTATION --- */
         let simonSeq = [1, 3, 2]; let sIdx = 0;
         function startSimon(idx) {
             document.getElementById("sStart").style.display = "none";
@@ -737,7 +762,7 @@
         function tapMorse(char, idx) {
             morseStr += char;
             document.getElementById("morseLog").innerText = morseStr;
-            if(morseStr === ".-.") markSolved(idx, "Signal Decoded!");
+            if(morseStr === ".-.") markSolved(idx, "Morse Signal Decoded!");
             else if(morseStr.length >= 3) morseStr = "";
         }
 
@@ -747,14 +772,14 @@
             document.getElementById(`sw${i}`).classList.toggle("on", switchStates[i]);
         }
         function verifySwitches(idx) {
-            if(switchStates[0] && !switchStates[1] && switchStates[2]) markSolved(idx, "Voltage stabilized!");
+            if(switchStates[0] && !switchStates[1] && switchStates[2]) markSolved(idx, "Voltage Grid Stabilized!");
             else alert("Incorrect layout! Set switches to [ON - OFF - ON].");
         }
 
         let cOffset = 0;
         function shiftCipher(idx) {
             cOffset = (cOffset + 1) % 10;
-            document.getElementById("cVal").innerText = "Current Offset: " + cOffset;
+            document.getElementById("cVal").innerText = "Current Shift: " + cOffset;
             if(cOffset === 7) markSolved(idx, "Caesar Cipher Unlocked!");
         }
 
@@ -762,19 +787,19 @@
         function spinGears(idx) {
             gEngage += 25;
             document.getElementById("gVal").innerText = "Engagement: " + gEngage + "%";
-            if(gEngage >= 100) markSolved(idx, "Gears Interlocked!");
+            if(gEngage >= 100) markSolved(idx, "Gears Fully Interlocked!");
         }
 
         let rebusStr = "";
         function pressRebus(char, idx) {
             rebusStr += char;
             document.getElementById("rLog").innerText = rebusStr;
-            if(rebusStr === "👁️🔑") markSolved(idx, "Rebus Formula Solved!");
+            if(rebusStr === "👁️🔑") markSolved(idx, "Rebus Code Verified!");
             else if(rebusStr.length >= 2) rebusStr = "";
         }
 
         function connectPatch(idx) {
-            document.getElementById("patchStatus").innerText = "Channel Live - Syncing...";
+            document.getElementById("patchStatus").innerText = "Status: Patching Channels...";
             setTimeout(() => markSolved(idx, "Synthesizer Switchboard Online!"), 600);
         }
 
