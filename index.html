@@ -353,14 +353,27 @@
             letter-spacing: 4px; margin-top: 8px; text-shadow: 0 0 10px var(--terminal-green);
         }
 
-        /* --- ANDY FLYING ANIMATION --- */
+        /* --- DYNAMIC BOUNCING ANDY GRAPHIC --- */
         #andy-flying-icon {
-            position: fixed; bottom: -250px; left: -250px;
-            width: 200px; height: 200px; z-index: 5000; pointer-events: none;
-            transition: transform 3s cubic-bezier(0.25, 1, 0.5, 1);
+            position: fixed;
+            top: 0; left: 0;
+            width: 160px; height: 160px;
+            z-index: 5000;
+            pointer-events: none;
+            display: none;
+            filter: drop-shadow(0 0 20px rgba(16, 185, 129, 0.8));
         }
 
-        .fly-across { transform: translate(calc(100vw + 500px), calc(-100vh - 500px)) rotate(720deg); }
+        /* Glitch Trail Effects */
+        .andy-trail {
+            position: fixed;
+            width: 160px; height: 160px;
+            pointer-events: none;
+            z-index: 4999;
+            opacity: 0.6;
+            filter: blur(4px) hue-rotate(90deg);
+            transition: opacity 0.4s ease-out;
+        }
 
         .switch-grid { display: flex; justify-content: center; gap: 15px; margin: 15px 0; }
         .toggle-switch {
@@ -384,7 +397,7 @@
 </head>
 <body>
 
-    <!-- FLYING ANDY ANIMATION GRAPHIC -->
+    <!-- BOUNCING ANDY ANIMATION GRAPHIC -->
     <img src="lock.png" id="andy-flying-icon" alt="Andy Unleashed" onerror="this.onerror=null; this.src='lock.jpg';">
 
     <!-- TOP DYNAMIC HEADER BANNER -->
@@ -444,7 +457,7 @@
         function devUnlockAll() {
             cardsData.forEach(c => { if(!c.isVault) c.solved = true; });
             renderGrid();
-            alert("⚡ [DEV BYPASS ACTIVATED]: All 11 character nodes unlocked! You can now click Node 12 (Andy's Vault) to test the combination safe and fireworks event.");
+            alert("⚡ [DEV BYPASS ACTIVATED]: All 11 character nodes unlocked! Click Node 12 (Andy's Vault) to test the combination safe and bouncing fireworks finale.");
         }
 
         function updateGlobalBanner() {
@@ -834,20 +847,106 @@
             document.getElementById("dialVal").innerText = dialNumber < 10 ? `0${dialNumber}` : dialNumber;
         }
 
+        /* --- BOUNCING ANDY 2D PHYSICS ANIMATION ENGINE --- */
+        let animationFrameId = null;
+
+        function startBouncingAndy(durationMs, onComplete) {
+            const andy = document.getElementById("andy-flying-icon");
+            andy.style.display = "block";
+
+            // Screen dimensions and starting position
+            let x = window.innerWidth / 2 - 80;
+            let y = window.innerHeight / 2 - 80;
+            
+            // Velocity speeds (Paced so it doesn't go too fast)
+            let dx = 8 + Math.random() * 4;
+            let dy = 6 + Math.random() * 4;
+            let rotation = 0;
+
+            const iconSize = 160;
+            const startTime = Date.now();
+
+            function frame() {
+                const elapsed = Date.now() - startTime;
+                if (elapsed >= durationMs) {
+                    andy.style.display = "none";
+                    cancelAnimationFrame(animationFrameId);
+                    if (onComplete) onComplete();
+                    return;
+                }
+
+                x += dx;
+                y += dy;
+                rotation += 6;
+
+                // Bounce off Left / Right Screen Walls
+                if (x <= 0 || x + iconSize >= window.innerWidth) {
+                    dx *= -1;
+                    triggerWallEffect(x, y);
+                }
+
+                // Bounce off Top / Bottom Screen Walls
+                if (y <= 0 || y + iconSize >= window.innerHeight) {
+                    dy *= -1;
+                    triggerWallEffect(x, y);
+                }
+
+                // Keep bounded inside window
+                x = Math.max(0, Math.min(window.innerWidth - iconSize, x));
+                y = Math.max(0, Math.min(window.innerHeight - iconSize, y));
+
+                // Apply position and rotation
+                andy.style.transform = `translate(${x}px, ${y}px) rotate(${rotation}deg)`;
+
+                // Periodically leave trail ghost copies behind
+                if (Math.random() < 0.25) {
+                    createGlitchTrail(x, y, rotation);
+                }
+
+                animationFrameId = requestAnimationFrame(frame);
+            }
+
+            animationFrameId = requestAnimationFrame(frame);
+        }
+
+        function triggerWallEffect(x, y) {
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 25,
+                    spread: 60,
+                    origin: { x: (x + 80) / window.innerWidth, y: (y + 80) / window.innerHeight }
+                });
+            }
+        }
+
+        function createGlitchTrail(x, y, rotation) {
+            const trail = document.createElement("img");
+            trail.src = "lock.png";
+            trail.className = "andy-trail";
+            trail.onerror = function() { this.src = 'lock.jpg'; };
+            trail.style.left = `${x}px`;
+            trail.style.top = `${y}px`;
+            trail.style.transform = `rotate(${rotation}deg)`;
+            document.body.appendChild(trail);
+
+            setTimeout(() => {
+                trail.style.opacity = "0";
+                setTimeout(() => trail.remove(), 400);
+            }, 100);
+        }
+
         function unlockAndyVaultWithEvent() {
             if (dialNumber !== 70) { alert("LOCK ENGAGED: Turn dial to 70."); return; }
 
             closeModal();
             document.body.classList.add("alarm-active");
 
-            if (typeof confetti === 'function') confetti({ particleCount: 180, spread: 100, origin: { y: 0.6 } });
+            // Confetti Burst at start
+            if (typeof confetti === 'function') confetti({ particleCount: 150, spread: 90, origin: { y: 0.5 } });
 
-            const andyImg = document.getElementById("andy-flying-icon");
-            andyImg.classList.add("fly-across");
-
-            setTimeout(() => {
+            // Run Bouncing Andy Physics Engine for 5.5 Seconds before opening the final victory modal
+            startBouncingAndy(5500, () => {
                 document.body.classList.remove("alarm-active");
-                andyImg.classList.remove("fly-across");
 
                 const modal = document.getElementById("card-modal");
                 const modalBody = document.getElementById("modal-body");
@@ -867,7 +966,7 @@
                     <button class="modal-btn" onclick="closeModal()">RETURN TO MATRIX</button>
                 `;
                 modal.style.display = "flex";
-            }, 3000);
+            });
         }
 
         function markSolved(index, message) {
