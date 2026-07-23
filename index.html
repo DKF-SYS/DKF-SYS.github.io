@@ -47,20 +47,32 @@
             overflow-x: hidden;
         }
 
+        /* CRT Monitor Overlays */
         body::before {
             content: " ";
             display: block;
             position: fixed;
-            top: -20%; left: 0; width: 100%; height: 20%;
-            background: linear-gradient(to bottom, rgba(16, 185, 129, 0) 0%, rgba(16, 185, 129, 0.06) 50%, rgba(16, 185, 129, 0) 100%);
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            z-index: 999;
+            background-size: 100% 3px, 3px 100%;
+            pointer-events: none;
+        }
+
+        body::after {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: -40%; left: 0; width: 100%; height: 40%;
+            background: linear-gradient(to bottom, rgba(16, 185, 129, 0) 0%, rgba(16, 185, 129, 0.12) 50%, rgba(16, 185, 129, 0) 100%);
             z-index: 1000;
             pointer-events: none;
-            animation: rollingSweep 10s linear infinite;
+            animation: rollingSweep 8s linear infinite;
         }
 
         @keyframes rollingSweep {
-            0% { top: -20%; }
-            100% { top: 110%; }
+            0% { top: -40%; }
+            100% { top: 120%; }
         }
 
         .vault-header {
@@ -409,10 +421,8 @@
         const gridContainer = document.getElementById("card-grid");
         const chartInstances = {};
 
-        // Helper function that automatically checks for .jpg first, then .png if jpg fails
         function handleImageError(imgElement, baseName) {
             if (imgElement.dataset.triedPng) {
-                // If both failed, show fallback placeholder
                 imgElement.style.display = 'none';
                 imgElement.nextElementSibling.style.display = 'flex';
                 return;
