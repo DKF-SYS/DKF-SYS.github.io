@@ -318,10 +318,12 @@
             border: 2px solid var(--terminal-green);
             box-shadow: 0 0 25px rgba(16, 185, 129, 0.4);
             border-radius: 8px;
-            max-width: 500px;
+            max-width: 520px;
             width: 100%;
             padding: 24px;
             position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
         .close-btn {
@@ -332,6 +334,7 @@
             color: var(--alert-red);
             font-size: 1.2rem;
             cursor: pointer;
+            z-index: 10;
         }
 
         .modal-input {
@@ -363,15 +366,80 @@
             color: #000;
         }
 
+        /* Interactive Minigame UI Styles */
+        .game-board {
+            background: #030712;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 6px;
+            padding: 12px;
+            margin: 10px 0;
+            text-align: center;
+        }
+
+        /* Card 1: Memory Grid */
+        .memory-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .mem-tile {
+            background: #111827;
+            border: 1px solid #374151;
+            color: #10b981;
+            font-size: 1.2rem;
+            height: 45px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .mem-tile.active { background: #10b981; color: #000; box-shadow: 0 0 10px #10b981; }
+
+        /* Card 2: Slider Puzzle / Sequence */
+        .slider-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 6px 0;
+            background: #111827;
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        /* Card 3: Slider Control */
+        .range-slider {
+            width: 100%;
+            margin: 10px 0;
+            accent-color: var(--terminal-green);
+        }
+
+        /* Card 5: Nonogram Mini Grid */
+        .nonogram-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 40px);
+            gap: 6px;
+            justify-content: center;
+            margin: 10px auto;
+        }
+        .nono-cell {
+            width: 40px; height: 40px;
+            background: #111827;
+            border: 1px solid #4b5563;
+            border-radius: 4px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            color: #38bdf8;
+            font-weight: bold;
+        }
+        .nono-cell.selected { background: #38bdf8; color: #000; box-shadow: 0 0 8px #38bdf8; }
+
         @keyframes alarmFlash {
             0% { background-color: rgba(239, 68, 68, 0.3); }
             50% { background-color: rgba(0, 0, 0, 0.95); }
             100% { background-color: rgba(239, 68, 68, 0.3); }
         }
-
-        .alarm-active {
-            animation: alarmFlash 0.5s infinite !important;
-        }
+        .alarm-active { animation: alarmFlash 0.5s infinite !important; }
     </style>
 </head>
 <body>
@@ -404,17 +472,17 @@
 
     <script>
         const cardsData = [
-            { id: 1, name: "MR. SNAPS", ticker: "$SNPX", baseName: "snpx", class: "card-snpx", color: "#10b981", addr: "3kF9xA1...9b2Z", progress: 45, chart: [12, 18, 25, 22, 45], solved: false, puzzle: "Observe the button flash sequence and enter the correct order (e.g. 1-3-2):", solution: "132" },
-            { id: 2, name: "CHILL-BOT 9000", ticker: "$CHLL", baseName: "chill", class: "card-chll", color: "#10b981", addr: "7mP2qC8...4v1L", progress: 60, chart: [30, 35, 40, 52, 60], solved: false, puzzle: "Unscramble the letters on the oil can [O-R-B-T-O-S]:", solution: "ROBOTS" },
-            { id: 3, name: "GLOOMIE", ticker: "$GLUM", baseName: "glum", class: "card-glum", color: "#a855f7", addr: "9xT4vN1...1m8K", progress: 30, chart: [10, 15, 12, 28, 30], solved: false, puzzle: "Match the floating shadow silhouette letter code hidden in the glass tube:", solution: "GLUM" },
-            { id: 4, name: "OVER-BITE", ticker: "$BITE", baseName: "bite", class: "card-bite", color: "#f97316", addr: "2bL8rY9...6p3W", progress: 80, chart: [40, 50, 65, 70, 80], solved: false, puzzle: "Trace the arcade screen maze path word:", solution: "ARCADE" },
-            { id: 5, name: "PUDGY BYTES", ticker: "$PDGY", baseName: "pdgy", class: "card-pdgy", color: "#38bdf8", addr: "5vZ1mQ4...8t7X", progress: 20, chart: [5, 12, 10, 15, 20], solved: false, puzzle: "Complete the 5x5 nonogram grid word code:", solution: "PENGUIN" },
-            { id: 6, name: "SCREECH", ticker: "$SCRH", baseName: "scrh", class: "card-scrh", color: "#ec4899", addr: "8kN3pL2...5x9Y", progress: 90, chart: [50, 60, 75, 82, 90], solved: false, puzzle: "Translate the Morse audio frequency flashes:", solution: "WIRE" },
-            { id: 7, name: "GIGA-WATT", ticker: "$GWAT", baseName: "gwat", class: "card-gwat", color: "#10b981", addr: "1qW4eR7...3y2U", progress: 50, chart: [20, 30, 25, 40, 50], solved: false, puzzle: "Enter the correct switch sequence to balance the high-voltage grid (e.g. ON-OFF-ON):", solution: "ON-OFF-ON" },
-            { id: 8, name: "ZERO", ticker: "$ZRO", baseName: "zro", class: "card-zro", color: "#3b82f6", addr: "4uI9oP1...7a6S", progress: 15, chart: [5, 8, 10, 12, 15], solved: false, puzzle: "Apply the backward 2-step Caesar shift to the string [EDX]:", solution: "CBV" },
-            { id: 9, name: "PROFESSOR CIRCUIT", ticker: "$CRKT", baseName: "crkt", class: "card-crkt", color: "#eab308", addr: "6dF3gH8...2j1K", progress: 70, chart: [30, 45, 50, 62, 70], solved: false, puzzle: "Calculate the gear ratio rotation output (e.g. 2CCW):", solution: "2CCW" },
-            { id: 10, name: "SLICK", ticker: "$SLK", baseName: "slk", class: "card-slk", color: "#d946ef", addr: "9zC5vB0...4m3N", progress: 40, chart: [15, 20, 32, 38, 40], solved: false, puzzle: "Solve the neon sign rebus puzzle [EYE + KEY - BEE + RAIN]:", solution: "CYBER" },
-            { id: 11, name: "THE DEVELOPER'S GHOST", ticker: "$GHST", baseName: "ghst", class: "card-ghst", color: "#e2e8f0", addr: "3xS7dF2...8g9H", progress: 10, chart: [2, 4, 6, 8, 10], solved: false, puzzle: "Assemble the final master synthesis passcode from the previous 10 nodes:", solution: "MASTERKEY" },
+            { id: 1, name: "MR. SNAPS", ticker: "$SNPX", baseName: "snpx", class: "card-snpx", color: "#10b981", addr: "3kF9xA1...9b2Z", progress: 45, chart: [12, 18, 25, 22, 45], solved: false, type: "memory" },
+            { id: 2, name: "CHILL-BOT 9000", ticker: "$CHLL", baseName: "chill", class: "card-chll", color: "#10b981", addr: "7mP2qC8...4v1L", progress: 60, chart: [30, 35, 40, 52, 60], solved: false, type: "sliders" },
+            { id: 3, name: "GLOOMIE", ticker: "$GLUM", baseName: "glum", class: "card-glum", color: "#a855f7", addr: "9xT4vN1...1m8K", progress: 30, chart: [10, 15, 12, 28, 30], solved: false, type: "slider_match" },
+            { id: 4, name: "OVER-BITE", ticker: "$BITE", baseName: "bite", class: "card-bite", color: "#f97316", addr: "2bL8rY9...6p3W", progress: 80, chart: [40, 50, 65, 70, 80], solved: false, type: "cipher", puzzle: "Trace the arcade screen maze path word (Type 'ARCADE'):", solution: "ARCADE" },
+            { id: 5, name: "PUDGY BYTES", ticker: "$PDGY", baseName: "pdgy", class: "card-pdgy", color: "#38bdf8", addr: "5vZ1mQ4...8t7X", progress: 20, chart: [5, 12, 10, 15, 20], solved: false, type: "nonogram" },
+            { id: 6, name: "SCREECH", ticker: "$SCRH", baseName: "scrh", class: "card-scrh", color: "#ec4899", addr: "8kN3pL2...5x9Y", progress: 90, chart: [50, 60, 75, 82, 90], solved: false, type: "cipher", puzzle: "Translate the Morse audio frequency flashes (Type 'WIRE'):", solution: "WIRE" },
+            { id: 7, name: "GIGA-WATT", ticker: "$GWAT", baseName: "gwat", class: "card-gwat", color: "#10b981", addr: "1qW4eR7...3y2U", progress: 50, chart: [20, 30, 25, 40, 50], solved: false, type: "cipher", puzzle: "Enter the correct switch sequence to balance the high-voltage grid (Type 'ON-OFF-ON'):", solution: "ON-OFF-ON" },
+            { id: 8, name: "ZERO", ticker: "$ZRO", baseName: "zro", class: "card-zro", color: "#3b82f6", addr: "4uI9oP1...7a6S", progress: 15, chart: [5, 8, 10, 12, 15], solved: false, type: "cipher", puzzle: "Apply backward 2-step Caesar shift to string [EDX] (Type 'CBV'):", solution: "CBV" },
+            { id: 9, name: "PROFESSOR CIRCUIT", ticker: "$CRKT", baseName: "crkt", class: "card-crkt", color: "#eab308", addr: "6dF3gH8...2j1K", progress: 70, chart: [30, 45, 50, 62, 70], solved: false, type: "cipher", puzzle: "Calculate the gear ratio rotation output (Type '2CCW'):", solution: "2CCW" },
+            { id: 10, name: "SLICK", ticker: "$SLK", baseName: "slk", class: "card-slk", color: "#d946ef", addr: "9zC5vB0...4m3N", progress: 40, chart: [15, 20, 32, 38, 40], solved: false, type: "cipher", puzzle: "Solve the neon sign rebus puzzle [EYE + KEY - BEE + RAIN] (Type 'CYBER'):", solution: "CYBER" },
+            { id: 11, name: "THE DEVELOPER'S GHOST", ticker: "$GHST", baseName: "ghst", class: "card-ghst", color: "#e2e8f0", addr: "3xS7dF2...8g9H", progress: 10, chart: [2, 4, 6, 8, 10], solved: false, type: "cipher", puzzle: "Assemble the final master synthesis passcode (Type 'MASTERKEY'):", solution: "MASTERKEY" },
             { id: 12, name: "ANDY'S VAULT", ticker: "NODE-12", class: "card-lock", color: "#ef4444", addr: "ENCRYPTED", progress: 0, chart: [], solved: false, isVault: true }
         ];
 
@@ -540,21 +608,75 @@
                     <div style="color: var(--terminal-green); text-align: center; font-weight: bold; padding: 15px;">✓ NODE ALREADY SOLVED & CLEARANCE SECURED</div>
                 `;
             } else {
+                let interactiveHTML = "";
+
+                if (card.type === "memory") {
+                    interactiveHTML = `
+                        <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px;">SEQUENCE SIMULATOR: Click the matching sequence [1 -> 3 -> 2]</div>
+                        <div class="game-board">
+                            <div class="memory-grid">
+                                <button class="mem-tile" onclick="memoryClick(1, ${index})">1</button>
+                                <button class="mem-tile" onclick="memoryClick(2, ${index})">2</button>
+                                <button class="mem-tile" onclick="memoryClick(3, ${index})">3</button>
+                            </div>
+                            <div id="mem-status" style="font-size: 0.75rem; color: var(--amber-warn); margin-top: 8px;">Inputs: <span id="mem-sequence">None</span></div>
+                        </div>
+                    `;
+                } else if (card.type === "sliders") {
+                    interactiveHTML = `
+                        <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px;">CALIBRATE VAUVE CONTROLS: Match targets (50, 75, 30)</div>
+                        <div class="game-board">
+                            <div class="slider-row"><span>Valve A: <span id="valA">20</span></span> <input type="range" class="range-slider" min="0" max="100" value="20" id="sliderA" oninput="updateSliders()"></div>
+                            <div class="slider-row"><span>Valve B: <span id="valB">10</span></span> <input type="range" class="range-slider" min="0" max="100" value="10" id="sliderB" oninput="updateSliders()"></div>
+                            <div class="slider-row"><span>Valve C: <span id="valC">90</span></span> <input type="range" class="range-slider" min="0" max="100" value="90" id="sliderC" oninput="updateSliders()"></div>
+                            <button class="modal-btn" style="margin-top: 8px;" onclick="verifySliders(${index})">LOCK VALVES (Target: 50 / 75 / 30)</button>
+                        </div>
+                    `;
+                } else if (card.type === "slider_match") {
+                    interactiveHTML = `
+                        <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px;">FREQUENCY RESONANCE: Align wave frequency to 420 Hz</div>
+                        <div class="game-board">
+                            <div style="font-size: 0.9rem; color: #a855f7; margin-bottom: 6px;">Current Frequency: <span id="freqVal">100</span> Hz</div>
+                            <input type="range" class="range-slider" min="0" max="1000" value="100" id="freqSlider" oninput="updateFreq()">
+                            <button class="modal-btn" style="margin-top: 8px;" onclick="verifyFreq(${index})">SYNCHRONIZE FREQUENCY</button>
+                        </div>
+                    `;
+                } else if (card.type === "nonogram") {
+                    interactiveHTML = `
+                        <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px;">ACTIVATE PATTERN MATRIX: Activate corners & center (Indices 0, 2, 4, 6, 8)</div>
+                        <div class="game-board">
+                            <div class="nonogram-grid" id="nono-board">
+                                <button class="nono-cell" onclick="nonoToggle(0)"></button>
+                                <button class="nono-cell" onclick="nonoToggle(1)"></button>
+                                <button class="nono-cell" onclick="nonoToggle(2)"></button>
+                                <button class="nono-cell" onclick="nonoToggle(3)"></button>
+                                <button class="nono-cell" onclick="nonoToggle(4)"></button>
+                                <button class="nono-cell" onclick="nonoToggle(5)"></button>
+                                <button class="nono-cell" onclick="nonoToggle(6)"></button>
+                                <button class="nono-cell" onclick="nonoToggle(7)"></button>
+                                <button class="nono-cell" onclick="nonoToggle(8)"></button>
+                            </div>
+                            <button class="modal-btn" onclick="verifyNonogram(${index})">VERIFY PATTERN</button>
+                        </div>
+                    `;
+                } else {
+                    interactiveHTML = `
+                        <div style="background: #030712; border: 1px solid ${card.color}; padding: 12px; border-radius: 4px; margin-bottom: 12px;">
+                            <div style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 4px;">PUZZLE CLUE:</div>
+                            <div style="font-size: 0.85rem; color: #fff; line-height: 1.4;">${card.puzzle}</div>
+                        </div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px;">ENTER SOLUTION CODE:</div>
+                        <input type="text" id="puzzle-answer" class="modal-input" placeholder="Type solution here..." />
+                        <button class="modal-btn" style="border-color: ${card.color}; color: ${card.color};" onclick="submitCipher(${index})">
+                            VERIFY & UNLOCK NODE
+                        </button>
+                    `;
+                }
+
                 modalBody.innerHTML = `
-                    <div style="color: ${card.color}; font-size: 0.75rem; margin-bottom: 4px;">// SCAVENGER HUNT CHALLENGE (STAGE ${card.id})</div>
+                    <div style="color: ${card.color}; font-size: 0.75rem; margin-bottom: 4px;">// SECURE CHALLENGE INTERFACE (STAGE ${card.id})</div>
                     <h2 style="color: #fff; margin-bottom: 8px;">${card.name} (${card.ticker})</h2>
-                    
-                    <div style="background: #030712; border: 1px solid ${card.color}; padding: 12px; border-radius: 4px; margin-bottom: 12px;">
-                        <div style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 4px;">PUZZLE CLUE:</div>
-                        <div style="font-size: 0.85rem; color: #fff; line-height: 1.4;">${card.puzzle}</div>
-                    </div>
-
-                    <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px;">ENTER SOLUTION CODE:</div>
-                    <input type="text" id="puzzle-answer" class="modal-input" placeholder="Type solution here..." />
-
-                    <button class="modal-btn" style="border-color: ${card.color}; color: ${card.color};" onclick="submitPuzzle(${index})">
-                        VERIFY & UNLOCK NODE
-                    </button>
+                    ${interactiveHTML}
                 `;
             }
             
@@ -562,10 +684,91 @@
         }
 
         function closeModal() {
+            document.getElementById("modal-overlay")?.style.setProperty("display", "none");
             document.getElementById("card-modal").style.display = "none";
         }
 
-        function submitPuzzle(index) {
+        // Card 1 Logic
+        let memInputSeq = [];
+        function memoryClick(val, index) {
+            memInputSeq.push(val);
+            document.getElementById("mem-sequence").innerText = memInputSeq.join(" - ");
+            if (memInputSeq.length === 3) {
+                if (memInputSeq.join("") === "132") {
+                    cardsData[index].solved = true;
+                    cardsData[index].progress = 100;
+                    closeModal();
+                    renderGrid();
+                    alert("ACCESS GRANTED: Memory sequence accepted!");
+                } else {
+                    alert("ACCESS DENIED: Wrong sequence combination. Resetting...");
+                    memInputSeq = [];
+                    document.getElementById("mem-sequence").innerText = "None";
+                }
+            }
+        }
+
+        // Card 2 Logic
+        function updateSliders() {
+            document.getElementById("valA").innerText = document.getElementById("sliderA").value;
+            document.getElementById("valB").innerText = document.getElementById("sliderB").value;
+            document.getElementById("valC").innerText = document.getElementById("sliderC").value;
+        }
+        function verifySliders(index) {
+            let a = parseInt(document.getElementById("sliderA").value);
+            let b = parseInt(document.getElementById("sliderB").value);
+            let c = parseInt(document.getElementById("sliderC").value);
+            if (a === 50 && b === 75 && c === 30) {
+                cardsData[index].solved = true;
+                cardsData[index].progress = 100;
+                closeModal();
+                renderGrid();
+                alert("ACCESS GRANTED: Valves calibrated successfully!");
+            } else {
+                alert("ACCESS DENIED: Valve levels out of calibration range. Target: 50 / 75 / 30");
+            }
+        }
+
+        // Card 3 Logic
+        function updateFreq() {
+            document.getElementById("freqVal").innerText = document.getElementById("freqSlider").value;
+        }
+        function verifyFreq(index) {
+            let val = parseInt(document.getElementById("freqSlider").value);
+            if (val === 420) {
+                cardsData[index].solved = true;
+                cardsData[index].progress = 100;
+                closeModal();
+                renderGrid();
+                alert("ACCESS GRANTED: Frequency resonance locked at 420 Hz!");
+            } else {
+                alert("ACCESS DENIED: Frequency unstable. Target: 420 Hz");
+            }
+        }
+
+        // Card 5 Logic
+        let nonoState = [false,false,false,false,false,false,false,false,false];
+        function nonoToggle(idx) {
+            nonoState[idx] = !nonoState[idx];
+            let cells = document.querySelectorAll(".nono-cell");
+            cells[idx].classList.toggle("selected", nonoState[idx]);
+        }
+        function verifyNonogram(index) {
+            let target = [true, false, true, false, true, false, true, false, true];
+            let match = nonoState.every((val, i) => val === target[i]);
+            if (match) {
+                cardsData[index].solved = true;
+                cardsData[index].progress = 100;
+                closeModal();
+                renderGrid();
+                alert("ACCESS GRANTED: Matrix pattern configuration verified!");
+            } else {
+                alert("ACCESS DENIED: Incorrect pattern matrix sequence.");
+            }
+        }
+
+        // Cipher Logic
+        function submitCipher(index) {
             const inputVal = document.getElementById("puzzle-answer").value.trim().toUpperCase();
             const correctVal = cardsData[index].solution.toUpperCase();
 
@@ -574,9 +777,9 @@
                 cardsData[index].progress = 100;
                 closeModal();
                 renderGrid();
-                alert("ACCESS GRANTED: Puzzle solved successfully!");
+                alert("ACCESS GRANTED: Cipher solution verified!");
             } else {
-                alert("ACCESS DENIED: Incorrect solution code. Try again!");
+                alert("ACCESS DENIED: Incorrect solution code.");
             }
         }
 
