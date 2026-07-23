@@ -14,7 +14,6 @@
             --text-main: #f3f4f6;
             --text-muted: #9ca3af;
 
-            /* Neon Accent Palette */
             --glow-snpx: #10b981;
             --glow-chll: #10b981;
             --glow-glum: #a855f7;
@@ -48,7 +47,6 @@
             overflow-x: hidden;
         }
 
-        /* Ambient Screen Sweep */
         body::before {
             content: " ";
             display: block;
@@ -65,7 +63,6 @@
             100% { top: 110%; }
         }
 
-        /* Top Vault Telemetry Bar */
         .vault-header {
             background: rgba(11, 18, 27, 0.9);
             border: 1px solid #1f2937;
@@ -131,7 +128,6 @@
             letter-spacing: 1px;
         }
 
-        /* Main Grid */
         .card-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
@@ -140,7 +136,6 @@
             margin: 0 auto;
         }
 
-        /* Individual Cards */
         .card-item {
             background-color: #0b0f19;
             border-radius: 12px;
@@ -156,7 +151,6 @@
             transform: translateY(-6px);
         }
 
-        /* Neon Frames */
         .card-snpx { border: 2px solid var(--glow-snpx); box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
         .card-chll { border: 2px solid var(--glow-chll); box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
         .card-glum { border: 2px solid var(--glow-glum); box-shadow: 0 0 15px rgba(168, 85, 247, 0.4); }
@@ -196,7 +190,6 @@
             z-index: 5;
         }
 
-        /* Image Display Frame */
         .image-frame {
             width: 100%;
             height: 195px;
@@ -226,7 +219,6 @@
             margin-bottom: 6px;
         }
 
-        /* Dynamic Clearance Status Badge */
         .status-badge-front {
             font-size: 0.65rem;
             padding: 2px 6px;
@@ -250,7 +242,6 @@
             border: 1px solid var(--terminal-green);
         }
 
-        /* Card Progress Bar */
         .card-progress-bar-bg {
             width: 100%;
             height: 6px;
@@ -266,7 +257,6 @@
             transition: width 0.3s ease;
         }
 
-        /* Coin Address Box */
         .addr-box {
             background: rgba(3, 7, 18, 0.9);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -281,7 +271,6 @@
             text-align: center;
         }
 
-        /* Ticker Pill */
         .ticker-pill {
             align-self: center;
             background: #000000;
@@ -300,7 +289,6 @@
             margin-bottom: 4px;
         }
 
-        /* Modal Overlay */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -334,6 +322,18 @@
             cursor: pointer;
         }
 
+        .modal-input {
+            width: 100%;
+            background: #030712;
+            border: 1px solid #334155;
+            color: #fff;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            font-family: inherit;
+        }
+
         .modal-btn {
             background: rgba(16, 185, 129, 0.15);
             color: var(--terminal-green);
@@ -342,7 +342,6 @@
             border-radius: 4px;
             width: 100%;
             font-weight: bold;
-            margin-top: 16px;
             cursor: pointer;
             letter-spacing: 1px;
         }
@@ -352,7 +351,6 @@
             color: #000;
         }
 
-        /* Node 12 Emergency Alarm */
         @keyframes alarmFlash {
             0% { background-color: rgba(239, 68, 68, 0.3); }
             50% { background-color: rgba(0, 0, 0, 0.95); }
@@ -366,7 +364,6 @@
 </head>
 <body>
 
-    <!-- Vault Telemetry Bar -->
     <div class="vault-header">
         <div class="header-title">
             <span>LIVE VAULT: SUB-WALLET #01</span>
@@ -384,10 +381,8 @@
         </div>
     </div>
 
-    <!-- 12-Card Grid -->
     <div class="card-grid" id="card-grid"></div>
 
-    <!-- Stats Modal Popup -->
     <div class="modal-overlay" id="card-modal">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal()">✕</button>
@@ -397,22 +392,34 @@
 
     <script>
         const cardsData = [
-            { id: 1, name: "MR. SNAPS", ticker: "$SNPX", class: "card-snpx", color: "#10b981", addr: "3kF9xA1...9b2Z", progress: 45, chart: [12, 18, 25, 22, 45], solved: false, img: "snpx.png" },
-            { id: 2, name: "CHILL-BOT 9000", ticker: "$CHLL", class: "card-chll", color: "#10b981", addr: "7mP2qC8...4v1L", progress: 60, chart: [30, 35, 40, 52, 60], solved: false, img: "mlow.png" },
-            { id: 3, name: "GLOOMIE", ticker: "$GLUM", class: "card-glum", color: "#a855f7", addr: "9xT4vN1...1m8K", progress: 30, chart: [10, 15, 12, 28, 30], solved: false, img: "glum.png" },
-            { id: 4, name: "OVER-BITE", ticker: "$BITE", class: "card-bite", color: "#f97316", addr: "2bL8rY9...6p3W", progress: 80, chart: [40, 50, 65, 70, 80], solved: false, img: "bite.png" },
-            { id: 5, name: "PUDGY BYTES", ticker: "$PDGY", class: "card-pdgy", color: "#38bdf8", addr: "5vZ1mQ4...8t7X", progress: 20, chart: [5, 12, 10, 15, 20], solved: false, img: "pdgy.png" },
-            { id: 6, name: "SCREECH", ticker: "$SCRH", class: "card-scrh", color: "#ec4899", addr: "8kN3pL2...5x9Y", progress: 90, chart: [50, 60, 75, 82, 90], solved: false, img: "scrh.png" },
-            { id: 7, name: "GIGA-WATT", ticker: "$GWAT", class: "card-gwat", color: "#10b981", addr: "1qW4eR7...3y2U", progress: 50, chart: [20, 30, 25, 40, 50], solved: false, img: "gwat.png" },
-            { id: 8, name: "ZERO", ticker: "$ZRO", class: "card-zro", color: "#3b82f6", addr: "4uI9oP1...7a6S", progress: 15, chart: [5, 8, 10, 12, 15], solved: false, img: "zro.png" },
-            { id: 9, name: "PROFESSOR CIRCUIT", ticker: "$CRKT", class: "card-crkt", color: "#eab308", addr: "6dF3gH8...2j1K", progress: 70, chart: [30, 45, 50, 62, 70], solved: false, img: "crkt.png" },
-            { id: 10, name: "SLICK", ticker: "$SLK", class: "card-slk", color: "#d946ef", addr: "9zC5vB0...4m3N", progress: 40, chart: [15, 20, 32, 38, 40], solved: false, img: "slk.png" },
-            { id: 11, name: "THE DEVELOPER'S GHOST", ticker: "$GHST", class: "card-ghst", color: "#e2e8f0", addr: "3xS7dF2...8g9H", progress: 10, chart: [2, 4, 6, 8, 10], solved: false, img: "ghst.png" },
+            { id: 1, name: "MR. SNAPS", ticker: "$SNPX", baseName: "snpx", class: "card-snpx", color: "#10b981", addr: "3kF9xA1...9b2Z", progress: 45, chart: [12, 18, 25, 22, 45], solved: false, puzzle: "Observe the button flash sequence and enter the correct order (e.g. 1-3-2):", solution: "132" },
+            { id: 2, name: "CHILL-BOT 9000", ticker: "$CHLL", baseName: "chill", class: "card-chll", color: "#10b981", addr: "7mP2qC8...4v1L", progress: 60, chart: [30, 35, 40, 52, 60], solved: false, puzzle: "Unscramble the letters on the oil can [O-R-B-T-O-S]:", solution: "ROBOTS" },
+            { id: 3, name: "GLOOMIE", ticker: "$GLUM", baseName: "glum", class: "card-glum", color: "#a855f7", addr: "9xT4vN1...1m8K", progress: 30, chart: [10, 15, 12, 28, 30], solved: false, puzzle: "Match the floating shadow silhouette letter code hidden in the glass tube:", solution: "GLUM" },
+            { id: 4, name: "OVER-BITE", ticker: "$BITE", baseName: "bite", class: "card-bite", color: "#f97316", addr: "2bL8rY9...6p3W", progress: 80, chart: [40, 50, 65, 70, 80], solved: false, puzzle: "Trace the arcade screen maze path word:", solution: "ARCADE" },
+            { id: 5, name: "PUDGY BYTES", ticker: "$PDGY", baseName: "pdgy", class: "card-pdgy", color: "#38bdf8", addr: "5vZ1mQ4...8t7X", progress: 20, chart: [5, 12, 10, 15, 20], solved: false, puzzle: "Complete the 5x5 nonogram grid word code:", solution: "PENGUIN" },
+            { id: 6, name: "SCREECH", ticker: "$SCRH", baseName: "scrh", class: "card-scrh", color: "#ec4899", addr: "8kN3pL2...5x9Y", progress: 90, chart: [50, 60, 75, 82, 90], solved: false, puzzle: "Translate the Morse audio frequency flashes:", solution: "WIRE" },
+            { id: 7, name: "GIGA-WATT", ticker: "$GWAT", baseName: "gwat", class: "card-gwat", color: "#10b981", addr: "1qW4eR7...3y2U", progress: 50, chart: [20, 30, 25, 40, 50], solved: false, puzzle: "Enter the correct switch sequence to balance the high-voltage grid (e.g. ON-OFF-ON):", solution: "ON-OFF-ON" },
+            { id: 8, name: "ZERO", ticker: "$ZRO", baseName: "zro", class: "card-zro", color: "#3b82f6", addr: "4uI9oP1...7a6S", progress: 15, chart: [5, 8, 10, 12, 15], solved: false, puzzle: "Apply the backward 2-step Caesar shift to the string [EDX]:", solution: "CBV" },
+            { id: 9, name: "PROFESSOR CIRCUIT", ticker: "$CRKT", baseName: "crkt", class: "card-crkt", color: "#eab308", addr: "6dF3gH8...2j1K", progress: 70, chart: [30, 45, 50, 62, 70], solved: false, puzzle: "Calculate the gear ratio rotation output (e.g. 2CCW):", solution: "2CCW" },
+            { id: 10, name: "SLICK", ticker: "$SLK", baseName: "slk", class: "card-slk", color: "#d946ef", addr: "9zC5vB0...4m3N", progress: 40, chart: [15, 20, 32, 38, 40], solved: false, puzzle: "Solve the neon sign rebus puzzle [EYE + KEY - BEE + RAIN]:", solution: "CYBER" },
+            { id: 11, name: "THE DEVELOPER'S GHOST", ticker: "$GHST", baseName: "ghst", class: "card-ghst", color: "#e2e8f0", addr: "3xS7dF2...8g9H", progress: 10, chart: [2, 4, 6, 8, 10], solved: false, puzzle: "Assemble the final master synthesis passcode from the previous 10 nodes:", solution: "MASTERKEY" },
             { id: 12, name: "ANDY'S VAULT", ticker: "NODE-12", class: "card-lock", color: "#ef4444", addr: "ENCRYPTED", progress: 0, chart: [], solved: false, isVault: true }
         ];
 
         const gridContainer = document.getElementById("card-grid");
         const chartInstances = {};
+
+        // Helper function that automatically checks for .jpg first, then .png if jpg fails
+        function handleImageError(imgElement, baseName) {
+            if (imgElement.dataset.triedPng) {
+                // If both failed, show fallback placeholder
+                imgElement.style.display = 'none';
+                imgElement.nextElementSibling.style.display = 'flex';
+                return;
+            }
+            imgElement.dataset.triedPng = "true";
+            imgElement.src = baseName + ".png";
+        }
 
         function renderGrid() {
             gridContainer.innerHTML = "";
@@ -452,26 +459,21 @@
                         <div class="card-number-badge">${card.id}</div>
                         <div class="card-inner">
                             <div class="image-frame">
-                                <img src="${card.img}" alt="${card.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <img src="${card.baseName}.jpg" alt="${card.name}" onerror="handleImageError(this, '${card.baseName}')">
                                 <div style="display:none; flex-direction:column; align-items:center; color: var(--text-muted); font-size: 0.7rem;">
                                     <div style="font-size: 1.5rem;">🖼️</div>
-                                    <div>${card.img}</div>
+                                    <div>${card.baseName}.jpg/png</div>
                                 </div>
                             </div>
                             <div class="card-title">${card.name}</div>
-                            
                             ${statusBadgeHTML}
-                            
                             <div class="card-progress-bar-bg">
                                 <div class="card-progress-bar-fill" style="width: ${card.solved ? 100 : card.progress}%; background: ${card.color}; box-shadow: 0 0 6px ${card.color};"></div>
                             </div>
-
                             <div class="addr-box">CA: ${card.addr}</div>
-                            
                             <div class="mini-chart-box">
                                 <canvas id="mini-chart-${card.id}"></canvas>
                             </div>
-                            
                             <div class="ticker-pill" style="color: ${card.color}; border-color: ${card.color};">${card.ticker}</div>
                         </div>
                     `;
@@ -517,28 +519,34 @@
             const modal = document.getElementById("card-modal");
             const modalBody = document.getElementById("modal-body");
             
-            modalBody.innerHTML = `
-                <div style="color: ${card.color}; font-size: 0.75rem; margin-bottom: 4px;">
-                    // ACCESS STATUS: ${card.solved ? 'UNLOCKED / CLEARED' : '🔒 ENCRYPTED / LOCKED'}
-                </div>
-                <h2 style="color: #fff; margin-bottom: 8px;">${card.name} (${card.ticker})</h2>
-                
-                <div style="background: #030712; border: 1px solid ${card.color}; padding: 10px; border-radius: 4px; margin-bottom: 12px;">
-                    <div style="font-size: 0.7rem; color: var(--text-muted);">CONTRACT ADDRESS</div>
-                    <div style="font-size: 0.8rem; color: ${card.color}; word-break: break-all;">${card.addr}</div>
-                </div>
-
-                <div style="margin-bottom: 12px;">
-                    <div style="font-size: 0.75rem; margin-bottom: 4px; color: #fff;">CLEARANCE PROGRESS: ${card.solved ? '100% (CLEARED)' : card.progress + '%'}</div>
-                    <div class="progress-bar-bg" style="width: 100%; height: 10px;">
-                        <div class="progress-fill" style="width: ${card.solved ? 100 : card.progress}%; background: ${card.color}; box-shadow: 0 0 8px ${card.color};"></div>
+            if (card.solved) {
+                modalBody.innerHTML = `
+                    <div style="color: ${card.color}; font-size: 0.75rem; margin-bottom: 4px;">// ACCESS STATUS: UNLOCKED / CLEARED</div>
+                    <h2 style="color: #fff; margin-bottom: 8px;">${card.name} (${card.ticker})</h2>
+                    <div style="background: #030712; border: 1px solid ${card.color}; padding: 10px; border-radius: 4px; margin-bottom: 12px;">
+                        <div style="font-size: 0.7rem; color: var(--text-muted);">CONTRACT ADDRESS</div>
+                        <div style="font-size: 0.8rem; color: ${card.color}; word-break: break-all;">${card.addr}</div>
                     </div>
-                </div>
+                    <div style="color: var(--terminal-green); text-align: center; font-weight: bold; padding: 15px;">✓ NODE ALREADY SOLVED & CLEARANCE SECURED</div>
+                `;
+            } else {
+                modalBody.innerHTML = `
+                    <div style="color: ${card.color}; font-size: 0.75rem; margin-bottom: 4px;">// SCAVENGER HUNT CHALLENGE (STAGE ${card.id})</div>
+                    <h2 style="color: #fff; margin-bottom: 8px;">${card.name} (${card.ticker})</h2>
+                    
+                    <div style="background: #030712; border: 1px solid ${card.color}; padding: 12px; border-radius: 4px; margin-bottom: 12px;">
+                        <div style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 4px;">PUZZLE CLUE:</div>
+                        <div style="font-size: 0.85rem; color: #fff; line-height: 1.4;">${card.puzzle}</div>
+                    </div>
 
-                <button class="modal-btn" style="border-color: ${card.color}; color: ${card.color};" onclick="solveCard(${index})">
-                    ${card.solved ? 'NODE CLEARED' : 'ENTER OVERRIDE CODE TO UNLOCK'}
-                </button>
-            `;
+                    <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px;">ENTER SOLUTION CODE:</div>
+                    <input type="text" id="puzzle-answer" class="modal-input" placeholder="Type solution here..." />
+
+                    <button class="modal-btn" style="border-color: ${card.color}; color: ${card.color};" onclick="submitPuzzle(${index})">
+                        VERIFY & UNLOCK NODE
+                    </button>
+                `;
+            }
             
             modal.style.display = "flex";
         }
@@ -547,11 +555,19 @@
             document.getElementById("card-modal").style.display = "none";
         }
 
-        function solveCard(index) {
-            cardsData[index].solved = true;
-            cardsData[index].progress = 100;
-            closeModal();
-            renderGrid();
+        function submitPuzzle(index) {
+            const inputVal = document.getElementById("puzzle-answer").value.trim().toUpperCase();
+            const correctVal = cardsData[index].solution.toUpperCase();
+
+            if (inputVal === correctVal) {
+                cardsData[index].solved = true;
+                cardsData[index].progress = 100;
+                closeModal();
+                renderGrid();
+                alert("ACCESS GRANTED: Puzzle solved successfully!");
+            } else {
+                alert("ACCESS DENIED: Incorrect solution code. Try again!");
+            }
         }
 
         function triggerNode12Sequence(ready) {
