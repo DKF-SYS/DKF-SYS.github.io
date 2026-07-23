@@ -366,7 +366,6 @@
             color: #000;
         }
 
-        /* Interactive Minigame UI Styles */
         .game-board {
             background: #030712;
             border: 1px solid rgba(255,255,255,0.1);
@@ -376,7 +375,6 @@
             text-align: center;
         }
 
-        /* Card 1: Memory Grid */
         .memory-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -395,7 +393,6 @@
         }
         .mem-tile.active { background: #10b981; color: #000; box-shadow: 0 0 10px #10b981; }
 
-        /* Card 2: Slider Puzzle / Sequence */
         .slider-row {
             display: flex;
             justify-content: space-between;
@@ -407,14 +404,12 @@
             font-size: 0.8rem;
         }
 
-        /* Card 3: Slider Control */
         .range-slider {
             width: 100%;
             margin: 10px 0;
             accent-color: var(--terminal-green);
         }
 
-        /* Card 5: Nonogram Mini Grid */
         .nonogram-grid {
             display: grid;
             grid-template-columns: repeat(3, 40px);
@@ -473,7 +468,7 @@
     <script>
         const cardsData = [
             { id: 1, name: "MR. SNAPS", ticker: "$SNPX", baseName: "snpx", class: "card-snpx", color: "#10b981", addr: "3kF9xA1...9b2Z", progress: 45, chart: [12, 18, 25, 22, 45], solved: false, type: "memory" },
-            { id: 2, name: "CHILL-BOT 9000", ticker: "$CHLL", baseName: "chill", class: "card-chll", color: "#10b981", addr: "7mP2qC8...4v1L", progress: 60, chart: [30, 35, 40, 52, 60], solved: false, type: "sliders" },
+            { id: 2, name: "CHILL-BOT 9000", ticker: "$MLOW", baseName: "mlow", class: "card-chll", color: "#10b981", addr: "7mP2qC8...4v1L", progress: 60, chart: [30, 35, 40, 52, 60], solved: false, type: "sliders" },
             { id: 3, name: "GLOOMIE", ticker: "$GLUM", baseName: "glum", class: "card-glum", color: "#a855f7", addr: "9xT4vN1...1m8K", progress: 30, chart: [10, 15, 12, 28, 30], solved: false, type: "slider_match" },
             { id: 4, name: "OVER-BITE", ticker: "$BITE", baseName: "bite", class: "card-bite", color: "#f97316", addr: "2bL8rY9...6p3W", progress: 80, chart: [40, 50, 65, 70, 80], solved: false, type: "cipher", puzzle: "Trace the arcade screen maze path word (Type 'ARCADE'):", solution: "ARCADE" },
             { id: 5, name: "PUDGY BYTES", ticker: "$PDGY", baseName: "pdgy", class: "card-pdgy", color: "#38bdf8", addr: "5vZ1mQ4...8t7X", progress: 20, chart: [5, 12, 10, 15, 20], solved: false, type: "nonogram" },
@@ -624,7 +619,7 @@
                     `;
                 } else if (card.type === "sliders") {
                     interactiveHTML = `
-                        <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px;">CALIBRATE VAUVE CONTROLS: Match targets (50, 75, 30)</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px;">CALIBRATE VALVE CONTROLS: Match targets (50, 75, 30)</div>
                         <div class="game-board">
                             <div class="slider-row"><span>Valve A: <span id="valA">20</span></span> <input type="range" class="range-slider" min="0" max="100" value="20" id="sliderA" oninput="updateSliders()"></div>
                             <div class="slider-row"><span>Valve B: <span id="valB">10</span></span> <input type="range" class="range-slider" min="0" max="100" value="10" id="sliderB" oninput="updateSliders()"></div>
@@ -684,11 +679,9 @@
         }
 
         function closeModal() {
-            document.getElementById("modal-overlay")?.style.setProperty("display", "none");
             document.getElementById("card-modal").style.display = "none";
         }
 
-        // Card 1 Logic
         let memInputSeq = [];
         function memoryClick(val, index) {
             memInputSeq.push(val);
@@ -708,7 +701,6 @@
             }
         }
 
-        // Card 2 Logic
         function updateSliders() {
             document.getElementById("valA").innerText = document.getElementById("sliderA").value;
             document.getElementById("valB").innerText = document.getElementById("sliderB").value;
@@ -729,7 +721,6 @@
             }
         }
 
-        // Card 3 Logic
         function updateFreq() {
             document.getElementById("freqVal").innerText = document.getElementById("freqSlider").value;
         }
@@ -746,7 +737,6 @@
             }
         }
 
-        // Card 5 Logic
         let nonoState = [false,false,false,false,false,false,false,false,false];
         function nonoToggle(idx) {
             nonoState[idx] = !nonoState[idx];
@@ -767,7 +757,6 @@
             }
         }
 
-        // Cipher Logic
         function submitCipher(index) {
             const inputVal = document.getElementById("puzzle-answer").value.trim().toUpperCase();
             const correctVal = cardsData[index].solution.toUpperCase();
