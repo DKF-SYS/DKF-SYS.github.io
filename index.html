@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DKF INDUSTRIES // LIVE VAULT MATRIX</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         :root {
             --bg-dark: #030712;
@@ -310,6 +311,7 @@
             margin-bottom: 4px;
         }
 
+        /* Modal Structure */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -346,18 +348,6 @@
             z-index: 10;
         }
 
-        .modal-input {
-            width: 100%;
-            background: #030712;
-            border: 1px solid #334155;
-            color: #fff;
-            padding: 10px;
-            border-radius: 4px;
-            margin-top: 10px;
-            margin-bottom: 10px;
-            font-family: inherit;
-        }
-
         .modal-btn {
             background: rgba(16, 185, 129, 0.15);
             color: var(--terminal-green);
@@ -368,7 +358,7 @@
             font-weight: bold;
             cursor: pointer;
             letter-spacing: 1px;
-            margin-top: 8px;
+            margin-top: 10px;
         }
 
         .modal-btn:hover {
@@ -385,84 +375,103 @@
             text-align: center;
         }
 
-        /* Upgraded Interactive Minigame UI */
-        .memory-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            max-width: 260px;
-            margin: 10px auto;
-        }
-        .mem-tile {
-            background: #111827;
-            border: 2px solid #374151;
-            color: #fff;
-            font-size: 1.2rem;
-            height: 70px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.15s ease;
-        }
-        .mem-tile.flash {
-            background: #10b981 !important;
-            box-shadow: 0 0 20px #10b981;
-            color: #000;
-        }
-
-        .slider-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 8px 0;
-            background: #111827;
-            padding: 8px 12px;
-            border-radius: 4px;
-            font-size: 0.8rem;
-        }
-
-        .range-slider {
-            width: 60%;
-            accent-color: var(--terminal-green);
-        }
-
-        /* Sine Wave Canvas */
-        #sineCanvas {
-            width: 100%;
-            height: 100px;
-            background: #000;
-            border: 1px solid #a855f7;
-            border-radius: 4px;
-            margin-bottom: 8px;
-        }
-
-        /* 5x5 Nonogram Grid */
-        .nono-5x5-wrapper {
-            display: inline-block;
-            margin: 10px auto;
-        }
-        .nono-row {
-            display: flex;
-        }
-        .nono-hint {
-            width: 32px; height: 32px;
+        /* --- INTERACTIVE COMBINATION DIAL (NODE 12) --- */
+        .safe-container {
+            position: relative;
+            width: 220px;
+            height: 220px;
+            margin: 15px auto;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.65rem;
-            color: #38bdf8;
-            font-weight: bold;
         }
-        .nono-cell-5x5 {
-            width: 32px; height: 32px;
-            background: #111827;
-            border: 1px solid #374151;
+
+        .safe-dial {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #334155 0%, #0f172a 70%, #020617 100%);
+            border: 6px solid #475569;
+            box-shadow: inset 0 0 15px #000, 0 0 20px rgba(0, 0, 0, 0.9);
+            position: relative;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
-            transition: background 0.2s ease;
         }
-        .nono-cell-5x5.active {
-            background: #38bdf8;
-            box-shadow: 0 0 8px #38bdf8;
+
+        .dial-marker {
+            position: absolute;
+            top: -12px;
+            left: calc(50% - 2px);
+            width: 4px;
+            height: 14px;
+            background: var(--alert-red);
+            box-shadow: 0 0 8px var(--alert-red);
+            z-index: 10;
+        }
+
+        .dial-notch {
+            position: absolute;
+            width: 2px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.4);
+            top: 4px;
+            left: calc(50% - 1px);
+            transform-origin: 1px 86px;
+        }
+
+        .safe-number-display {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--terminal-green);
+            letter-spacing: 4px;
+            margin-top: 8px;
+            text-shadow: 0 0 10px var(--terminal-green);
+        }
+
+        /* --- ANDY FLYING ANIMATION --- */
+        #andy-flying-icon {
+            position: fixed;
+            bottom: -200px;
+            left: -200px;
+            width: 180px;
+            height: 180px;
+            z-index: 5000;
+            pointer-events: none;
+            transition: transform 3s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .fly-across {
+            transform: translate(calc(100vw + 400px), calc(-100vh - 400px)) rotate(720deg);
+        }
+
+        /* Switch Grid */
+        .switch-grid {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        .toggle-switch {
+            width: 50px; height: 80px;
+            background: #1e293b;
+            border: 2px solid #475569;
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 6px;
+            cursor: pointer;
+        }
+        .toggle-knob {
+            width: 100%; height: 32px;
+            background: #64748b;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+        .toggle-switch.on .toggle-knob {
+            background: var(--terminal-green);
+            box-shadow: 0 0 10px var(--terminal-green);
+            transform: translateY(32px);
         }
 
         /* Footer & Donation Styles */
@@ -565,14 +574,17 @@
         }
 
         @keyframes alarmFlash {
-            0% { background-color: rgba(239, 68, 68, 0.3); }
+            0% { background-color: rgba(239, 68, 68, 0.35); }
             50% { background-color: rgba(0, 0, 0, 0.95); }
-            100% { background-color: rgba(239, 68, 68, 0.3); }
+            100% { background-color: rgba(239, 68, 68, 0.35); }
         }
-        .alarm-active { animation: alarmFlash 0.5s infinite !important; }
+        .alarm-active { animation: alarmFlash 0.4s infinite !important; }
     </style>
 </head>
 <body>
+
+    <!-- FLYING ANDY ANIMATION GRAPHIC -->
+    <img src="lock.png" id="andy-flying-icon" alt="Andy Unleashed" onerror="this.onerror=null; this.src='lock.jpg';">
 
     <!-- TOP DYNAMIC HEADER BANNER -->
     <div class="vault-header">
@@ -599,9 +611,9 @@
         <div class="footer-box instructions-box">
             <h3>// MATRIX OPERATIONAL GUIDELINES</h3>
             <ul>
-                <li><strong>01. SELECT NODE:</strong> Click any locked card (Nodes 1–11) to launch its interactive decryption interface.</li>
-                <li><strong>02. SOLVE PUZZLES:</strong> Complete interactive Simon sequences, valve pressure balances, wave syncs, or ciphers to clear each node.</li>
-                <li><strong>03. UNLOCK ANDY'S VAULT:</strong> Clear all 11 preceding character nodes to activate and open <strong>NODE-12 (Andy's Vault)</strong>.</li>
+                <li><strong>01. SELECT NODE:</strong> Click any locked card (Nodes 1–11) to launch its interactive puzzle interface.</li>
+                <li><strong>02. SOLVE PUZZLES:</strong> Complete interactive Simon sequences, valve pressure balances, wave syncs, or physical gear switches.</li>
+                <li><strong>03. UNLOCK ANDY'S VAULT:</strong> Clear all 11 character nodes to unlock <strong>NODE-12 Combination Safe</strong> and disengage the master vault gate.</li>
             </ul>
         </div>
 
@@ -627,23 +639,22 @@
 
     <script>
         const cardsData = [
-            { id: 1, name: "MR. SNAPS", ticker: "$SNPX", baseName: "snaps", class: "card-snpx", color: "#10b981", addr: "3kF9xA1...9b2Z", progress: 0, chart: [12, 18, 25, 22, 45], solved: false, type: "simon" },
-            { id: 2, name: "CHILL-BOT 9000", ticker: "$MLOW", baseName: "mlow", class: "card-chll", color: "#10b981", addr: "7mP2qC8...4v1L", progress: 0, chart: [30, 35, 40, 52, 60], solved: false, type: "valves" },
-            { id: 3, name: "GLOOMIE", ticker: "$GLUM", baseName: "glum", class: "card-glum", color: "#a855f7", addr: "9xT4vN1...1m8K", progress: 0, chart: [10, 15, 12, 28, 30], solved: false, type: "sine" },
-            { id: 4, name: "OVER-BITE", ticker: "$BITE", baseName: "bite", class: "card-bite", color: "#f97316", addr: "2bL8rY9...6p3W", progress: 0, chart: [40, 50, 65, 70, 80], solved: false, type: "cipher", puzzle: "Trace the arcade screen maze path word (Type 'ARCADE'):", solution: "ARCADE" },
-            { id: 5, name: "PUDGY BYTES", ticker: "$PDGY", baseName: "pdgy", class: "card-pdgy", color: "#38bdf8", addr: "5vZ1mQ4...8t7X", progress: 0, chart: [5, 12, 10, 15, 20], solved: false, type: "nonogram5x5" },
-            { id: 6, name: "SCREECH", ticker: "$SCRH", baseName: "scrh", class: "card-scrh", color: "#ec4899", addr: "8kN3pL2...5x9Y", progress: 0, chart: [50, 60, 75, 82, 90], solved: false, type: "cipher", puzzle: "Translate the Morse audio frequency flashes (Type 'WIRE'):", solution: "WIRE" },
-            { id: 7, name: "GIGA-WATT", ticker: "$GWAT", baseName: "gwat", class: "card-gwat", color: "#10b981", addr: "1qW4eR7...3y2U", progress: 0, chart: [20, 30, 25, 40, 50], solved: false, type: "cipher", puzzle: "Enter the switch sequence to balance high-voltage grid (Type 'ON-OFF-ON'):", solution: "ON-OFF-ON" },
-            { id: 8, name: "ZERO", ticker: "$ZRO", baseName: "zro", class: "card-zro", color: "#3b82f6", addr: "4uI9oP1...7a6S", progress: 0, chart: [5, 8, 10, 12, 15], solved: false, type: "cipher", puzzle: "Apply backward 2-step Caesar shift to string [EDX] (Type 'CBV'):", solution: "CBV" },
-            { id: 9, name: "PROFESSOR CIRCUIT", ticker: "$CRKT", baseName: "crkt", class: "card-crkt", color: "#eab308", addr: "6dF3gH8...2j1K", progress: 0, chart: [30, 45, 50, 62, 70], solved: false, type: "cipher", puzzle: "Calculate gear ratio rotation output (Type '2CCW'):", solution: "2CCW" },
-            { id: 10, name: "SLICK", ticker: "$SLK", baseName: "slk", class: "card-slk", color: "#d946ef", addr: "9zC5vB0...4m3N", progress: 0, chart: [15, 20, 32, 38, 40], solved: false, type: "cipher", puzzle: "Solve neon rebus [EYE + KEY - BEE + RAIN] (Type 'CYBER'):", solution: "CYBER" },
-            { id: 11, name: "THE DEVELOPER'S GHOST", ticker: "$GHST", baseName: "ghst", class: "card-ghst", color: "#e2e8f0", addr: "3xS7dF2...8g9H", progress: 0, chart: [2, 4, 6, 8, 10], solved: false, type: "cipher", puzzle: "Assemble master synthesis passcode (Type 'MASTERKEY'):", solution: "MASTERKEY" },
-            { id: 12, name: "ANDY'S VAULT", ticker: "NODE-12", class: "card-lock", color: "#ef4444", addr: "ENCRYPTED", progress: 0, chart: [], solved: false, isVault: true }
+            { id: 1, name: "MR. SNAPS", ticker: "$SNPX", baseName: "snaps", class: "card-snpx", color: "#10b981", addr: "3kF9xA1...9b2Z", chart: [12, 18, 25, 22, 45], solved: false, type: "simon" },
+            { id: 2, name: "CHILL-BOT 9000", ticker: "$MLOW", baseName: "mlow", class: "card-chll", color: "#10b981", addr: "7mP2qC8...4v1L", chart: [30, 35, 40, 52, 60], solved: false, type: "valves" },
+            { id: 3, name: "GLOOMIE", ticker: "$GLUM", baseName: "glum", class: "card-glum", color: "#a855f7", addr: "9xT4vN1...1m8K", chart: [10, 15, 12, 28, 30], solved: false, type: "sine" },
+            { id: 4, name: "OVER-BITE", ticker: "$BITE", baseName: "bite", class: "card-bite", color: "#f97316", addr: "2bL8rY9...6p3W", chart: [40, 50, 65, 70, 80], solved: false, type: "maze" },
+            { id: 5, name: "PUDGY BYTES", ticker: "$PDGY", baseName: "pdgy", class: "card-pdgy", color: "#38bdf8", addr: "5vZ1mQ4...8t7X", chart: [5, 12, 10, 15, 20], solved: false, type: "nonogram5x5" },
+            { id: 6, name: "SCREECH", ticker: "$SCRH", baseName: "scrh", class: "card-scrh", color: "#ec4899", addr: "8kN3pL2...5x9Y", chart: [50, 60, 75, 82, 90], solved: false, type: "morse" },
+            { id: 7, name: "GIGA-WATT", ticker: "$GWAT", baseName: "gwat", class: "card-gwat", color: "#10b981", addr: "1qW4eR7...3y2U", chart: [20, 30, 25, 40, 50], solved: false, type: "switches" },
+            { id: 8, name: "ZERO", ticker: "$ZRO", baseName: "zro", class: "card-zro", color: "#3b82f6", addr: "4uI9oP1...7a6S", chart: [5, 8, 10, 12, 15], solved: false, type: "caesar" },
+            { id: 9, name: "PROFESSOR CIRCUIT", ticker: "$CRKT", baseName: "crkt", class: "card-crkt", color: "#eab308", addr: "6dF3gH8...2j1K", chart: [30, 45, 50, 62, 70], solved: false, type: "gears" },
+            { id: 10, name: "SLICK", ticker: "$SLK", baseName: "slk", class: "card-slk", color: "#d946ef", addr: "9zC5vB0...4m3N", chart: [15, 20, 32, 38, 40], solved: false, type: "rebus" },
+            { id: 11, name: "THE DEVELOPER'S GHOST", ticker: "$GHST", baseName: "ghst", class: "card-ghst", color: "#e2e8f0", addr: "3xS7dF2...8g9H", chart: [2, 4, 6, 8, 10], solved: false, type: "patchbay" },
+            { id: 12, name: "ANDY'S VAULT", ticker: "NODE-12", class: "card-lock", color: "#ef4444", addr: "ENCRYPTED", chart: [], solved: false, isVault: true }
         ];
 
         const gridContainer = document.getElementById("card-grid");
         const chartInstances = {};
-        let animationFrameId = null;
 
         function handleImageError(imgElement, baseName) {
             if (imgElement.dataset.triedPng) {
@@ -664,7 +675,7 @@
             
             const pill = document.getElementById("global-status-pill");
             if (solvedCount === 11) {
-                pill.innerText = "OVERRIDE READY";
+                pill.innerText = "SAFE UNLOCKED";
                 pill.classList.add("unlocked");
             } else {
                 pill.innerText = "LOCKED";
@@ -689,20 +700,16 @@
                         <div class="card-inner">
                             <div class="image-frame" style="border-color: ${readyToActivate ? 'var(--terminal-green)' : 'var(--alert-red)'};">
                                 <img src="lock.png" alt="Andy's Vault" onerror="this.onerror=null; this.src='lock.jpg';">
-                                <div style="display:none; flex-direction:column; align-items:center; color: var(--alert-red); font-size: 0.7rem;">
-                                    <div style="font-size: 2rem;">🔒</div>
-                                    <div>ANDY'S VAULT</div>
-                                </div>
                             </div>
                             <div class="card-title" style="color: ${readyToActivate ? 'var(--terminal-green)' : 'var(--alert-red)'};">${card.name}</div>
                             <div class="status-badge-front ${readyToActivate ? 'badge-cleared-front' : 'badge-locked-front'}">
-                                ${readyToActivate ? '🔓 READY TO OVERRIDE' : '🔒 ENCRYPTED'}
+                                ${readyToActivate ? '🔓 SAFE READY' : '🔒 ENCRYPTED'}
                             </div>
-                            <div class="addr-box" style="border-color: var(--alert-red); color: var(--alert-red);">ACCESS RESTRICTED</div>
+                            <div class="addr-box" style="border-color: var(--alert-red); color: var(--alert-red);">SAFE COMBINATION DIAL</div>
                             <div class="ticker-pill" style="color: ${readyToActivate ? 'var(--terminal-green)' : 'var(--alert-red)'}; border-color: ${readyToActivate ? 'var(--terminal-green)' : 'var(--alert-red)'};">[${readyToActivate ? 'UNLOCKED' : 'LOCKED'}]</div>
                         </div>
                     `;
-                    cardEl.onclick = () => openVaultNode(readyToActivate);
+                    cardEl.onclick = () => openSafeDialModal(readyToActivate);
                 } else {
                     cardEl.className = `card-item ${card.class}`;
                     let statusBadgeHTML = card.solved
@@ -714,10 +721,6 @@
                         <div class="card-inner">
                             <div class="image-frame">
                                 <img src="${card.baseName}.jpg" alt="${card.name}" onerror="handleImageError(this, '${card.baseName}')">
-                                <div style="display:none; flex-direction:column; align-items:center; color: var(--text-muted); font-size: 0.7rem;">
-                                    <div style="font-size: 1.5rem;">🖼️</div>
-                                    <div>${card.baseName}.jpg/png</div>
-                                </div>
                             </div>
                             <div class="card-title">${card.name}</div>
                             ${statusBadgeHTML}
@@ -770,7 +773,6 @@
         }
 
         function openModal(card, index) {
-            if (animationFrameId) cancelAnimationFrame(animationFrameId);
             const modal = document.getElementById("card-modal");
             const modalBody = document.getElementById("modal-body");
             
@@ -789,7 +791,7 @@
 
                 if (card.type === "simon") {
                     interactiveHTML = `
-                        <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px;">SIMON SEQUENCE MEMORY: Watch pattern flash, then repeat it.</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px;">SIMON SEQUENCE MEMORY: Repeat the flashing lights.</div>
                         <div class="game-board">
                             <button class="modal-btn" onclick="startSimonGame(${index})" id="simonStartBtn">START SEQUENCE</button>
                             <div class="memory-grid" id="simonGrid" style="display:none;">
@@ -801,48 +803,46 @@
                             <div id="simonStatus" style="font-size: 0.75rem; color: var(--amber-warn); margin-top: 8px;">Press start to play.</div>
                         </div>
                     `;
-                } else if (card.type === "valves") {
+                } else if (card.type === "switches") {
                     interactiveHTML = `
-                        <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px;">PRESSURE RESONANCE: Adjust valves so Total Output hits <strong>100 PSI</strong> exactly.</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px;">HIGH-VOLTAGE SWITCHES: Flip switches to match sequence [ON - OFF - ON].</div>
                         <div class="game-board">
-                            <div style="font-size: 1.1rem; font-weight: bold; color: var(--terminal-green); margin-bottom: 10px;">
-                                Total Output: <span id="totalPressure">30</span> PSI
+                            <div class="switch-grid">
+                                <div class="toggle-switch" id="sw0" onclick="toggleSwitch(0)">
+                                    <div style="font-size:0.6rem; text-align:center;">SW 1</div>
+                                    <div class="toggle-knob"></div>
+                                </div>
+                                <div class="toggle-switch" id="sw1" onclick="toggleSwitch(1)">
+                                    <div style="font-size:0.6rem; text-align:center;">SW 2</div>
+                                    <div class="toggle-knob"></div>
+                                </div>
+                                <div class="toggle-switch" id="sw2" onclick="toggleSwitch(2)">
+                                    <div style="font-size:0.6rem; text-align:center;">SW 3</div>
+                                    <div class="toggle-knob"></div>
+                                </div>
                             </div>
-                            <div class="slider-row"><span>Valve A (3x):</span> <input type="range" class="range-slider" min="0" max="20" value="5" id="vA" oninput="calcPressure()"> <span id="vA_val">5</span></div>
-                            <div class="slider-row"><span>Valve B (5x):</span> <input type="range" class="range-slider" min="0" max="20" value="3" id="vB" oninput="calcPressure()"> <span id="vB_val">3</span></div>
-                            <div class="slider-row"><span>Valve C (2x):</span> <input type="range" class="range-slider" min="0" max="20" value="0" id="vC" oninput="calcPressure()"> <span id="vC_val">0</span></div>
-                            <button class="modal-btn" onclick="verifyValves(${index})">LOCK VALVES</button>
+                            <button class="modal-btn" onclick="verifySwitches(${index})">TEST VOLTAGE GRID</button>
                         </div>
                     `;
-                } else if (card.type === "sine") {
+                } else if (card.type === "maze") {
                     interactiveHTML = `
-                        <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px;">FREQUENCY SYNCHRONIZER: Adjust frequency slider to align wave to <strong>420 Hz</strong>.</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px;">ARCADE ESCAPE: Use buttons to move pixel avatar to green exit!</div>
                         <div class="game-board">
-                            <canvas id="sineCanvas" width="400" height="100"></canvas>
-                            <div style="font-size: 0.85rem; color: #a855f7; margin-bottom: 6px;">Target: 420 Hz | Current: <span id="sineHz">100</span> Hz</div>
-                            <input type="range" class="range-slider" min="100" max="800" value="100" id="sineSlider" style="width: 90%;" oninput="updateSineHz()">
-                            <button class="modal-btn" onclick="verifySine(${index})">SYNCHRONIZE WAVE</button>
-                        </div>
-                    `;
-                } else if (card.type === "nonogram5x5") {
-                    interactiveHTML = `
-                        <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px;">MATRIX GRID: Form an 'X' pattern (Diagonal cells)</div>
-                        <div class="game-board">
-                            <div class="nono-5x5-wrapper" id="nono5Grid"></div>
-                            <button class="modal-btn" onclick="verifyNonogram5x5(${index})">VERIFY PATTERN</button>
+                            <div id="mazeContainer" style="display:grid; grid-template-columns:repeat(5,35px); gap:4px; justify-content:center; margin:10px auto;"></div>
+                            <div style="display:flex; justify-content:center; gap:8px; margin-top:8px;">
+                                <button class="modal-btn" style="width:50px;" onclick="moveMaze(-1,0)">◀</button>
+                                <button class="modal-btn" style="width:50px;" onclick="moveMaze(0,-1)">▲</button>
+                                <button class="modal-btn" style="width:50px;" onclick="moveMaze(0,1)">▼</button>
+                                <button class="modal-btn" style="width:50px;" onclick="moveMaze(1,0)">▶</button>
+                            </div>
                         </div>
                     `;
                 } else {
                     interactiveHTML = `
-                        <div style="background: #030712; border: 1px solid ${card.color}; padding: 12px; border-radius: 4px; margin-bottom: 12px;">
-                            <div style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 4px;">PUZZLE CLUE:</div>
-                            <div style="font-size: 0.85rem; color: #fff; line-height: 1.4;">${card.puzzle}</div>
+                        <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:6px;">INTERACTIVE NODE: Click button to bypass security locks.</div>
+                        <div class="game-board">
+                            <button class="modal-btn" onclick="markSolved(${index}, 'Security protocol overridden!')">OVERRIDE NODE LOCK</button>
                         </div>
-                        <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px;">ENTER SOLUTION CODE:</div>
-                        <input type="text" id="puzzle-answer" class="modal-input" placeholder="Type solution here..." />
-                        <button class="modal-btn" style="border-color: ${card.color}; color: ${card.color};" onclick="submitCipher(${index})">
-                            VERIFY & UNLOCK NODE
-                        </button>
                     `;
                 }
 
@@ -854,20 +854,71 @@
             }
             
             modal.style.display = "flex";
-
-            if (card.type === "sine" && !card.solved) {
-                initSineWaveCanvas();
-            } else if (card.type === "nonogram5x5" && !card.solved) {
-                initNonogram5x5();
-            }
+            if(card.type === "maze" && !card.solved) initMaze();
         }
 
         function closeModal() {
-            if (animationFrameId) cancelAnimationFrame(animationFrameId);
             document.getElementById("card-modal").style.display = "none";
         }
 
-        /* --- 1. SIMON MINI GAME --- */
+        /* --- SWITCHES PUZZLE --- */
+        let switchStates = [false, false, false];
+        function toggleSwitch(i) {
+            switchStates[i] = !switchStates[i];
+            document.getElementById(`sw${i}`).classList.toggle("on", switchStates[i]);
+        }
+        function verifySwitches(index) {
+            if (switchStates[0] === true && switchStates[1] === false && switchStates[2] === true) {
+                markSolved(index, "Grid balanced: ON - OFF - ON verified!");
+            } else {
+                alert("ACCESS DENIED: Voltage grid overload! Target layout is [ON - OFF - ON].");
+            }
+        }
+
+        /* --- MAZE PUZZLE --- */
+        let playerPos = { r: 0, c: 0 };
+        function initMaze() {
+            playerPos = { r: 0, c: 0 };
+            renderMaze();
+        }
+        function renderMaze() {
+            const container = document.getElementById("mazeContainer");
+            if(!container) return;
+            container.innerHTML = "";
+            for(let r=0; r<5; r++) {
+                for(let c=0; c<5; c++) {
+                    const cell = document.createElement("div");
+                    cell.style.width = "35px"; cell.style.height = "35px";
+                    cell.style.border = "1px solid #334155";
+                    cell.style.borderRadius = "4px";
+                    cell.style.display = "flex"; cell.style.alignItems = "center"; cell.style.justifyContent = "center";
+                    
+                    if(r === playerPos.r && c === playerPos.c) {
+                        cell.innerText = "👾";
+                        cell.style.background = "#f97316";
+                    } else if(r === 4 && c === 4) {
+                        cell.innerText = "🚩";
+                        cell.style.background = "#10b981";
+                    } else {
+                        cell.style.background = "#0f172a";
+                    }
+                    container.appendChild(cell);
+                }
+            }
+        }
+        function moveMaze(dc, dr) {
+            let nr = playerPos.r + dr;
+            let nc = playerPos.c + dc;
+            if(nr >= 0 && nr < 5 && nc >= 0 && nc < 5) {
+                playerPos = { r: nr, c: nc };
+                renderMaze();
+                if(nr === 4 && nc === 4) {
+                    setTimeout(() => markSolved(3, "Arcade maze cleared!"), 100);
+                }
+            }
+        }
+
+        /* --- SIMON PUZZLE --- */
         let simonSequence = [1, 3, 2, 4];
         let simonUserIndex = 0;
         function startSimonGame(index) {
@@ -880,14 +931,16 @@
             simonSequence.forEach((tileNum) => {
                 setTimeout(() => {
                     const tile = document.getElementById(`tile-${tileNum}`);
-                    tile.classList.add("flash");
-                    setTimeout(() => tile.classList.remove("flash"), 400);
+                    if(tile) {
+                        tile.classList.add("flash");
+                        setTimeout(() => tile.classList.remove("flash"), 400);
+                    }
                 }, delay);
                 delay += 700;
             });
 
             setTimeout(() => {
-                document.getElementById("simonStatus").innerText = "Repeat the sequence now!";
+                document.getElementById("simonStatus").innerText = "Repeat sequence!";
             }, delay);
         }
 
@@ -899,142 +952,22 @@
             if (tileNum === simonSequence[simonUserIndex]) {
                 simonUserIndex++;
                 if (simonUserIndex === simonSequence.length) {
-                    markSolved(index, "Memory sequence verified! Clearance granted.");
+                    markSolved(index, "Simon sequence verified!");
                 }
             } else {
-                alert("ACCESS DENIED: Sequence mismatch! Try again.");
+                alert("ACCESS DENIED: Sequence mismatch!");
                 document.getElementById("simonStartBtn").style.display = "block";
                 document.getElementById("simonGrid").style.display = "none";
-                document.getElementById("simonStatus").innerText = "Failed. Press start to retry.";
             }
         }
 
-        /* --- 2. VALVES MINI GAME --- */
-        function calcPressure() {
-            let a = parseInt(document.getElementById("vA").value);
-            let b = parseInt(document.getElementById("vB").value);
-            let c = parseInt(document.getElementById("vC").value);
-            document.getElementById("vA_val").innerText = a;
-            document.getElementById("vB_val").innerText = b;
-            document.getElementById("vC_val").innerText = c;
-            
-            let total = (a * 3) + (b * 5) + (c * 2);
-            document.getElementById("totalPressure").innerText = total;
-        }
+        /* --- COMBINATION SAFE DIAL (NODE 12) --- */
+        let currentDialRotation = 0;
+        let dialNumber = 0;
 
-        function verifyValves(index) {
-            let total = parseInt(document.getElementById("totalPressure").innerText);
-            if (total === 100) {
-                markSolved(index, "Pressure locked at 100 PSI! Clearance granted.");
-            } else {
-                alert(`ACCESS DENIED: Pressure set to ${total} PSI. Needs exactly 100 PSI!`);
-            }
-        }
-
-        /* --- 3. SINE WAVE MINI GAME --- */
-        let currentHz = 100;
-        function updateSineHz() {
-            currentHz = parseInt(document.getElementById("sineSlider").value);
-            document.getElementById("sineHz").innerText = currentHz;
-        }
-
-        function initSineWaveCanvas() {
-            const canvas = document.getElementById("sineCanvas");
-            if (!canvas) return;
-            const ctx = canvas.getContext("2d");
-            let step = 0;
-
-            function draw() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                ctx.beginPath();
-                ctx.lineWidth = 2;
-                ctx.strokeStyle = currentHz === 420 ? "#10b981" : "#a855f7";
-
-                for (let x = 0; x < canvas.width; x++) {
-                    let y = canvas.height / 2 + Math.sin((x + step) * (currentHz / 1000)) * 30;
-                    if (x === 0) ctx.moveTo(x, y);
-                    else ctx.lineTo(x, y);
-                }
-                ctx.stroke();
-                step += 2;
-                animationFrameId = requestAnimationFrame(draw);
-            }
-            draw();
-        }
-
-        function verifySine(index) {
-            if (currentHz === 420) {
-                markSolved(index, "Harmonic frequency resonance matched at 420 Hz!");
-            } else {
-                alert("ACCESS DENIED: Unstable wave frequency. Target is 420 Hz.");
-            }
-        }
-
-        /* --- 4. 5x5 NONOGRAM MINI GAME --- */
-        let nono5State = Array(25).fill(false);
-        function initNonogram5x5() {
-            const wrapper = document.getElementById("nono5Grid");
-            wrapper.innerHTML = "";
-            nono5State = Array(25).fill(false);
-
-            for (let r = 0; r < 5; r++) {
-                const rowEl = document.createElement("div");
-                rowEl.className = "nono-row";
-                for (let c = 0; c < 5; c++) {
-                    const idx = r * 5 + c;
-                    const cell = document.createElement("div");
-                    cell.className = "nono-cell-5x5";
-                    cell.onclick = () => {
-                        nono5State[idx] = !nono5State[idx];
-                        cell.classList.toggle("active", nono5State[idx]);
-                    };
-                    rowEl.appendChild(cell);
-                }
-                wrapper.appendChild(rowEl);
-            }
-        }
-
-        function verifyNonogram5x5(index) {
-            // Target is an X pattern (0,4,6,8,12,16,18,20,24)
-            const targetX = [0, 4, 6, 8, 12, 16, 18, 20, 24];
-            let match = true;
-            for (let i = 0; i < 25; i++) {
-                let shouldBeActive = targetX.includes(i);
-                if (nono5State[i] !== shouldBeActive) {
-                    match = false;
-                    break;
-                }
-            }
-            if (match) {
-                markSolved(index, "5x5 Matrix X-pattern aligned correctly!");
-            } else {
-                alert("ACCESS DENIED: Pattern configuration invalid. Hint: Form an 'X'.");
-            }
-        }
-
-        /* --- CIPHERS & GENERAL SOLVED HANDLER --- */
-        function submitCipher(index) {
-            const inputVal = document.getElementById("puzzle-answer").value.trim().toUpperCase();
-            const correctVal = cardsData[index].solution.toUpperCase();
-
-            if (inputVal === correctVal) {
-                markSolved(index, "Cipher solution verified!");
-            } else {
-                alert("ACCESS DENIED: Incorrect solution code.");
-            }
-        }
-
-        function markSolved(index, message) {
-            cardsData[index].solved = true;
-            cardsData[index].progress = 100;
-            closeModal();
-            renderGrid();
-            alert(`🔓 ACCESS GRANTED: ${message}`);
-        }
-
-        function openVaultNode(ready) {
+        function openSafeDialModal(ready) {
             if (!ready) {
-                alert("ACCESS DENIED: You must solve all 11 preceding character nodes before activating Node 12 (Andy's Vault).");
+                alert("ACCESS DENIED: You must solve all 11 preceding character nodes to obtain the Vault Dial combination.");
                 return;
             }
 
@@ -1042,21 +975,79 @@
             const modalBody = document.getElementById("modal-body");
 
             modalBody.innerHTML = `
-                <div style="color: var(--alert-red); font-size: 0.75rem; margin-bottom: 4px;">// CRITICAL OVERRIDE SUCCESSFUL</div>
-                <h2 style="color: #fff; margin-bottom: 8px;">ANDY'S PRIVATE VAULT (NODE-12)</h2>
-                <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid var(--alert-red); padding: 12px; border-radius: 4px; margin-bottom: 12px;">
-                    <div style="font-size: 0.75rem; color: #fca5a5; margin-bottom: 4px;">MASTER TREASURY REVEAL:</div>
-                    <div style="font-size: 0.85rem; color: #fff; line-height: 1.4;">
-                        Welcome to Andy's Vault enclave. Clearance Level-5 active. All sub-nodes linked to master mainnet.
+                <div style="color: var(--alert-red); font-size: 0.75rem; margin-bottom: 4px; text-align:center;">// COMBINATION LOCK ENCLAVE</div>
+                <h2 style="color: #fff; margin-bottom: 8px; text-align:center;">ANDY'S SAFE DIAL</h2>
+                <div style="font-size:0.75rem; color:var(--text-muted); text-align:center;">Rotate dial to Target Combination: <strong style="color:var(--terminal-green)">77</strong></div>
+                
+                <div class="safe-container">
+                    <div class="dial-marker"></div>
+                    <div class="safe-dial" id="safeDial" onclick="rotateDial()">
+                        <div class="dial-notch"></div>
                     </div>
                 </div>
-                <div style="background: #030712; border: 1px solid var(--terminal-green); padding: 10px; border-radius: 4px; margin-bottom: 12px;">
-                    <div style="font-size: 0.7rem; color: var(--text-muted);">MASTER CONTRACT ADDRESS</div>
-                    <div style="font-size: 0.8rem; color: var(--terminal-green); word-break: break-all;">VAULT-MASTER-999...DKF12</div>
-                </div>
-                <button class="modal-btn" onclick="closeModal()">CLOSE ENCLAVE</button>
+
+                <div class="safe-number-display" id="dialVal" style="text-align:center;">00</div>
+                <button class="modal-btn" onclick="unlockAndyVaultWithEvent()" style="margin-top:15px; border-color:var(--terminal-green); color:var(--terminal-green);">DISENGAGE SAFE LOCK</button>
             `;
             modal.style.display = "flex";
+        }
+
+        function rotateDial() {
+            currentDialRotation += 36;
+            dialNumber = (dialNumber + 10) % 100;
+            document.getElementById("safeDial").style.transform = `rotate(${currentDialRotation}deg)`;
+            document.getElementById("dialVal").innerText = dialNumber < 10 ? `0${dialNumber}` : dialNumber;
+        }
+
+        function unlockAndyVaultWithEvent() {
+            if (dialNumber !== 70 && dialNumber !== 77) {
+                alert("LOCK ENGAGED: Incorrect combination number on dial! Turn dial to 70.");
+                return;
+            }
+
+            closeModal();
+            document.body.classList.add("alarm-active");
+
+            // 1. Fireworks Explosion
+            if (typeof confetti === 'function') {
+                confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
+            }
+
+            // 2. Andy Flying Across
+            const andyImg = document.getElementById("andy-flying-icon");
+            andyImg.classList.add("fly-across");
+
+            setTimeout(() => {
+                document.body.classList.remove("alarm-active");
+                andyImg.classList.remove("fly-across");
+
+                // 3. Reveal Expansion Teaser Modal
+                const modal = document.getElementById("card-modal");
+                const modalBody = document.getElementById("modal-body");
+
+                modalBody.innerHTML = `
+                    <div style="color: var(--terminal-green); font-size: 0.75rem; margin-bottom: 4px;">🎉 MASTER OVERRIDE COMPLETE</div>
+                    <h2 style="color: #fff; margin-bottom: 8px;">ANDY'S VAULT IS UNLOCKED!</h2>
+                    <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid var(--terminal-green); padding: 14px; border-radius: 6px; margin: 12px 0;">
+                        <div style="font-size: 0.85rem; color: #fff; line-height: 1.5; margin-bottom:10px;">
+                            <strong>CONGRATULATIONS AGENT!</strong> You cleared all 11 character nodes and disengaged Andy's master vault lock!
+                        </div>
+                        <div style="font-size: 0.75rem; color: var(--amber-warn);">
+                            ⚡ <strong>SEASON 2 EXPANSION IN DEVELOPMENT:</strong><br>
+                            A new set of cyberpunk trading cards, boss nodes, and live token pools are currently being deployed to the matrix.
+                        </div>
+                    </div>
+                    <button class="modal-btn" onclick="closeModal()">RETURN TO TERMINAL</button>
+                `;
+                modal.style.display = "flex";
+            }, 3000);
+        }
+
+        function markSolved(index, message) {
+            cardsData[index].solved = true;
+            closeModal();
+            renderGrid();
+            alert(`🔓 ACCESS GRANTED: ${message}`);
         }
 
         function copyWalletAddress() {
